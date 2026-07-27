@@ -1,0 +1,16 @@
+{
+  "name": "project",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "J4KEWasNotHere_Vigets": {
+        "$path": "src/ReplicatedStorage/J4KEWasNotHere_Vigets",
+
+        "Packages": {
+           "$path": "Packages"
+        }
+      }
+    }
+  }
+}
