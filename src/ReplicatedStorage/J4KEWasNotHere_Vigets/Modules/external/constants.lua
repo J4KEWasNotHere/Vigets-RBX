@@ -1,6 +1,6 @@
 local module = {
 	Name = "Vigets",
-	Icon = "",
+	Icon = "rbxassetid://135928770766655",
 
 	Version = "0.1.0",
 	VersionTip = "-alpha",

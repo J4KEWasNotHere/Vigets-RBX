@@ -171,7 +171,8 @@ return {
 			{
 				Id = "toVide",
 				Text = "Convert to Vide Component",
-				Image = "http://www.roblox.com/asset/?id=6031233841",
+				Image = "rbxassetid://131881863542969", --"http://www.roblox.com/asset/?id=6031233841",
+				IconSize = 0.85,
 				Applies = function(inst: Instance)
 					return inst:IsA("GuiBase") or inst:IsA("UIBase")
 				end,
@@ -182,7 +183,8 @@ return {
 			{
 				Id = "toStory",
 				Text = "Convert to Story",
-				Image = "http://www.roblox.com/asset/?id=6031233841",
+				Image = "rbxassetid://96954263450238", --"http://www.roblox.com/asset/?id=6031233841",
+				IconSize = 0.9,
 				Applies = function(inst: Instance)
 					return inst:IsA("ModuleScript")
 				end,
@@ -193,7 +195,7 @@ return {
 			{
 				Id = "fromVide",
 				Text = "Build from Component",
-				Image = "http://www.roblox.com/asset/?id=6023426938",
+				Image = "rbxassetid://6383105831", --"http://www.roblox.com/asset/?id=6023426938",
 				IconSize = 0.7,
 				Applies = function(inst: Instance)
 					return inst:IsA("ModuleScript")
@@ -323,36 +325,6 @@ return {
 									},
 								})
 							else
-								local loaded = Value(false)
-								local imageAsset = Computed(function()
-									return #unwrap(items) == 0
-											and "http://www.roblox.com/asset/?id=6023565916"
-										or "http://www.roblox.com/asset/?id=6031071050"
-								end)
-
-								local iconImageLabel = New("ImageLabel")({
-									BackgroundTransparency = 1,
-									Image = imageAsset,
-									Size = UDim2.fromOffset(42, 42),
-								})
-
-								local function checkLoaded()
-									local currentAsset = unwrap(imageAsset)
-									if currentAsset == "" then
-										loaded:set(false)
-										return
-									end
-									loaded:set(iconImageLabel.IsLoaded)
-								end
-
-								iconImageLabel
-									:GetPropertyChangedSignal("IsLoaded")
-									:Connect(checkLoaded)
-								iconImageLabel
-									:GetPropertyChangedSignal("Image")
-									:Connect(checkLoaded)
-								checkLoaded()
-
 								return New("Frame")({
 									BackgroundTransparency = 1,
 									Size = UDim2.fromScale(1, 1),
@@ -372,12 +344,15 @@ return {
 											PaddingTop = UDim.new(0, 12),
 										}),
 
-										Computed(function()
-											return loaded:get()
-													and unwrap(imageAsset) ~= ""
-													and iconImageLabel
-												or nil
-										end),
+										New("ImageLabel")({
+											BackgroundTransparency = 1,
+											Image = Computed(function()
+												return #unwrap(items) == 0
+														and "http://www.roblox.com/asset/?id=6023565916"
+													or "http://www.roblox.com/asset/?id=6031071050"
+											end),
+											Size = UDim2.fromOffset(42, 42),
+										}),
 
 										Label({
 											Text = Computed(function()

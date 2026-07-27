@@ -1,7 +1,6 @@
 export type InstanceData = {
 	Name: string,
 	ClassName: string,
-	--Archivable: boolean,
 
 	_children: { [number]: InstanceData },
 	[any]: any,
@@ -19,7 +18,33 @@ local create = Vide.create
 
 --> Vide Element
 return function(props: {any}?)
-	return %s
+    return %s
+end]]
+
+local DYNAMIC_VIDE_TEMPLATE: string = [[--!nolint
+-- %s
+local RunService = game:GetService("RunService")
+
+--> Vide API: https://centau.github.io/vide/api/reactivity-core.html
+local Vide = require(%s)
+local create = Vide.create
+
+local isPreview = RunService:IsStudio() and not RunService:IsRunning()
+
+--> Dynamic Vide Element
+return function(props: {any}?)
+    local elements = {
+        %s
+    }
+
+    if isPreview and not (props and props.__vigetOverride) then
+        return elements
+    end
+
+    return create "ScreenGui" {
+        %s
+        elements
+    end
 end]]
 
 local STORY_TEMPLATE: string = [[--!nolint
@@ -28,10 +53,10 @@ local App = require(%s)
 local Vide = require(%s)
 
 local story = {
-	vide = Vide,
-	story = function()
-		return App {} -- pass in your own properties here
-	end
+    vide = Vide,
+    story = function()
+        return App {} -- pass in your own properties here
+    end
 }
 
 return story]]
@@ -89,7 +114,7 @@ local function serializeInstance(instance: Instance): InstanceData?
 		data._children = {}
 
 		for _, child in instance:GetChildren() do
-			local ok, childData = pcall(serializeInstance, child)
+			local _, childData = pcall(serializeInstance, child)
 			if childData then
 				table.insert(data._children, childData)
 			end
@@ -114,11 +139,11 @@ local function createFromSerializedInstance(data: InstanceData): Instance
 				end
 			end
 		else
-			local ok, result = pcall(function()
+			local ok2, result = pcall(function()
 				instance[property] = value
 			end)
 
-			if not ok then
+			if not ok2 then
 				warn(
 					`Failed to set property: {property} on {instance.ClassName}: {tostring(result)}`
 				)
@@ -160,7 +185,7 @@ local function getRequirePath(inst: Instance): string
 	end
 
 	local serviceName = current and current.ClassName or "ReplicatedStorage"
-	local path = string.format("game.%s", serviceName) --string.format("game:GetService(%q)", serviceName)
+	local path = string.format("game.%s", serviceName)
 
 	for _, part in parts do
 		path ..= if isValidIdentifier(part) then "." .. part else string.format("[%q]", part)
@@ -332,28 +357,59 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 	end
 
 	local ok, vide_inst = pcall(locateVide)
-	-- Defensive: only ever trust this as a real Instance. If locateVide()
-	-- somehow hands back something else (a stale cached require() result,
-	-- Vide's own library table, etc.) we fall back to the TODO placeholder
-	-- below instead of crashing the whole build on getRequirePath's `.Parent`
-	-- walk.
 	vide_inst = (ok and typeof(vide_inst) == "Instance") and vide_inst or nil
 
 	if not vide_inst then
 		warn("Vidgets: could not locate Vide automatically - fill in the require() path by hand")
 	end
 
-	local vide_path = if vide_inst
-		then getRequirePath(vide_inst)
-		else "nil --[[ TODO: could not locate Vide, set this path yourself ]]"
+	local vide_path = if vide_inst then getRequirePath(vide_inst) else "nil"
 
-	local ok2, raw = pcall(readDataIntoVideCode, data)
-	raw = ok2 and raw or "nil"
+	local sourceCode = ""
+
+	if instance.ClassName == "ScreenGui" then
+		-- Extract properties for the ScreenGui wrapper itself
+		local propKeys: { string } = {}
+		for property in data do
+			if property ~= "_children" and property ~= "ClassName" then
+				table.insert(propKeys, property)
+			end
+		end
+		table.sort(propKeys)
+
+		local propLines: { string } = {}
+		for _, property in propKeys do
+			table.insert(
+				propLines,
+				string.format("\t\t%s = %s,", property, serializeValue(data[property]))
+			)
+		end
+
+		-- Extract children elements for the preview table
+		local childLines: { string } = {}
+		if data._children then
+			for _, childData in data._children do
+				table.insert(childLines, "\t\t" .. readDataIntoVideCode(childData) .. ",")
+			end
+		end
+
+		sourceCode = string.format(
+			DYNAMIC_VIDE_TEMPLATE,
+			instance.Name,
+			vide_path,
+			table.concat(childLines, "\n"),
+			table.concat(propLines, "\n")
+		)
+	else
+		local ok2, raw = pcall(readDataIntoVideCode, data)
+		raw = ok2 and raw or "nil"
+
+		sourceCode = string.format(VIDE_TEMPLATE, instance.Name, vide_path, raw)
+	end
 
 	local ModuleScript = Instance.new("ModuleScript")
 	ModuleScript.Name = `{instance.Name}-Vide`
-
-	ModuleScript.Source = Lint(string.format(VIDE_TEMPLATE, instance.Name, vide_path, raw))
+	ModuleScript.Source = Lint(sourceCode)
 
 	ModuleScript.Parent = workspace
 	return ModuleScript
@@ -370,7 +426,8 @@ function Reader.DeserializeFromVide(moduleScript: ModuleScript): Instance?
 		return nil
 	end
 
-	local ok2, instance = pcall(App)
+	-- Pass the override flag so it builds the full ScreenGui even in Studio preview mode
+	local ok2, instance = pcall(App, { __vigetOverride = true })
 	if not ok2 or typeof(instance) ~= "Instance" then
 		warn(`Vide module {moduleScript.Name} did not return an Instance: {tostring(instance)}`)
 		return nil
@@ -388,7 +445,6 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	end
 
 	local ok, videModule = pcall(locateVide)
-	-- Same defensive guard as SerializeToVide above.
 	videModule = (ok and typeof(videModule) == "Instance") and videModule or nil
 
 	local storyScript = Instance.new("ModuleScript")
