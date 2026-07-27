@@ -109,18 +109,18 @@
 		<Item class="Camera" referent="RBXC61E6F7C265C4E5CBDE0FF03C8A6E333">
 			<Properties>
 				<CoordinateFrame name="CFrame">
-					<X>0</X>
-					<Y>20</Y>
-					<Z>20</Z>
-					<R00>1</R00>
-					<R01>0</R01>
-					<R02>-0</R02>
+					<X>0.189343616</X>
+					<Y>19.858387</Y>
+					<Z>20.1119308</Z>
+					<R00>0.999971628</R00>
+					<R01>-0.00467670709</R01>
+					<R02>0.00591409951</R02>
 					<R10>-0</R10>
-					<R11>0.780868828</R11>
-					<R12>0.624695063</R12>
-					<R20>0</R20>
-					<R21>-0.624695063</R21>
-					<R22>0.780868828</R22>
+					<R11>0.784387112</R11>
+					<R12>0.620271623</R12>
+					<R20>-0.00753977243</R20>
+					<R21>-0.62025404</R21>
+					<R22>0.78436476</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
 				<token name="CameraType">0</token>
@@ -6054,7 +6054,7 @@ local SelectionService = game:GetService("Selection")
 type pluginRoot = typeof(script.Parent.Parent.Parent)
 
 return {
-	start = function(pluginInstance, pluginRoot: pluginRoot)
+	start = function(pluginInstance: Plugin, pluginRoot: pluginRoot)
 		if RunService:IsRunMode() or RunService:IsRunning() then
 			return function() end
 		end
@@ -6136,8 +6136,6 @@ return {
 			local modifier = getModifier({
 				Enabled = true,
 				Selected = isSelected,
-				--Pressed = isPressed,
-				--Hovering = isHovering,
 			})
 
 			return New("TextButton")({
@@ -6217,13 +6215,12 @@ return {
 
 		local MethodButtonSize = UDim2.new(1, 0, 0, 40)
 
-		-- Each conversion now carries its own `Run` function so the Build
-		-- handler can look it up generically instead of branching on Id.
 		local CONVERSIONS = {
 			{
 				Id = "toVide",
 				Text = "Convert to Vide Component",
-				Image = "http://www.roblox.com/asset/?id=6031233841",
+				Image = "rbxassetid://131881863542969", --"http://www.roblox.com/asset/?id=6031233841",
+				IconSize = 0.85,
 				Applies = function(inst: Instance)
 					return inst:IsA("GuiBase") or inst:IsA("UIBase")
 				end,
@@ -6234,7 +6231,8 @@ return {
 			{
 				Id = "toStory",
 				Text = "Convert to Story",
-				Image = "http://www.roblox.com/asset/?id=6031233841",
+				Image = "rbxassetid://96954263450238", --"http://www.roblox.com/asset/?id=6031233841",
+				IconSize = 0.9,
 				Applies = function(inst: Instance)
 					return inst:IsA("ModuleScript")
 				end,
@@ -6245,7 +6243,7 @@ return {
 			{
 				Id = "fromVide",
 				Text = "Build from Component",
-				Image = "http://www.roblox.com/asset/?id=6023426938",
+				Image = "rbxassetid://6383105831", --"http://www.roblox.com/asset/?id=6023426938",
 				IconSize = 0.7,
 				Applies = function(inst: Instance)
 					return inst:IsA("ModuleScript")
@@ -6397,10 +6395,9 @@ return {
 										New("ImageLabel")({
 											BackgroundTransparency = 1,
 											Image = Computed(function()
-												local result = #unwrap(items) == 0
+												return #unwrap(items) == 0
 														and "http://www.roblox.com/asset/?id=6023565916"
 													or "http://www.roblox.com/asset/?id=6031071050"
-												return result
 											end),
 											Size = UDim2.fromOffset(42, 42),
 										}),
@@ -6542,12 +6539,12 @@ return {
 							<Content name="LinkedSource"><null></null></Content>
 							<ProtectedString name="Source"><![CDATA[local module = {
 	Name = "Vigets",
-	Icon = "",
-	
+	Icon = "rbxassetid://135928770766655",
+
 	Version = "0.1.0",
 	VersionTip = "-alpha",
-	
-	WidgetSize = Vector2.new(220, 200),
+
+	WidgetSize = Vector2.new(230, 200),
 }
 
 return module
@@ -7906,13 +7903,6 @@ return {
 
 local INDENT = "\t"
 
-local END_OPENERS: { [string]: boolean } = {
-	["function"] = true,
-	["if"] = true,
-	["for"] = true,
-	["while"] = true,
-	["do"] = true,
-}
 local WORD_KEYWORDS = {
 	"function",
 	"if",
@@ -8130,7 +8120,6 @@ end
 							<ProtectedString name="Source"><![CDATA[export type InstanceData = {
 	Name: string,
 	ClassName: string,
-	--Archivable: boolean,
 
 	_children: { [number]: InstanceData },
 	[any]: any,
@@ -8148,7 +8137,33 @@ local create = Vide.create
 
 --> Vide Element
 return function(props: {any}?)
-	return %s
+    return %s
+end]]
+
+local DYNAMIC_VIDE_TEMPLATE: string = [[--!nolint
+-- %s
+local RunService = game:GetService("RunService")
+
+--> Vide API: https://centau.github.io/vide/api/reactivity-core.html
+local Vide = require(%s)
+local create = Vide.create
+
+local isPreview = RunService:IsStudio() and not RunService:IsRunning()
+
+--> Dynamic Vide Element
+return function(props: {any}?)
+    local elements = {
+        %s
+    }
+
+    if isPreview and not (props and props.__vigetOverride) then
+        return elements
+    end
+
+    return create "ScreenGui" {
+        %s
+        elements
+    end
 end]]
 
 local STORY_TEMPLATE: string = [[--!nolint
@@ -8157,10 +8172,10 @@ local App = require(%s)
 local Vide = require(%s)
 
 local story = {
-	vide = Vide,
-	story = function()
-		return App {} -- pass in your own properties here
-	end
+    vide = Vide,
+    story = function()
+        return App {} -- pass in your own properties here
+    end
 }
 
 return story]]
@@ -8218,7 +8233,7 @@ local function serializeInstance(instance: Instance): InstanceData?
 		data._children = {}
 
 		for _, child in instance:GetChildren() do
-			local ok, childData = pcall(serializeInstance, child)
+			local _, childData = pcall(serializeInstance, child)
 			if childData then
 				table.insert(data._children, childData)
 			end
@@ -8243,11 +8258,11 @@ local function createFromSerializedInstance(data: InstanceData): Instance
 				end
 			end
 		else
-			local ok, result = pcall(function()
+			local ok2, result = pcall(function()
 				instance[property] = value
 			end)
 
-			if not ok then
+			if not ok2 then
 				warn(
 					`Failed to set property: {property} on {instance.ClassName}: {tostring(result)}`
 				)
@@ -8289,7 +8304,7 @@ local function getRequirePath(inst: Instance): string
 	end
 
 	local serviceName = current and current.ClassName or "ReplicatedStorage"
-	local path = string.format("game.%s", serviceName) --string.format("game:GetService(%q)", serviceName)
+	local path = string.format("game.%s", serviceName)
 
 	for _, part in parts do
 		path ..= if isValidIdentifier(part) then "." .. part else string.format("[%q]", part)
@@ -8461,28 +8476,59 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 	end
 
 	local ok, vide_inst = pcall(locateVide)
-	-- Defensive: only ever trust this as a real Instance. If locateVide()
-	-- somehow hands back something else (a stale cached require() result,
-	-- Vide's own library table, etc.) we fall back to the TODO placeholder
-	-- below instead of crashing the whole build on getRequirePath's `.Parent`
-	-- walk.
 	vide_inst = (ok and typeof(vide_inst) == "Instance") and vide_inst or nil
 
 	if not vide_inst then
 		warn("Vidgets: could not locate Vide automatically - fill in the require() path by hand")
 	end
 
-	local vide_path = if vide_inst
-		then getRequirePath(vide_inst)
-		else "nil --[[ TODO: could not locate Vide, set this path yourself ]]"
+	local vide_path = if vide_inst then getRequirePath(vide_inst) else "nil"
 
-	local ok2, raw = pcall(readDataIntoVideCode, data)
-	raw = ok2 and raw or "nil"
+	local sourceCode = ""
+
+	if instance.ClassName == "ScreenGui" then
+		-- Extract properties for the ScreenGui wrapper itself
+		local propKeys: { string } = {}
+		for property in data do
+			if property ~= "_children" and property ~= "ClassName" then
+				table.insert(propKeys, property)
+			end
+		end
+		table.sort(propKeys)
+
+		local propLines: { string } = {}
+		for _, property in propKeys do
+			table.insert(
+				propLines,
+				string.format("\t\t%s = %s,", property, serializeValue(data[property]))
+			)
+		end
+
+		-- Extract children elements for the preview table
+		local childLines: { string } = {}
+		if data._children then
+			for _, childData in data._children do
+				table.insert(childLines, "\t\t" .. readDataIntoVideCode(childData) .. ",")
+			end
+		end
+
+		sourceCode = string.format(
+			DYNAMIC_VIDE_TEMPLATE,
+			instance.Name,
+			vide_path,
+			table.concat(childLines, "\n"),
+			table.concat(propLines, "\n")
+		)
+	else
+		local ok2, raw = pcall(readDataIntoVideCode, data)
+		raw = ok2 and raw or "nil"
+
+		sourceCode = string.format(VIDE_TEMPLATE, instance.Name, vide_path, raw)
+	end
 
 	local ModuleScript = Instance.new("ModuleScript")
 	ModuleScript.Name = `{instance.Name}-Vide`
-
-	ModuleScript.Source = Lint(string.format(VIDE_TEMPLATE, instance.Name, vide_path, raw))
+	ModuleScript.Source = Lint(sourceCode)
 
 	ModuleScript.Parent = workspace
 	return ModuleScript
@@ -8499,7 +8545,8 @@ function Reader.DeserializeFromVide(moduleScript: ModuleScript): Instance?
 		return nil
 	end
 
-	local ok2, instance = pcall(App)
+	-- Pass the override flag so it builds the full ScreenGui even in Studio preview mode
+	local ok2, instance = pcall(App, { __vigetOverride = true })
 	if not ok2 or typeof(instance) ~= "Instance" then
 		warn(`Vide module {moduleScript.Name} did not return an Instance: {tostring(instance)}`)
 		return nil
@@ -8517,7 +8564,6 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	end
 
 	local ok, videModule = pcall(locateVide)
-	-- Same defensive guard as SerializeToVide above.
 	videModule = (ok and typeof(videModule) == "Instance") and videModule or nil
 
 	local storyScript = Instance.new("ModuleScript")
@@ -12973,6 +13019,2513 @@ return xtypeof]]></ProtectedString>
 							</Item>
 						</Item>
 					</Item>
+				</Item>
+			</Item>
+		</Item>
+		<Item class="Folder" referent="RBX5714C91AA92343D1B5BDD5B720F7427B">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Packages</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029e7</UniqueId>
+			</Properties>
+			<Item class="ModuleScript" referent="RBX9343393DAB664E658D4EDB0A2918B3D7">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[assert(game, "when using vide outside of Roblox, require lib.luau instead")
+
+local vide = require(script.lib)
+
+export type source<T> = vide.source<T>
+export type Source<T> = vide.Source<T>
+export type context<T> = vide.context<T>
+export type Context<T> = vide.Context<T>
+
+return vide
+]]></ProtectedString>
+					<string name="ScriptGuid">{40EF6AE5-4716-440E-8107-B239B62A49E4}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">Vide</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029ea</UniqueId>
+				</Properties>
+				<Item class="ModuleScript" referent="RBX3D7EE5A888EB4095A8B8971B5B0B3C71">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[type Action = {
+    priority: number,
+    callback: (Instance) -> ()
+}
+
+local ActionMT = table.freeze {}
+
+local function is_action(v: any)
+    return getmetatable(v) == ActionMT
+end
+
+local function action(callback: (Instance) -> (), priority: number?): Action
+    local a = {
+        priority = priority or 1,
+        callback = callback
+    }
+
+    setmetatable(a :: any, ActionMT)
+
+    return table.freeze(a)
+end
+
+return function()
+    return action, is_action
+end
+]]></ProtectedString>
+						<string name="ScriptGuid">{98C00266-DD48-492F-9747-B5195436C1FC}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">action</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029eb</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX606617CD57A6422698F5F8B41722B042">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local typeof = game and typeof or require "../test/mock".typeof :: never
+
+local flags = require "./flags"
+local implicit_effect = require "./implicit_effect"
+local _, is_action = require "./action"()
+local graph = require "./graph"
+type Node<T> = graph.Node<T>
+
+type Array<V> = { V }
+type ArrayOrV<V> = {ArrayOrV<V>} | V
+type Map<K, V> = { [K]: V }
+
+type Cache = {
+    -- event listeners to connect after properties are set
+    events: Array<
+        | string -- 1. event name
+        | () -> () -- 2. listener
+    >,
+
+    -- actions to run after events are connected
+    actions: Map<
+        number, -- priority
+        Array<(Instance) -> ()> -- action callbacks
+    >,
+
+    -- what to parent the instance to after running actions
+    parent: unknown,
+
+    -- cache to detect duplicate property setting at same nesting depth
+    nested_debug: Map<
+        number, -- depth
+        Map<string, true> -- set of property names
+    >,
+
+    -- each nested layer occupies two indexes: 1. table ref 2. nested depth
+    -- e.g. { t1 = { t3 = {} }, t2 = {} } -> { t1, 1, t2, 1, t3, 2 }
+    nested_stack: { {} | number }
+}
+
+local free_cache: Cache?
+
+local function borrow_cache(): Cache
+    if free_cache then
+        local cache = free_cache
+        free_cache = nil
+        return cache
+    else
+        return {
+            events = {},
+            actions = setmetatable({} :: any, { -- lazy init
+                __index = function(self, i) self[i] = {}; return self[i] end
+            }),
+            parent = nil,
+            nested_debug = setmetatable({} :: any, {
+                __index = function(self, i: number) self[i] = {}; return self[i] end
+            }),
+            nested_stack = {}
+        }
+    end
+end
+
+local function return_cache(cache: Cache )
+    free_cache = cache
+end
+
+local function process_properties(properties: Map<unknown, unknown>, instance: Instance, cache: Cache, depth: number)
+    for property, value in properties do
+        if type(property) == "string" then
+            if flags.strict then -- check for duplicate property assignment at nesting depth
+                if cache.nested_debug[depth][property] then
+                    error(`duplicate property {property} at depth {depth}`, 0)
+                end
+                cache.nested_debug[depth][property] = true
+            end
+
+            if property == "Parent" then
+                cache.parent = value
+                continue
+            end
+
+            if type(value) == "function" then 
+                if typeof((instance :: any)[property]) == "RBXScriptSignal" then
+                    table.insert(cache.events, property) -- add event name to buffer
+                    table.insert(cache.events, value :: () -> ()) -- add event listener to buffer
+                else
+                    implicit_effect.property(instance, property, value :: () -> ()) -- create implicit effect for property
+                end
+            else
+                (instance :: any)[property] = value -- set property
+            end    
+        elseif type(property) == "number" then
+            if type(value) == "function" then
+                implicit_effect.children(instance, value :: () -> ArrayOrV<Instance>) -- bind children
+            elseif type(value) == "table" then
+                if is_action(value) then
+                    table.insert(cache.actions[(value :: any).priority], (value :: any).callback :: () -> ()) -- add action to buffer
+                elseif flags.defer_nested_properties then
+                    table.insert(cache.nested_stack, value :: {})
+                    table.insert(cache.nested_stack, depth + 1) -- push table to stack for later processing
+                else
+                    process_properties(value :: Map<unknown, unknown>, instance, cache, depth + 1)
+                end
+            elseif type(value) == "userdata" then
+                (value :: Instance).Parent = instance -- parent child
+            end
+        end
+    end
+end
+
+-- applies table of nested properties to an instance using full vide semantics
+local function apply<T>(instance: T & Instance, properties: { [unknown]: unknown }): T
+    if not properties then
+        error "attempt to call a constructor returned by create() with no properties"
+    end
+
+    local caches = borrow_cache()
+    local events = caches.events
+    local actions = caches.actions
+    local nested_debug = caches.nested_debug
+    local nested_stack = caches.nested_stack
+
+    -- process all properties
+    local depth = 1
+    repeat
+        process_properties(properties, instance, caches, depth)
+        depth = table.remove(nested_stack) :: number
+        properties = table.remove(nested_stack) :: {}
+    until not properties
+
+    for i = 1, #events, 2 do
+        local event_name = events[i]
+        local event_listener = events[i + 1]
+        ;(instance :: any)[event_name]:Connect(event_listener)
+    end
+
+    for _, queued in actions do
+        for _, callback in queued do
+            callback(instance)
+        end
+    end
+
+    local parent = caches.parent
+    if parent then
+        if type(parent) == "function" then
+            implicit_effect.parent(instance, parent :: () -> Instance)
+        else
+            instance.Parent = parent :: Instance
+        end
+    end
+
+    table.clear(events)
+    for _, queued in actions do table.clear(queued) end
+    caches.parent = nil
+    if flags.strict then table.clear(nested_debug) end
+    table.clear(nested_stack)
+
+    return_cache(caches)
+
+    return instance
+end
+
+return apply
+]]></ProtectedString>
+						<string name="ScriptGuid">{EE0055E4-C16A-4FEE-8E67-0EB993DAF406}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">apply</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029ec</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX6300A04F316B4989A0D45BDD3DD9EFA0">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local flags = require "./flags"
+local graph = require "./graph"
+
+local function batch(setter: () -> ())
+    local already_batching = flags.batch
+    local from
+
+    if not already_batching then
+        flags.batch = true
+        from = graph.get_update_queue_length()
+    end
+
+    local ok, err: string? = xpcall(setter, debug.traceback)
+
+    if not already_batching then
+        flags.batch = false
+        graph.flush_update_queue(from)
+    end
+
+    if not ok then error(`error occured while batching updates: {err}`, 0) end
+end
+
+return batch
+]]></ProtectedString>
+						<string name="ScriptGuid">{706D3032-9A27-4F4A-8ECB-794E45DA436F}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">batch</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029ed</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXADC97D2BF6C94104B416B8F4C93ED4F6">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+type Node<T> = graph.Node<T>
+local create_node = graph.create_node
+local push_scope = graph.push_scope
+local pop_scope = graph.pop_scope
+local destroy = graph.destroy
+local get_scope = graph.get_scope
+
+local function branch<T>(fn: () -> T): (() -> (), T)
+    local current = get_scope()
+    if not current then
+        error(`cannot use branch() outside a stable or reactive scope`, 0)
+    end
+
+    local parent = current.owner
+    if not parent or parent.effect then
+        error(`current scope is not owned by a stable scope`, 0)
+    end
+
+    local node = create_node(parent, false, false)
+
+    local destroy = function()
+        destroy(node)
+    end
+
+    push_scope(node)
+
+    local ok, result = xpcall(fn, debug.traceback)
+
+    pop_scope()
+
+    if not ok then
+        destroy()
+        error(`error while running branch():\n\n{result}`, 0)
+    end
+
+    return destroy, result
+end
+
+return branch
+]]></ProtectedString>
+						<string name="ScriptGuid">{2500A234-975B-4D99-AA92-3AF0C3D47B06}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">branch</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029ee</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXAC6F226734174BDBBA4C077F7DD6B196">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local action = require "./action"()
+local cleanup = require "./cleanup"
+
+local function changed<T>(property: string, callback: (T) -> ())
+    return action(function(instance)
+        local con = instance:GetPropertyChangedSignal(property):Connect(function()
+            callback((instance :: any)[property])
+        end)
+
+        cleanup(function()
+            con:Disconnect()
+        end)
+
+        callback((instance :: any)[property])
+    end)
+end
+
+return changed
+]]></ProtectedString>
+						<string name="ScriptGuid">{43B6853D-CB48-4099-A699-8B20D56FD01C}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">changed</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029ef</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXFD4FD98DAB1F4566AC846B5B3D68B0D3">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local typeof = game and typeof or require "../test/mock".typeof :: never
+
+local graph = require "./graph"
+local get_scope = graph.get_scope
+local push_cleanup = graph.push_cleanup
+
+local function helper(obj: any)
+    return
+        if typeof(obj) == "RBXScriptConnection" then function() obj:Disconnect() end
+        elseif type(obj) == "thread" then function() task.cancel(obj) end
+        elseif typeof(obj) == "Instance" then function() obj:Destroy() end
+        elseif obj.destroy then function() obj:destroy() end
+        elseif obj.disconnect then function() obj:disconnect() end
+        elseif obj.Destroy then function() obj:Destroy() end
+        elseif obj.Disconnect then function() obj:Disconnect() end
+        else error "cannot cleanup given object"
+end
+
+local function cleanup(value: unknown)
+    local scope = get_scope()
+
+    if not scope then
+        error "cannot cleanup outside a stable or reactive scope"
+    end; assert(scope)
+
+    if type(value) == "function" then
+        push_cleanup(scope, value :: () -> ())
+    else
+        push_cleanup(scope, helper(value))
+    end
+end
+
+type Destroyable = { destroy: (any) -> () } | { Destroy: (any) -> () }
+type Disconnectable = { disconnect: (any) -> () } | { Disconnect: (any) -> () }
+
+return cleanup ::
+    ( (callback: () -> ()) -> () ) &
+    ( (thread: thread) -> () ) &
+    ( (instance: Destroyable) -> () ) &
+    ( (connection: Disconnectable) -> () ) &
+    ( (instance: Instance) -> () ) &
+    ( (connection: RBXScriptConnection) -> () )
+
+]]></ProtectedString>
+						<string name="ScriptGuid">{2DD7954F-D0CC-473F-9B99-FDC5A21EA09D}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">cleanup</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f0</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX96387ECF709D4AEF839222A39E885FF0">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+type Node<T> = graph.Node<T>
+local create_node = graph.create_node
+local get_scope = graph.get_scope
+local push_scope = graph.push_scope
+local pop_scope = graph.pop_scope
+local set_context = graph.set_context
+
+export type Context<T> = (() -> T) & (<U>(T, () -> U) -> U)
+
+local nil_symbol = newproxy()
+local count = 0
+
+local function context<T>(...: T): Context<T>
+    count += 1
+    local id = count
+
+    local has_default = select("#", ...) > 0
+    local default_value = ...
+
+    return function<T>(...): any -- todo: fix type error
+        local scope: Node<unknown>? | false = get_scope()
+
+        if select("#", ...) == 0 then -- get
+            while scope do
+                local ctx = scope.context
+    
+                if not ctx then
+                    scope = scope.owner
+                    continue
+                end
+
+                local value = (ctx :: { unknown })[id]
+
+                if value == nil then
+                    scope = scope.owner
+                    continue
+                end
+                
+                return (if value ~= nil_symbol then value else nil) :: T
+            end
+
+            if has_default ~= nil then
+                return default_value
+            else
+                error("attempt to get context when no context is set and no default context is set", 0)
+            end
+        else -- set
+            if not scope then return error("attempt to set context outside of a vide scope", 0) end
+
+            local value, component = ...
+            
+            local new_scope = create_node(scope, false, false)
+            set_context(new_scope, id, if value == nil then nil_symbol else value)
+
+            push_scope(new_scope)
+
+            local function efn(err: string) return debug.traceback(err, 3) end
+            local ok, result = xpcall(component, efn)
+
+            pop_scope()
+
+            if not ok then
+                error(`error while running context:\n\n{result}`, 0)
+            end
+
+            return result
+        end
+
+        return nil :: any
+    end
+end
+
+return context
+]]></ProtectedString>
+						<string name="ScriptGuid">{6A6F925A-F9C8-429B-9073-8CC2056984E7}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">context</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f1</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXE1DCD488A26740CAADFAB41ED08DC2E1">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local typeof = game and typeof or require "../test/mock".typeof :: never
+local Instance = game and Instance or require "../test/mock".Instance :: never
+
+local defaults = require "./defaults"
+local apply = require "./apply"
+local flags = require "./flags"
+
+local ctor_cache = {} :: { [string]: (AnyProps) -> Instance }
+local function lazy_init(_, class: string)
+    local function ctor(properties: AnyProps): Instance
+        local ok, instance: Instance = pcall(Instance.new, class :: any)
+        if not ok then error(`invalid class name { class }`, 0) end
+
+        if flags.defaults then
+            local default: { [string]: unknown }? = defaults[class]
+            if default then
+                for i, v in default do
+                    (instance :: any)[i] = v
+                end
+            end
+        end
+
+        return apply(instance, properties)
+    end
+
+    ctor_cache[class] = ctor
+    return ctor
+end
+setmetatable(ctor_cache, { __index = lazy_init })
+
+-- todo: remove support for different overloads
+local function create(class_or_instance: string|Instance, properties: AnyProps?): ((AnyProps) -> Instance) | Instance
+    if type(class_or_instance) ~= "string" and typeof(class_or_instance) ~= "Instance" then
+        error("bad argument #1, expected string or instance, got " .. typeof(class_or_instance), 0)
+    end
+
+    local ctor = if type(class_or_instance) == "string"
+        then ctor_cache[class_or_instance]
+        else function(properties)
+            local clone = class_or_instance:Clone()
+            if not clone then error "attempt to clone a non-archivable instance" end
+            return apply(clone, properties)
+        end
+
+    return if properties
+        then ctor(properties)
+        else ctor
+end
+
+type Instances = {
+    Folder: Folder,
+    BillboardGui: BillboardGui,
+    CanvasGroup: CanvasGroup,
+    Frame: Frame,
+    ImageButton: ImageButton,
+    ImageLabel: ImageLabel,
+    ScreenGui: ScreenGui,
+    ScrollingFrame: ScrollingFrame,
+    SurfaceGui: SurfaceGui,
+    TextBox: TextBox,
+    TextButton: TextButton,
+    TextLabel: TextLabel,
+    UIAspectRatioConstraint: UIAspectRatioConstraint,
+    UICorner: UICorner,
+    UIGradient: UIGradient,
+    UIGridLayout: UIGridLayout,
+    UIListLayout: UIListLayout,
+    Camera: Camera,
+    WorldModel: WorldModel,
+}
+
+type function Properties(instance: type?)
+    local properties = types.newtable()
+
+    while instance do
+        for i, v in instance:properties() do
+            local connector = v.read and v.read.tag == "table" and v.read:readproperty(types.singleton("Connect"))
+            if connector then
+                if not connector then continue end
+                local params = connector:parameters().head
+                if not params then continue end
+                local listener = params[2]
+                if not listener then continue end
+                properties:setproperty(i, types.optional(listener))
+            elseif v.write then
+                properties:setproperty(i, types.optional(types.unionof(
+                    v.write,
+                    types.newfunction({}, { head = { v.write } })
+                )))
+            end
+        end
+
+        instance = instance:readparent()
+    end
+
+    properties:setindexer(types.number, types.any)
+
+    return properties
+end
+
+type AnyProps = { [any]: any }
+type Create = (
+    (Instance) -> (AnyProps) -> Instance
+) & (
+    (string, AnyProps) -> Instance
+) & (
+    <Name>(Name|keyof<Instances>) -> (Properties<index<Instances, Name>>) -> index<Instances, Name>
+)
+
+return (create :: any) :: Create
+]]></ProtectedString>
+						<string name="ScriptGuid">{D3F856B0-DF11-4481-B097-1E70646A6A4B}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">create</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f2</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXB30DBFCBDE6C4D5FBAA69C87A7FC0975">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local Enum = game and Enum or require "../test/mock".Enum :: never
+local Color3 = game and Color3 or require "../test/mock".Color3 :: never
+
+return {
+    Part = {
+        Material = Enum.Material.SmoothPlastic,
+        Size = vector.create(1, 1, 1),
+        Anchored = true
+    },
+
+    BillboardGui = {
+        ResetOnSpawn = false,
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    },
+
+    CanvasGroup = nil,
+
+    Frame = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0
+    },
+
+    ImageButton = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0,
+        AutoButtonColor = false
+    },
+
+    ImageLabel = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0,
+    },
+
+    ScreenGui = {
+        ResetOnSpawn = false,
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    },
+
+    ScrollingFrame = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0,
+        ScrollBarImageColor3 = Color3.new(0, 0, 0)
+    },
+    
+    SurfaceGui = {
+        ResetOnSpawn = false,
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+
+        PixelsPerStud = 50,
+        SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+    },
+    
+    TextBox = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0,
+        ClearTextOnFocus = false,
+        Font = Enum.Font.SourceSans,
+        Text = "",
+        TextColor3 = Color3.new(0, 0, 0)
+    },
+
+    TextButton = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0,
+        AutoButtonColor = false,
+        Font = Enum.Font.SourceSans,
+        Text = "",
+        TextColor3 = Color3.new(0, 0, 0)
+    },
+    
+    TextLabel = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0,
+        Font = Enum.Font.SourceSans,
+        Text = "",
+        TextColor3 = Color3.new(0, 0, 0)
+    },
+    
+    UIListLayout = {
+        SortOrder = Enum.SortOrder.LayoutOrder
+    },
+   
+    UIGridLayout = {
+        SortOrder = Enum.SortOrder.LayoutOrder
+    },
+
+    UITableLayout = {
+        SortOrder = Enum.SortOrder.LayoutOrder
+    },
+
+    UIPageLayout = {
+        SortOrder = Enum.SortOrder.LayoutOrder
+    },
+    
+    VideoFrame = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0
+    },
+    
+    ViewportFrame = {
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderColor3 = Color3.new(0, 0, 0),
+        BorderSizePixel = 0
+    }
+}
+]]></ProtectedString>
+						<string name="ScriptGuid">{1B18B224-8E00-45EF-97D2-58D8F725D52A}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">defaults</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f3</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXB61AEF19DC0E4B09BF66E895A57507B6">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+local create_node = graph.create_node
+local push_scope_as_child_of = graph.push_scope_as_child_of
+local assert_stable_scope = graph.assert_stable_scope
+local evaluate_node = graph.evaluate_node
+
+local function derive<T>(source: () -> T): () -> T
+    local node = create_node(assert_stable_scope(), source, false :: any)
+
+    evaluate_node(node)
+
+    return function()
+        push_scope_as_child_of(node)
+        return node.cache
+    end
+end
+
+return derive
+]]></ProtectedString>
+						<string name="ScriptGuid">{6E7A4D4F-E1A7-4C00-9E34-82C3FB45B5B7}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">derive</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f4</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXC2D05476395849ECA6603D9C31DD3475">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+local create_node = graph.create_node
+local assert_stable_scope = graph.assert_stable_scope
+local evaluate_node = graph.evaluate_node
+
+local function effect<T>(callback: (T) -> T, initial_value: T)
+    local node = create_node(assert_stable_scope(), callback, initial_value)
+
+    evaluate_node(node)
+end
+
+return effect :: (<T>(callback: (T) -> T, initial_value: T) -> ()) & ((callback: () -> ()) -> ())
+]]></ProtectedString>
+						<string name="ScriptGuid">{F41AA913-A6CA-46BB-89FC-3AEAEC6B7D45}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">effect</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f5</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX19EDE9710C5D4FBD93099A5F38E5C5D7">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local function inline_test(): string
+    return debug.info(1, "n")
+end
+
+local is_O2 = inline_test() ~= "inline_test"
+
+return {
+    strict = not is_O2,
+    defaults = true,
+    defer_nested_properties = true,
+    batch = false,
+}
+]]></ProtectedString>
+						<string name="ScriptGuid">{13EAC07F-464B-45AB-833F-B5E22B57451E}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">flags</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f6</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXF8478831AF624362A522C2724DFDB6C8">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local flags = require "./flags"
+
+export type SourceNode<T> = {
+    cache: T,
+    [number]: Node<T>
+}
+
+export type Node<T> =  {
+    cache: T,
+    effect:  ((T) -> T) | false,
+    cleanups: { () -> () } | false,
+
+    context: { [number]: unknown } | false,
+
+    owned: { Node<T> } | false,
+    owner: Node<T> | false,
+
+    parents: { SourceNode<T> },
+    [number]: Node<T> -- children
+}
+
+local scopes = { n = 0 } :: { [number]: Node<any>, n: number } -- scopes stack
+
+local function efn(err: string)
+    local trace = debug.traceback(err, 2)
+
+    if string.find(err, "^effect error stacktrace") then -- if effect error is nested
+        trace = string.gsub("    " .. trace, "\n", function() -- indent entire error
+            return "\n    "
+        end)
+    end
+
+    trace ..= "\nsource update stacktrace:"
+return trace
+end
+
+local function ycall<T, U>(fn: (T) -> U, arg: T): (boolean, string|U)
+
+    local thread = coroutine.create(xpcall)
+    --local function efn(err: string) return debug.traceback(err, 3) end
+    local resume_ok, run_ok, result = coroutine.resume(thread, fn, efn, arg)
+
+    assert(resume_ok)
+        
+    if coroutine.status(thread) ~= "dead" then
+        return false, debug.traceback(thread, "attempt to yield in reactive scope")
+    end
+
+    return run_ok, result
+end
+
+local function get_scope(): Node<unknown>?
+    return scopes[scopes.n]
+end
+
+local function assert_stable_scope(): Node<unknown>
+    local scope = get_scope()
+
+    if not scope then
+        local caller_name = debug.info(2, "n")
+        return error(`cannot use {caller_name}() outside a stable or reactive scope`, 0)
+    elseif scope.effect then
+        error("cannot create a new reactive scope inside another reactive scope", 0)
+    end
+
+    return scope
+end
+
+local function push_child<T>(parent: SourceNode<any>, child: Node<any>)
+    table.insert(parent, child)
+    table.insert(child.parents, parent)
+end
+
+local function push_scope<T>(node: Node<T>)
+    local n = scopes.n + 1
+    scopes.n = n
+    scopes[n] = node
+end
+
+local function pop_scope()
+    local n = scopes.n
+    scopes.n = n - 1
+    scopes[n] = nil
+end
+
+local function push_cleanup<T>(node: Node<T>, cleanup: () -> ())
+    if node.cleanups then
+        table.insert(node.cleanups, cleanup)
+    else
+        node.cleanups = { cleanup }
+    end
+end
+
+local function flush_cleanups<T>(node: Node<T>)
+    if node.cleanups then
+        for _, fn in node.cleanups do
+            local ok, err: string? = xpcall(fn, debug.traceback)
+            if not ok then error(`cleanup error: {err}`, 0) end
+        end
+
+        table.clear(node.cleanups)
+    end
+end
+
+local function find_and_swap_pop<T>(t: { T }, v: T)
+    local i = table.find(t, v) :: number
+    local n = #t
+    t[i] = t[n]
+    t[n] = nil
+end
+
+local function unparent<T>(node: Node<T>)
+    local parents = node.parents
+
+    for i, parent in parents do
+        find_and_swap_pop(parent, node)
+        parents[i] = nil
+    end
+end
+
+local function destroy<T>(node: Node<T>)
+    if flags.strict and table.find(scopes, node) then
+        error("attempt to destroy an active scope", 0)
+    end
+
+    flush_cleanups(node)
+    unparent(node)
+    
+    if node.owner then
+        find_and_swap_pop(node.owner.owned :: { Node<T> }, node)
+        node.owner = false
+    end
+
+    if node.owned then
+        local owned = node.owned
+        while owned[1] do destroy(owned[1]) end
+    end
+end
+
+local function destroy_owned<T>(node: Node<T>)
+    if node.owned then
+        local owned = node.owned
+        while owned[1] do destroy(owned[1]) end
+    end
+end
+
+local update_queue = { n = 0 } :: { n: number, [number]: Node<any> }
+
+local function evaluate_node<T>(node: Node<T>)
+    if flags.strict then
+        if table.find(scopes, node) then
+            error("a scope, that should rerun due to the update of a source, is already active", 0)
+        end
+
+        local initial_value = node.cache
+
+        for i = 1, 2 do
+            local cur_value = node.cache
+
+            flush_cleanups(node)
+            destroy_owned(node)
+    
+            push_scope(node)
+            local ok, new_value = ycall(node.effect :: (T) -> T, cur_value)
+            pop_scope()
+            
+            if not ok then
+                table.clear(update_queue)
+                update_queue.n = 0
+                error(`effect error stacktrace\n{new_value :: string}`, 0)
+            end
+
+            node.cache = new_value :: T
+        end
+
+        return initial_value ~= node.cache
+    else
+        local cur_value = node.cache
+
+        flush_cleanups(node)
+        destroy_owned(node)
+
+        push_scope(node)
+        local ok, new_value = pcall(node.effect :: (T) -> T, node.cache)
+        pop_scope()
+
+        if not ok then
+            table.clear(update_queue)
+            update_queue.n = 0
+            error(`effect error:\n{new_value}\n`, 0)
+        end
+    
+        node.cache = new_value
+        return cur_value ~= new_value
+    end
+end
+
+local function queue_children_for_update<T>(node: SourceNode<T>)
+    local i = update_queue.n
+    while node[1] do
+        i += 1
+        update_queue[i] = node[1]
+        unparent(node[1])
+    end
+    update_queue.n = i
+end
+
+local function get_update_queue_length()
+    return update_queue.n
+end
+
+local function flush_update_queue(from: number)
+    local i = from + 1
+    while i <= update_queue.n do
+        local node = update_queue[i]
+        --assert(node.effect)
+
+        if node.owner and evaluate_node(node) then
+            queue_children_for_update(node)
+        end
+
+        update_queue[i] = false :: any
+        i += 1
+    end
+    
+    update_queue.n = from
+end
+
+local function update_descendants<T>(root: SourceNode<T>)
+    local n0 = update_queue.n
+    queue_children_for_update(root)
+
+    if flags.batch then return end
+
+    local i = n0 + 1
+    while i <= update_queue.n do
+        local node = update_queue[i]
+        --assert(node.effect)
+
+        -- check if node is still owned in case destroyed after queued
+        if node.owner and evaluate_node(node) then
+            queue_children_for_update(node)
+        end
+
+        update_queue[i] = false :: any -- false instead of nil to avoid sparse
+        i += 1
+    end
+
+    update_queue.n = n0
+end
+
+local function push_scope_as_child_of<T>(node: SourceNode<T>)
+    local scope = get_scope()
+    if scope and scope.effect then -- do not track nodes with no effect
+        push_child(node, scope)
+    end
+end
+
+local function create_node<T>(owner: false | Node<any>, effect: false | (T) -> T, value: T): Node<T>
+    local node: Node<T> = {
+        cache = value,
+        effect = effect,
+        cleanups = false,
+
+        context = false,
+
+        owner = owner,
+        owned = false,
+
+        parents = {},
+    }
+
+    if owner then
+        if owner.owned then
+            table.insert(owner.owned, node)
+        else
+            owner.owned = { node }
+        end
+    end
+
+    return node
+end
+
+local function create_source_node<T>(value: T): SourceNode<T>
+    return { cache = value }
+end
+
+local function get_children<T>(node: Node<T>): { Node<unknown> }
+    return { unpack(node) } :: { Node<any> }
+end
+
+local function set_context<T>(node: Node<T>, key: number, value: unknown)
+    if node.context then
+        node.context[key] = value
+    else
+        node.context = { [key] = value }
+    end
+end
+
+return table.freeze {
+    push_scope = push_scope,
+    pop_scope = pop_scope,
+    evaluate_node = evaluate_node,
+    get_scope = get_scope,
+    assert_stable_scope = assert_stable_scope,
+    push_cleanup = push_cleanup,
+    destroy = destroy,
+    flush_cleanups = flush_cleanups,
+    push_scope_as_child_of = push_scope_as_child_of,
+    update_descendants = update_descendants,
+    push_child = push_child,
+    create_node = create_node,
+    create_source_node = create_source_node,
+    get_children = get_children,
+    flush_update_queue = flush_update_queue,
+    get_update_queue_length = get_update_queue_length,
+    set_context = set_context,
+    scopes = scopes,
+
+    q = update_queue
+}
+]]></ProtectedString>
+						<string name="ScriptGuid">{87B8C12C-4F14-4926-9C42-B34680EB3ED1}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">graph</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f7</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX1CA979DB57474AA483FA253EA1226331">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+type Node<T> = graph.Node<T>
+local create_node = graph.create_node
+local assert_stable_scope = graph.assert_stable_scope
+local get_scope = graph.get_scope
+local evaluate_node = graph.evaluate_node
+local push_cleanup = graph.push_cleanup
+
+local function update_property_effect(p: {
+    instance: Instance,
+    property: string,
+    source: () -> unknown  
+})
+    (p.instance :: any)[p.property] = p.source()
+    return p
+end
+
+local function update_parent_effect(p: {
+    instance: Instance,
+    source: () -> Instance
+})
+    p.instance.Parent = p.source()
+    return p
+end
+
+-- todo: investigate if "count" method used in indexes() and values() can improve performance here
+local function update_children_effect(p: {
+    instance: Instance,
+    cur_children_set: { [Instance]: true },
+    new_children_set: { [Instance]: true },
+    source: () -> Instance | { Instance }
+})
+    local cur_children_set: { [Instance]: true } = p.cur_children_set -- cache of all children parented before update
+    local new_children_set: { [Instance]: true } = p.new_children_set -- cache of all children parented after update
+
+    local new_children = p.source() -- all (and only) children that should be parented after this update
+    
+    local function process_child(child: Instance | { Instance })
+        if type(child) == "userdata" then
+            if new_children_set[child] then return end -- stops redundant reparenting
+
+            new_children_set[child] = true -- record child set from this update
+            
+            if not cur_children_set[child] then
+                child.Parent = p.instance -- if child wasn't already parented then parent it
+            else 
+                cur_children_set[child] = nil -- remove child from cache if it was already in cache
+            end  
+        elseif type(child) == "table" then
+            for _, child in child do
+                process_child(child)
+            end
+        elseif type(child) == "function" then
+            local node = create_node(assert(get_scope()), update_children_effect, {
+                instance = p.instance,
+                cur_children_set = {},
+                new_children_set = {},
+                source = child   
+            })
+    
+            evaluate_node(node)
+
+            push_cleanup(assert(get_scope()), function()
+                for child in node.cache.cur_children_set do
+                    child.Parent = nil
+                end
+            end)
+        end
+    end
+
+    process_child(new_children)
+
+    for child in cur_children_set do
+        child.Parent = nil -- unparent all children that weren't in the new children set
+    end
+
+    table.clear(cur_children_set) -- clear cache, preserve capacity
+    p.cur_children_set, p.new_children_set = new_children_set, cur_children_set
+
+    return p
+end
+
+return {
+    property = function(instance, property, source)
+        local node = create_node(assert_stable_scope(), update_property_effect, {
+            instance = instance,
+            property = property,
+            source = source
+        })
+
+        evaluate_node(node)
+
+        return node
+    end,
+
+    parent = function(instance, parent)
+        local node = create_node(assert_stable_scope(), update_parent_effect, {
+            instance = instance,
+            source = parent
+        })
+
+        evaluate_node(node)
+        
+        return node
+    end,
+
+    children = function(instance, children)
+        local node = create_node(assert_stable_scope(), update_children_effect, {
+            instance = instance,
+            cur_children_set = {},
+            new_children_set = {},
+            source = children
+        })
+
+        evaluate_node(node)
+
+        push_cleanup(assert_stable_scope(), function()
+            for child in node.cache.cur_children_set do
+                child.Parent = nil
+            end
+        end)
+
+        return node
+    end
+}
+]]></ProtectedString>
+						<string name="ScriptGuid">{65A3D8F3-1335-48EA-A532-1DEC9EE1B9F1}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">implicit_effect</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f8</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX63EB183740B548B0BDF60D5EC7E2857A">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local flags = require "./flags"
+local branch = require "./branch"
+local source = require "./source"
+local effect = require "./effect"
+local timeout = require "./timeout" ()
+
+type Array<T> = { T }
+type Map<K, V> = { [K]: V }
+type Source<T> = () -> T
+
+local function indexes<K, V, Obj>(
+    input: Source<Map<K, V>>,
+    component: (Source<V>, K, Source<boolean>) -> (Obj, ...number)
+): Source<Array<Obj>>
+    local update_count = 0
+    local scopes = {} :: Map<K, {
+        destroy: () -> (),
+        object: Obj,
+        value: V?,
+        value_source: (V?) -> V,
+        count: number,
+        delay: number,
+        present: (boolean?) -> boolean,
+        timeout: { cancel: boolean }?,
+    }>
+
+    local output = source({} :: Array<Obj>)
+    local function update_output()
+        local objects = table.create(4)
+
+        for _, scope in scopes do
+            table.insert(objects, scope.object)
+        end
+
+        output(objects)
+    end
+
+    effect(function()
+        local data = input()
+
+        local count = update_count
+        update_count += 1
+
+        local children_need_update = false -- set to true if a scope is created or destroyed
+
+        -- create or update scopes
+        for i, v in data do
+            local scope = scopes[i]
+
+            if scope == nil then -- create new scope and create component
+                local value_source = source(v)
+                local present = source(false)
+
+                local delay = nil :: number?
+                local destroy, object = branch(function()
+                    local object, t = component(value_source, i, present)
+                    delay = t
+                    return object
+                end)
+
+                present(true)
+                
+                children_need_update = true
+
+                scopes[i] = {
+                    destroy = destroy,
+                    object = object,
+                    value = v,
+                    value_source = value_source,
+                    count = count,
+                    delay = delay or 0,
+                    present = present,
+                    timeout = nil,
+                }
+            else -- update scope
+                scope.count = count
+
+                if scope.value ~= v then
+                    if scope.timeout then -- index is in input table again; cancel destruction
+                        scope.timeout.cancel = true
+                        scope.timeout = nil
+                        scope.present(true)
+                    end
+                    
+                    scope.value = v
+                    scope.value_source(v)
+                end
+            end
+        end
+
+        -- destroy scopes
+        for i, scope in scopes do
+            if scope.count < count then -- if count is not latest then index is no longer in the input table
+                scope.present(false)
+
+                if scope.delay == 0 then
+                    scope.destroy()
+                    scopes[i] = nil
+                    children_need_update = true
+                else
+                    scope.value = nil -- set to nil for the `scope.value ~= v` check
+                    if scope.timeout == nil then
+                        scope.timeout = timeout(scope.delay, function() -- todo: possible redundant updates
+                            scope.destroy()
+                            scopes[i] = nil
+                            update_output()
+                        end)
+                    end
+                end
+            end
+        end
+
+        if children_need_update then
+            update_output()
+        end
+    end)
+
+    return output
+end
+
+return indexes
+]]></ProtectedString>
+						<string name="ScriptGuid">{2381D7A6-CC26-492C-ACC3-509FF443FB46}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">indexes</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029f9</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXC90DFEE2370E4B5596B12063F88F13EC">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local version = { major = 0, minor = 4, patch = 0 }
+
+local root = require "./root"
+local branch = require "./branch"
+local mount = require "./mount"
+local create = require "./create"
+local apply = require "./apply"
+local source = require "./source"
+local effect = require "./effect"
+local derive = require "./derive"
+local cleanup = require "./cleanup"
+local untrack = require "./untrack"
+local read = require "./read"
+local batch = require "./batch"
+local context = require "./context"
+local switch = require "./switch"
+local show = require "./show"
+local indexes = require "./indexes"
+local values = require "./values"
+local spring, update_springs = require "./spring"()
+local action = require "./action"()
+local changed = require "./changed"
+local timeout, update_timeouts = require "./timeout"()
+local flags = require "./flags"
+
+export type Source<T> = source.Source<T>
+export type source<T> = Source<T>
+export type Context<T> = context.Context<T>
+export type context<T> = Context<T>
+
+local function step(dt: number)
+    if game then debug.profilebegin("VIDE STEP") end
+
+    if game then debug.profilebegin("VIDE SPRING") end
+    update_springs(dt)
+    if game then debug.profileend() end
+
+    if game then debug.profilebegin("VIDE SCHEDULER") end
+    update_timeouts(dt)
+    if game then debug.profileend() end
+
+    if game then debug.profileend() end
+end
+
+local stepped = game and game:GetService("RunService").Heartbeat:Connect(function(dt: number)
+    task.defer(step, dt)
+end)
+
+local vide = {
+    version = version,
+
+    -- core
+    root = root,
+    --branch = branch,
+    mount = mount,
+    create = create,
+    source = source,
+    effect = effect,
+    derive = derive,
+    switch = switch,
+    show = show,
+    indexes = indexes,
+    values = values,
+
+    -- util
+    cleanup = cleanup,
+    untrack = untrack,
+    read = read,
+    batch = batch,
+    context = context,
+
+    -- animations
+    spring = spring,
+
+    -- actions
+    action = action,
+    changed = changed,
+
+    -- flags
+    strict = (nil :: any) :: boolean,
+    defaults = (nil :: any) :: boolean,
+    defer_nested_properties = (nil :: any) :: boolean,
+
+    -- temporary
+    apply = function(instance: Instance)
+        return function(props: { [any]: any })
+            apply(instance, props)
+            return instance
+        end
+    end,
+
+    -- runtime
+    step = function(dt: number)
+        if stepped then
+            stepped:Disconnect()
+            stepped = nil
+        end
+        step(dt)
+    end
+}
+
+setmetatable(vide :: any, {
+    __index = function(_, index: unknown): ()
+        if flags[index] == nil then
+            error(`{tostring(index)} is not a valid member of vide`, 0)
+        else
+            return flags[index]
+        end
+    end,
+
+    __newindex = function(_, index: unknown, value: unknown)
+        if flags[index] == nil then
+            error(`{tostring(index)} is not a valid member of vide, 0`)
+        else
+            flags[index] = value
+        end
+    end
+})
+
+return vide
+]]></ProtectedString>
+						<string name="ScriptGuid">{4734C152-A4B3-4421-A9D8-A2B0E463901E}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">lib</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029fa</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX15C55C142CEB4A00A3A916187D23AAC3">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local root = require "./root"
+local apply = require "./apply"
+
+local function mount<T>(component: () -> T, target: Instance?): () -> ()
+    return root(function()
+        local result = component()
+        if target then apply(target, { result }) end
+    end)
+end
+
+return mount :: (<T>(component: () -> T, target: Instance) -> () -> ()) & ((component: () -> ()) -> () -> ())
+]]></ProtectedString>
+						<string name="ScriptGuid">{1FF50EDB-D1A8-4E2A-91B0-EAE99A6506C0}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">mount</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029fb</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX2574462EDA974A31A5C70EBA8E74EB72">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local function read<T>(value: T | () -> T): T
+    return if type(value) == "function" then value() else value
+end
+
+return read
+]]></ProtectedString>
+						<string name="ScriptGuid">{E240BD67-B9B0-418E-9D44-CE0097078DD5}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">read</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029fc</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX79092C1F883945378FCCF1C13AB312A3">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+type Node<T> = graph.Node<T>
+local create_node = graph.create_node
+local push_scope = graph.push_scope
+local pop_scope = graph.pop_scope
+local destroy = graph.destroy
+
+local refs = {}
+
+local function root<T...>(fn: (destroy: () -> ()) -> T...): (() -> (), T...)
+    local node = create_node(false, false, false)
+
+    refs[node] = true -- prevent gc of root node
+
+    local destroy = function()
+        if not refs[node] then error "root already destroyed" end
+        refs[node] = nil
+        destroy(node)
+    end
+
+    push_scope(node)
+
+    local result = { xpcall(fn, debug.traceback, destroy) }
+
+    pop_scope()
+
+    if not result[1] then
+        destroy()
+        error(`error while running root():\n\n{result[2]}`, 0)
+    end
+
+    return destroy, unpack(result :: any, 2)
+end
+
+return root :: <T...>(fn: (destroy: () -> ()) -> T...) -> (() -> (), T...)
+]]></ProtectedString>
+						<string name="ScriptGuid">{F5565825-DB97-4435-8A1C-293AEAB64EFF}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">root</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029fd</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXFE75B8D4066C486D8516F6EC4E7493CC">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local source = require "./source"
+local derive = require "./derive"
+local effect = require "./effect"
+local untrack = require "./untrack"
+local switch = require "./switch"
+
+type Array<T> = { T }
+type Source<T> = () -> T
+
+local function show<T, Obj>(
+    input: Source<T?>,
+    component: (Source<T>, Source<boolean>) -> (Obj, ...number),
+    fallback: ((Source<boolean>) -> (Obj, ...number))?
+): Source<nil | Obj | Array<Obj>>
+    local filtered_input = source()
+
+    effect(function()
+        local v = input() 
+        if v then
+            filtered_input(v)
+        end
+    end)
+
+    local input_is_truthy = derive(function()
+        return not not input()
+    end)
+
+    return switch(input_is_truthy) {
+        [true] = function(present)
+            return component(filtered_input, present)
+        end,
+        [false] = fallback
+    }
+end
+
+return show
+]]></ProtectedString>
+						<string name="ScriptGuid">{73B0F0CB-C497-4D7E-8507-70883FB7D721}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">show</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029fe</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX159AD2D611EC42F6850B861955CCC20F">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+type Node<T> = graph.Node<T>
+local create_source_node = graph.create_source_node
+local push_scope_as_child_of = graph.push_scope_as_child_of
+local update_descendants = graph.update_descendants
+
+export type Source<T> = (() -> T) & ((value: T) -> T)
+
+local function source<T>(initial_value: T): Source<T>
+    local node = create_source_node(initial_value)
+
+    local function update_source(...): T
+        if select("#", ...) == 0 then -- no args were given
+            push_scope_as_child_of(node)
+            return node.cache
+        end
+
+        local v = ... :: T
+        if node.cache == v and (type(v) ~= "table" or table.isfrozen(v)) then 
+            return v
+        end
+
+        node.cache = v
+        update_descendants(node)
+        return v
+    end
+
+    return update_source
+end
+
+return source :: (<T>(initial_value: T) -> Source<T>) & (<T>() -> Source<T>)
+]]></ProtectedString>
+						<string name="ScriptGuid">{557DBC5D-5B99-4126-AD67-6D6E0047C709}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">source</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000029ff</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX9B7284AB23474025A943744E9D035242">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+type Node<T> = graph.Node<T>
+type SourceNode<T> = graph.SourceNode<T>
+local create_node = graph.create_node
+local create_source_node = graph.create_source_node
+local assert_stable_scope = graph.assert_stable_scope
+local evaluate_node = graph.evaluate_node
+local update_descendants = graph.update_descendants
+local push_scope_as_child_of = graph.push_scope_as_child_of
+
+local UPDATE_RATE = 120
+local TOLERANCE_FACTOR = 10_000
+
+type Animatable = number | CFrame | Color3 | UDim | UDim2 | Vector2 | Vector3
+
+--[[
+Unsupported datatypes:
+- bool
+- Vector2int16
+- Vector3int16
+- EnumItem
+]]
+
+type SpringState<T> = {
+    k: number, -- spring constant
+    c: number, -- damping coeff
+
+    x0_123: vector, x0_456: vector, -- initial position
+    x_123: vector, x_456: vector, -- current position
+    x1_123: vector, x1_456: vector, -- target position
+    v_123: vector, v_456: vector, -- current velocity
+
+    source_value: T -- current value of spring input source
+}
+
+type SpringSettings<T> = ({
+    position: T?,
+    velocity: T?,
+    impulse: T?
+}) -> ()
+
+type TypeToVec6<T> = (T) -> (vector, vector)
+type Vec6ToType<T> = (vector, vector) -> T
+
+local type_to_vec6 = {
+    number = function(v)
+        return vector.create(v, 0, 0), vector.zero
+    end :: TypeToVec6<number>,
+
+    CFrame = function(v)
+        return v.Position, vector.create(v:ToEulerAnglesXYZ())
+    end :: TypeToVec6<CFrame>,
+
+    Color3 = function(v)
+        -- todo: hsv, oklab?
+        return vector.create(v.R, v.G, v.B), vector.zero
+    end :: TypeToVec6<Color3>,
+
+    UDim = function(v)
+        return vector.create(v.Scale, v.Offset, 0), vector.zero
+    end :: TypeToVec6<UDim>,
+    
+    UDim2 = function(v)
+        return vector.create(v.X.Scale, v.X.Offset, v.Y.Scale), vector.create(v.Y.Offset, 0, 0)
+    end :: TypeToVec6<UDim2>,
+
+    Vector2 = function(v)
+        return vector.create(v.X, v.Y, 0), vector.zero
+    end :: TypeToVec6<Vector2>,
+
+    Vector3 = function(v)
+        return v, vector.zero
+    end :: TypeToVec6<Vector3>,
+
+    Rect = function(v)
+        return vector.create(v.Min.X, v.Min.Y, v.Max.X), vector.create(v.Max.Y, 0, 0)
+    end :: TypeToVec6<Rect>,
+
+    table = function(v)
+        return vector.create(v[1] or 0, v[2] or 0, v[3] or 0), vector.create(v[4] or 0, 0, 0)
+    end :: TypeToVec6<{ number }>
+}
+
+local vec6_to_type = {
+    number = function(a, b)
+        return a.X
+    end :: Vec6ToType<number>,
+
+    CFrame = function(a, b)
+        return CFrame.new(a) * CFrame.fromEulerAnglesXYZ(b.X, b.Y, b.Z)
+    end :: Vec6ToType<CFrame>,
+
+    Color3 = function(v)
+        return Color3.new(math.clamp(v.X, 0, 1), math.clamp(v.Y, 0, 1), math.clamp(v.Z, 0, 1))
+    end :: Vec6ToType<Color3>,
+
+    UDim = function(v)
+        return UDim.new(v.X, math.round(v.Y))
+    end :: Vec6ToType<UDim>,
+    
+    UDim2 = function(a, b)
+        return UDim2.new(a.X, math.round(a.Y), a.Z, math.round(b.X))
+    end :: Vec6ToType<UDim2>,
+
+    Vector2 = function(v)
+        return Vector2.new(v.X, v.Y)
+    end :: Vec6ToType<Vector2>,
+
+    Vector3 = function(v)
+        return v
+    end :: Vec6ToType<Vector3>,
+
+    Rect = function(a, b)
+        return Rect.new(a.X, a.Y, a.Z, b.X)
+    end :: Vec6ToType<Rect>,
+
+    table = function(a, b)
+        return { a.X, a.Y, a.Z, b.X }
+    end :: Vec6ToType<{ number }>
+}
+
+local invalid_type = {
+    __index = function(_, t: string)
+        error(`cannot spring type {t}`, 0)
+    end
+}
+
+setmetatable(type_to_vec6, invalid_type)
+setmetatable(vec6_to_type, invalid_type)
+
+-- maps spring data to its corresponding output node
+-- lifetime of spring data is tied to output node
+local springs: { [SpringState<unknown>]: SourceNode<unknown> } = {}
+setmetatable(springs :: any, { __mode = "v" })
+
+local function spring<T>(source: () -> T, period: number?, damping_ratio: number?): (() -> T, SpringSettings<T>)
+    local owner = assert_stable_scope()
+
+    -- https://en.wikipedia.org/wiki/Damping
+    local w_n = 2*math.pi / (period or 1)
+    local z = damping_ratio or 1
+    local k = w_n^2
+    local c_c = 2*w_n
+    local c = z * c_c
+
+    -- todo: is there a solution other than reducing step size?
+    -- todo: this does not catch all solver exploding cases
+    if c > UPDATE_RATE*2 then -- solver will explode if this is true
+        error("spring damping too high, consider reducing damping or increasing period", 0)
+    end
+
+    local data: SpringState<T> = {
+        k = k,
+        c = c,
+
+        x0_123 = vector.zero,
+        x_123 = vector.zero,
+        x1_123 = vector.zero,
+        v_123 = vector.zero,
+
+        x0_456 = vector.zero,
+        x_456 = vector.zero,
+        x1_456 = vector.zero,
+        v_456 = vector.zero,
+
+        source_value = false :: any,
+    }
+    
+    local output = create_source_node(false :: any)
+
+    local function updater_effect()
+        local value = source()
+        data.x1_123, data.x1_456 = type_to_vec6[typeof(value)](value)
+        data.source_value = value
+        springs[data] = output
+        return value
+    end
+
+    local updater = create_node(owner, updater_effect, false :: any)
+    evaluate_node(updater)
+
+    -- set initial position to goal
+    data.x_123, data.x_456 = data.x1_123, data.x1_456
+
+    -- set output to goal
+    output.cache = data.source_value
+
+    local config = function(p)
+        local x = p.position
+        local v = p.velocity
+        local dv = p.impulse
+
+        if x then
+            local x_123, x_456 = type_to_vec6[typeof(x)](x)
+            data.x_123, data.x_456 = x_123, x_456
+            data.x0_123, data.x0_456 = x_123, x_456
+        end
+
+        if v then
+            data.v_123, data.v_456 = type_to_vec6[typeof(v)](v)
+        end
+
+        if dv then
+            local dv_123, dv_456 = type_to_vec6[typeof(dv)](dv)
+            data.v_123 += dv_123
+            data.v_456 += dv_456
+        end
+
+        -- schedule spring
+        springs[data] = output
+    end :: SpringSettings<T>
+
+    return function(...)
+        if select("#", ...) == 0 then -- no args were given
+            push_scope_as_child_of(output)
+            return output.cache
+        end
+
+        -- set current position to value
+        local v = ... :: T
+        data.x_123, data.x_456 = type_to_vec6[typeof(v)](v)
+
+        -- reset velocity
+        data.v_123 = vector.zero
+        data.v_456 = vector.zero
+
+        -- schedule spring
+        springs[data] = output
+
+        -- set output to value
+        output.cache = v
+
+        return v
+    end, config
+end
+
+-- calculates a float tolerance, based on the magnitude of the float
+local function get_min_step(x: number): number
+    return x/TOLERANCE_FACTOR
+end
+local function get_min_vector_step(direction: vector): vector
+    return vector.create(
+        get_min_step(direction.x),
+        get_min_step(direction.y),
+        get_min_step(direction.z)
+    )
+end
+
+local function step_springs(dt: number)
+    for s in springs do
+        local k = s.k
+        local c = s.c
+        local x_123, x_456 = s.x_123, s.x_456
+        local x1_123, x1_456 = s.x1_123, s.x1_456
+        local u_123, u_456 = s.v_123, s.v_456
+
+        -- calculate displacement from target
+        local dx_123 = x_123 - x1_123
+        local dx_456 = x_456 - x1_456
+
+        -- calculate spring force
+        local fs_123 = dx_123*-k
+        local fs_456 = dx_456*-k
+
+        -- calculate friction force
+        local ff_123 = u_123*-c
+        local ff_456 = u_456*-c
+
+        -- calculate acceleration
+        local a_123 = (fs_123 + ff_123)
+        local a_456 = (fs_456 + ff_456)
+
+        -- step acceleration
+        local v_123 = u_123 + a_123*dt
+        local v_456 = u_456 + a_456*dt
+
+        -- step velocity
+        local y_123 = x_123 + v_123*dt
+        local y_456 = x_456 + v_456*dt
+
+        s.x_123, s.x_456 = y_123, y_456
+        s.v_123, s.v_456 = v_123, v_456
+    end
+end
+
+local function update_spring_sources()
+    for data, output in springs do
+        local x0_123, x0_456 = data.x0_123, data.x0_456
+        local x_123, x_456 = data.x_123, data.x_456
+        local x1_123, x1_456 = data.x1_123, data.x1_456
+        local v_123, v_456 = data.v_123, data.v_456
+
+        local tol_123 = vector.abs(get_min_vector_step(x0_123 - x1_123))
+        local tol_456 = vector.abs(get_min_vector_step(x0_456 - x1_456))
+
+        if
+            -- position is at goal (within tolerance)
+            vector.max(vector.abs(x_123 - x1_123), tol_123) == tol_123
+            and vector.max(vector.abs(x_456 - x1_456), tol_456) == tol_456
+
+            -- velocity is at 0 (within tolerance)
+            and vector.max(vector.abs(v_123/10), tol_123) == tol_123
+            and vector.max(vector.abs(v_456/10), tol_456) == tol_456
+        then
+            springs[data] = nil
+            output.cache = data.source_value
+        else
+            output.cache = vec6_to_type[typeof(data.source_value)](x_123, x_456)
+        end
+
+        update_descendants(output)
+    end
+end
+
+return function()
+    local time_elapsed = 0
+
+    return spring, function(dt: number)
+        time_elapsed += dt
+
+        while time_elapsed > 1 / UPDATE_RATE do
+            time_elapsed -= 1 / UPDATE_RATE
+            step_springs(1 / UPDATE_RATE)
+        end
+
+        update_spring_sources()
+    end
+end
+]]></ProtectedString>
+						<string name="ScriptGuid">{6C0530C2-9135-4724-A6B2-41D9F835C6C2}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">spring</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300002a00</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX55F72F292AD945018D27C21784F27A1C">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local branch = require "./branch"
+local source = require "./source"
+local effect = require "./effect"
+local timeout = require "./timeout" ()
+
+type Array<T> = { T }
+type Map<K, V> = { [K]: V }
+type Source<T> = () -> T
+type Component<T> = (Source<boolean>) -> (T, ...number)
+
+local function switch_map<K, Obj>(
+    input: Source<K>,
+    map: Map<K, Component<Obj>>
+): Source<nil | Obj | Array<Obj>>
+    local scopes = {} :: Map<K, {
+        destroy: () -> (),
+        object: Obj,
+        delay: number,
+        present: (boolean?) -> boolean,
+        timeout: { cancel: boolean }?
+    }>
+
+    local output = source(nil :: nil | Obj | Array<Obj>)
+    local function update_output()
+        local objects = {}
+
+        for _, scope in scopes do
+            table.insert(objects, scope.object)
+        end
+
+        output(
+            if objects[2] then objects
+            elseif objects[1] then objects[1]
+            else nil
+        )
+    end
+
+    effect(function()
+        local key: K? = input()
+
+        -- destroy (or queue destroy) all scopes not associated with the input key
+        for k, scope in scopes do
+            if k == key then continue end
+
+            scope.present(false)
+
+            if scope.delay == 0 then
+                scope.destroy()
+                scopes[k] = nil
+            else
+                if scope.timeout == nil then
+                    scope.timeout = timeout(scope.delay, function()
+                        scope.destroy()
+                        scopes[k] = nil
+                        update_output()
+                    end)
+                end
+            end
+        end
+
+        -- create new scope or abort destruction of existing scope if key exists
+        if key ~= nil then
+            local scope = scopes[key]
+
+            if scope then
+                scope.present(true)
+
+                if scope.timeout then
+                    scope.timeout.cancel = true
+                    scope.timeout = nil
+                end
+            else
+                local component = map[key]
+
+                if component ~= nil then
+                    if type(component) ~= "function" then
+                        error("map must map a value to a function", 0)
+                    end
+
+                    local present = source(false)
+
+                    local delay = nil :: number?
+                    local destroy, object = branch(function()
+                        local object, t = component(present)
+                        delay = t
+                        return object
+                    end)
+
+                    present(true)
+
+                    scopes[key] = {
+                        destroy = destroy,
+                        object = object,
+                        delay = delay or 0,
+                        present = present,
+                        timeout = nil
+                    }
+                end
+            end
+        end
+
+        update_output()
+    end)
+
+    return output
+end
+
+local function switch<K, Obj>(input: Source<K>): (map: Map<K, Component<Obj>>) -> Source<nil | Obj | Array<Obj>>
+    return function(map)
+        return switch_map(input, map)
+    end
+end
+
+return switch
+]]></ProtectedString>
+						<string name="ScriptGuid">{B0B088E0-4D65-4E4F-86A6-F5C01DF4F625}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">switch</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300002a01</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXCE64523F77464E5D9AE2FE366C7B558F">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local queue = {} :: {
+    { t: number, fn: () -> (), cancel: boolean }
+}
+
+local function timeout(t: number, fn: () -> ())
+    local handle = { t = t, fn = fn, cancel = false }
+    table.insert(queue, handle)
+    return handle
+end
+
+local function update_timeouts(dt: number)
+    for i = #queue, 1, -1 do
+        local handle = queue[i]
+        handle.t -= dt
+        
+        if handle.cancel or handle.t <= 0 then
+            queue[i] = queue[#queue]
+            queue[#queue] = nil
+
+            if not handle.cancel then
+                handle.fn()
+            end
+        end
+    end
+end
+
+return function() return timeout, update_timeouts end
+]]></ProtectedString>
+						<string name="ScriptGuid">{777D4CE1-B07F-49D5-84F0-FD869610E4CC}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">timeout</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300002a02</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX34D97DD061F043699085674103BE58A1">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local graph = require "./graph"
+type Node<T> = graph.Node<T>
+local get_scope = graph.get_scope
+
+local function untrack<T>(source: () -> T): T
+    local scope = get_scope()
+    
+    if scope then
+        -- sources are only tracked if the node in scope has an effect
+        local effect = scope.effect
+        scope.effect = false
+
+        local ok, result = xpcall(source, debug.traceback)
+
+        scope.effect = effect :: () -> ()
+
+        if not ok then error(result, 0) end
+
+        return result :: T
+    else
+        return source()
+    end
+end
+
+return untrack :: ( <T>(fn: () -> T) -> T ) & ( (fn: () -> ()) -> () )
+]]></ProtectedString>
+						<string name="ScriptGuid">{C6BFC402-E5BA-4042-8217-18EB8273933F}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">untrack</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300002a03</UniqueId>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXDED9CABA075A434EAC6BD0BCC1A036DA">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[local flags = require "./flags"
+local branch = require "./branch"
+local source = require "./source"
+local effect = require "./effect"
+local timeout = require "./timeout" ()
+
+type Array<T> = { T }
+type Map<K, V> = { [K]: V }
+type Source<T> = () -> T
+
+local function values<K, V, Obj>(
+    input: Source<Map<K, V>>,
+    component: (V, Source<K>, Source<boolean>) -> (Obj, ...number)
+): Source<Array<Obj>>
+    local update_count = 0
+    local scopes = {} :: Map<V, {
+        destroy: () -> (),
+        object: Obj,
+        index: K?,
+        index_source: (K?) -> K,
+        count: number,
+        delay: number,
+        present: (boolean?) -> boolean,
+        timeout: { cancel: boolean }?,
+    }>
+
+    local output = source({} :: Array<Obj>)
+    local function update_output()
+        local objects = table.create(4)
+
+        for _, scope in scopes do
+            table.insert(objects, scope.object)
+        end
+
+        output(objects)
+    end
+
+    effect(function()
+        local data = input()
+
+        local count = update_count
+        update_count += 1
+
+        local children_need_update = false -- set to true if a scope is created or destroyed
+
+        if flags.strict then -- check for duplicate values
+            local map = {}
+            for _, v in data do
+                if map[v] then
+                    error("table source passed to `values()` contains duplicate values", 0)
+                end
+                map[v] = true
+            end
+        end
+
+        -- create or update scopes
+        for i, v in data do
+            local scope = scopes[v]
+
+            if scope == nil then -- create new scope and create component
+                local index_source = source(i)
+                local present = source(false)
+
+                local delay = nil :: number?
+                local destroy, object = branch(function()
+                    local object, t = component(v, index_source, present)
+                    delay = t
+                    return object
+                end)
+
+                present(true)
+                
+                children_need_update = true
+
+                scopes[v] = {
+                    destroy = destroy,
+                    object = object,
+                    index = i,
+                    index_source = index_source,
+                    count = count,
+                    delay = delay or 0,
+                    present = present,
+                    timeout = nil,
+                }
+            else -- update scope
+                scope.count = count
+
+                if scope.index ~= i then
+                    if scope.timeout then -- value is in input table again; cancel destruction
+                        scope.timeout.cancel = true
+                        scope.timeout = nil
+                        scope.present(true)
+                    end
+                    
+                    scope.index = i
+                    scope.index_source(i)
+                end
+            end
+        end
+
+        -- destroy scopes
+        for v, scope in scopes do
+            if scope.count < count then -- if count is not latest then value is no longer in the input table
+                scope.present(false)
+
+                if scope.delay == 0 then
+                    scope.destroy()
+                    scopes[v] = nil
+                    children_need_update = true
+                else
+                    scope.index = nil -- set to nil for the `scope.index ~= i` check
+                    if scope.timeout == nil then
+                        scope.timeout = timeout(scope.delay, function() -- todo: possible redundant updates
+                            scope.destroy()
+                            scopes[v] = nil
+                            update_output()
+                        end)
+                    end
+                end
+            end
+        end
+
+        if children_need_update then
+            update_output()
+        end
+    end)
+
+    return output
+end
+
+return values
+]]></ProtectedString>
+						<string name="ScriptGuid">{10E741EA-7041-46A9-B537-FEC216ECA2E2}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+						<string name="Name">values</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300002a04</UniqueId>
+					</Properties>
 				</Item>
 			</Item>
 		</Item>
