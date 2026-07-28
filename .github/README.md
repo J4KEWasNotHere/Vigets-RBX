@@ -11,7 +11,7 @@
 ## Reader Functionality
 **[**vide-reader.lua**](https://github.com/J4KEWasNotHere/Vigets-RBX/blob/main/src/ReplicatedStorage/J4KEWasNotHere_Vigets/Modules/files/vide-reader.lua) :** This core module acts as the primary parser and compiler. It inspects instance properties, handles tree hierarchies, translates layout elements (like `UIListLayout` and `UIPadding`), and manages bi-directional conversions between raw Roblox instances and Vide code blocks (`SerializeToVide`, `VideAppToStory`, and `DeserializeFromVide`).
 
-**Required** `simple-linter.lua`, `instance-properties.lua`
+**Required:** [`simple-linter.lua`](https://github.com/J4KEWasNotHere/Vigets-RBX/blob/main/src/ReplicatedStorage/J4KEWasNotHere_Vigets/Modules/files/simple-linter.lua), [`instance-properties.lua`](https://github.com/J4KEWasNotHere/Vigets-RBX/blob/main/src/ReplicatedStorage/J4KEWasNotHere_Vigets/Modules/external/instance-properties.lua)
 
 ```lua
 local VideReader = require(...)

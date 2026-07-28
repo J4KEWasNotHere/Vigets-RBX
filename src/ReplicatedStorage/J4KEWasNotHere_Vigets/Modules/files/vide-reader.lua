@@ -96,6 +96,8 @@ local function isAllowedType(inst: Instance): boolean
 	return false
 end
 
+local ProperitesToExclude: { string } = { "IsLoaded" }
+
 local function serializeInstance(instance: Instance): InstanceData?
 	assert(isAllowedType(instance), `{instance.ClassName} is not a valid class name`)
 
@@ -111,6 +113,9 @@ local function serializeInstance(instance: Instance): InstanceData?
 	end
 
 	for _, property: string in properties do
+		if table.find(ProperitesToExclude, property) then
+			continue
+		end
 		data[property] = instance[property]
 	end
 
@@ -175,6 +180,19 @@ local function isVide(vide: any): boolean
 	return false
 end
 
+local function isVideApp(inst: any): boolean
+	if not isModule(inst) then
+		return false
+	end
+
+	local ok, data = pcall(require, inst)
+	if not ok then
+		return false
+	end
+
+	return typeof(data) == "function"
+end
+
 local function isStory(story: any): boolean
 	if not isModule(story) then
 		return false
@@ -190,19 +208,6 @@ local function isStory(story: any): boolean
 	end
 
 	return false
-end
-
-local function isVideApp(inst: any): boolean
-	if not isModule(inst) then
-		return false
-	end
-
-	local ok, data = pcall(require, inst)
-	if not ok then
-		return false
-	end
-
-	return typeof(data) == "function"
 end
 
 local function isValidIdentifier(name: string): boolean
@@ -460,7 +465,6 @@ function Reader.DeserializeFromVide(moduleScript: ModuleScript): Instance?
 		return nil
 	end
 
-	-- Pass the override flag so it builds the full ScreenGui even in Studio preview mode
 	local ok2, instance = pcall(App, { __vigetOverride = true })
 	if not ok2 or typeof(instance) ~= "Instance" then
 		warn(`Vide module {moduleScript.Name} did not return an Instance: {tostring(instance)}`)
@@ -527,14 +531,23 @@ function Reader.DeserializeFromStory(moduleScript: ModuleScript): Instance?
 		return nil
 	end
 
-	local ok, storyData = pcall(require, moduleScript)
-	if not ok or typeof(storyData) ~= "table" or typeof(storyData.story) ~= "function" then
-		warn(`{moduleScript.Name} is not a valid story module`)
+	local appModule = moduleScript.Parent
+	if not isModule(appModule) then
+		warn(`{moduleScript.Name} has no parent App module to build from`)
 		return nil
 	end
 
-	local ok2, instance = pcall(storyData.story, { controls = storyData.controls or {} })
-	if not ok2 or typeof(instance) ~= "Instance" then
+	local ok, AppFn = pcall(require, appModule)
+	if not ok or typeof(AppFn) ~= "function" then
+		warn(`Failed to require App for story {moduleScript.Name}: {tostring(AppFn)}`)
+		return nil
+	end
+
+	local ok2, dynamic = pcall(isDynamicVideApp, appModule)
+	dynamic = ok2 and dynamic or false
+
+	local ok3, instance = pcall(AppFn, if dynamic then { __vigetOverride = true } else {})
+	if not ok3 or typeof(instance) ~= "Instance" then
 		warn(`Story {moduleScript.Name} did not return an Instance: {tostring(instance)}`)
 		return nil
 	end
@@ -546,11 +559,15 @@ end
 -- Exports
 
 function Reader.IsStory(inst: ModuleScript): boolean
-	return isStory(inst)
+	local ok, result = pcall(isStory, inst)
+	return ok and result or false
 end
 
 function Reader.IsVideApp(inst: ModuleScript): boolean
-	return isVideApp(inst) and not isStory(inst)
+	local ok, result = pcall(function()
+		return isVideApp(inst) and not isStory(inst)
+	end)
+	return ok and result or false
 end
 
 -- Control

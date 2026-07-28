@@ -9,10 +9,10 @@ return {
 		"TwistLimitsEnabled",
 		"TwistLowerAngle",
 		"TwistUpperAngle",
-		"UpperAngle"
+		"UpperAngle",
 	},
 	BrickColorValue = {
-		"Value"
+		"Value",
 	},
 	Stats = {
 		"ContactsCount",
@@ -24,7 +24,7 @@ return {
 		"PhysicsReceiveKbps",
 		"PhysicsSendKbps",
 		"PhysicsStepTimeMs",
-		"PrimitivesCount"
+		"PrimitivesCount",
 	},
 	Smoke = {
 		"Color",
@@ -32,7 +32,7 @@ return {
 		"Opacity",
 		"RiseVelocity",
 		"Size",
-		"TimeScale"
+		"TimeScale",
 	},
 	SurfaceGui = {
 		"Active",
@@ -46,20 +46,20 @@ return {
 		"PixelsPerStud",
 		"SizingMode",
 		"ToolPunchThroughDistance",
-		"ZOffset"
+		"ZOffset",
 	},
 	UIScale = {
-		"Scale"
+		"Scale",
 	},
 	CFrameValue = {
-		"Value"
+		"Value",
 	},
 	InputObject = {
 		"Delta",
 		"KeyCode",
 		"Position",
 		"UserInputState",
-		"UserInputType"
+		"UserInputType",
 	},
 	ImageLabel = {
 		"Image",
@@ -67,7 +67,6 @@ return {
 		"ImageRectOffset",
 		"ImageRectSize",
 		"ImageTransparency",
-		"IsLoaded",
 		"ResampleMode",
 		"ScaleType",
 		"SliceCenter",
@@ -94,22 +93,22 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	NotificationService = {
 		"IsLuaGameDetailsEnabled",
-		"SelectedTheme"
+		"SelectedTheme",
 	},
 	UIListLayout = {
-		"Padding"
+		"Padding",
 	},
 	PointLight = {
-		"Range"
+		"Range",
 	},
 	DoubleConstrainedValue = {
 		"MaxValue",
 		"MinValue",
-		"Value"
+		"Value",
 	},
 	RocketPropulsion = {
 		"CartoonFactor",
@@ -122,11 +121,11 @@ return {
 		"ThrustD",
 		"ThrustP",
 		"TurnD",
-		"TurnP"
+		"TurnP",
 	},
 	CoreGui = {
 		"SelectionImageObject",
-		"Version"
+		"Version",
 	},
 	CanvasGroup = {
 		"GroupColor",
@@ -151,15 +150,15 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	PluginToolbarButton = {
 		"ClickableWhenViewportHidden",
 		"Enabled",
-		"Icon"
+		"Icon",
 	},
 	SelectionPartLasso = {
-		"Part"
+		"Part",
 	},
 	DataModel = {
 		"CreatorId",
@@ -171,21 +170,21 @@ return {
 		"PlaceVersion",
 		"PrivateServerId",
 		"PrivateServerOwnerId",
-		"Workspace"
+		"Workspace",
 	},
 	Bone = {
 		"Transform",
 		"TransformedCFrame",
-		"TransformedWorldCFrame"
+		"TransformedWorldCFrame",
 	},
 	TerrainRegion = {
-		"SizeInCells"
+		"SizeInCells",
 	},
 	Texture = {
 		"OffsetStudsU",
 		"OffsetStudsV",
 		"StudsPerTileU",
-		"StudsPerTileV"
+		"StudsPerTileV",
 	},
 	PhysicsSettings = {
 		"AllowSleep",
@@ -212,21 +211,21 @@ return {
 		"PhysicsEnvironmentalThrottle",
 		"ShowDecompositionGeometry",
 		"ThrottleAdjustTime",
-		"UseCSGv2"
+		"UseCSGv2",
 	},
 	Script = {
 		"Enabled",
 		"RunContext",
-		"Source"
+		"Source",
 	},
 	LocalScript = {
 		"Enabled",
 		"RunContext",
-		"Source"
+		"Source",
 	},
 	LineHandleAdornment = {
 		"Length",
-		"Thickness"
+		"Thickness",
 	},
 	HumanoidDescription = {
 		"AccessoryBlob",
@@ -266,7 +265,7 @@ return {
 		"TorsoColor",
 		"WaistAccessory",
 		"WalkAnimation",
-		"WidthScale"
+		"WidthScale",
 	},
 	BillboardGui = {
 		"Active",
@@ -286,22 +285,22 @@ return {
 		"Size",
 		"SizeOffset",
 		"StudsOffset",
-		"StudsOffsetWorldSpace"
+		"StudsOffsetWorldSpace",
 	},
 	BodyThrust = {
 		"Force",
-		"Location"
+		"Location",
 	},
 	UIGridStyleLayout = {
 		"AbsoluteContentSize",
 		"FillDirection",
 		"HorizontalAlignment",
 		"SortOrder",
-		"VerticalAlignment"
+		"VerticalAlignment",
 	},
 	UITextSizeConstraint = {
 		"MaxTextSize",
-		"MinTextSize"
+		"MinTextSize",
 	},
 	WrapLayer = {
 		"BindOffset",
@@ -313,15 +312,15 @@ return {
 		"ReferenceMeshId",
 		"ReferenceOrigin",
 		"ReferenceOriginWorld",
-		"ShrinkFactor"
+		"ShrinkFactor",
 	},
 	NoCollisionConstraint = {
 		"Enabled",
 		"Part0",
-		"Part1"
+		"Part1",
 	},
 	SpecialMesh = {
-		"MeshType"
+		"MeshType",
 	},
 	RodConstraint = {
 		"CurrentDistance",
@@ -329,14 +328,14 @@ return {
 		"LimitAngle0",
 		"LimitAngle1",
 		"LimitsEnabled",
-		"Thickness"
+		"Thickness",
 	},
 	FileMesh = {
 		"MeshId",
-		"TextureId"
+		"TextureId",
 	},
 	Shirt = {
-		"ShirtTemplate"
+		"ShirtTemplate",
 	},
 	SlidingBallConstraint = {
 		"ActuatorType",
@@ -352,29 +351,29 @@ return {
 		"Speed",
 		"TargetPosition",
 		"UpperLimit",
-		"Velocity"
+		"Velocity",
 	},
 	FlagStand = {
-		"TeamColor"
+		"TeamColor",
 	},
 	SkateboardPlatform = {
 		"Controller",
 		"ControllingHumanoid",
 		"Steer",
 		"StickyWheels",
-		"Throttle"
+		"Throttle",
 	},
 	DebuggerWatch = {
-		"Expression"
+		"Expression",
 	},
 	DataModelMesh = {
 		"Offset",
 		"Scale",
-		"VertexColor"
+		"VertexColor",
 	},
 	SkateboardController = {
 		"Steer",
-		"Throttle"
+		"Throttle",
 	},
 	Beam = {
 		"Attachment0",
@@ -395,7 +394,7 @@ return {
 		"Transparency",
 		"Width0",
 		"Width1",
-		"ZOffset"
+		"ZOffset",
 	},
 	Mouse = {
 		"Hit",
@@ -408,7 +407,7 @@ return {
 		"ViewSizeX",
 		"ViewSizeY",
 		"X",
-		"Y"
+		"Y",
 	},
 	Constraint = {
 		"Active",
@@ -416,20 +415,20 @@ return {
 		"Attachment1",
 		"Color",
 		"Enabled",
-		"Visible"
+		"Visible",
 	},
 	Decal = {
 		"Color3",
 		"Texture",
 		"Transparency",
-		"ZIndex"
+		"ZIndex",
 	},
 	ImageHandleAdornment = {
 		"Image",
-		"Size"
+		"Size",
 	},
 	Clothing = {
-		"Color3"
+		"Color3",
 	},
 	Lighting = {
 		"Ambient",
@@ -448,7 +447,7 @@ return {
 		"OutdoorAmbient",
 		"ShadowSoftness",
 		"Technology",
-		"TimeOfDay"
+		"TimeOfDay",
 	},
 	RenderSettings = {
 		"AutoFRMLevel",
@@ -462,19 +461,19 @@ return {
 		"QualityLevel",
 		"ReloadAssets",
 		"RenderCSGTrianglesDebug",
-		"ShowBoundingBoxes"
+		"ShowBoundingBoxes",
 	},
 	ObjectValue = {
-		"Value"
+		"Value",
 	},
 	GameSettings = {
 		"AdditionalCoreIncludeDirs",
 		"OverrideStarterScript",
 		"VideoCaptureEnabled",
-		"VideoRecording"
+		"VideoRecording",
 	},
 	FaceInstance = {
-		"Face"
+		"Face",
 	},
 	BodyColors = {
 		"HeadColor",
@@ -488,13 +487,13 @@ return {
 		"RightLegColor",
 		"RightLegColor3",
 		"TorsoColor",
-		"TorsoColor3"
+		"TorsoColor3",
 	},
 	ColorCorrectionEffect = {
 		"Brightness",
 		"Contrast",
 		"Saturation",
-		"TintColor"
+		"TintColor",
 	},
 	Speaker = {
 		"ChannelCount",
@@ -504,7 +503,7 @@ return {
 		"RollOffMode",
 		"SoundGroup",
 		"Source",
-		"Volume"
+		"Volume",
 	},
 	Atmosphere = {
 		"Color",
@@ -512,7 +511,7 @@ return {
 		"Density",
 		"Glare",
 		"Haze",
-		"Offset"
+		"Offset",
 	},
 	RopeConstraint = {
 		"CurrentDistance",
@@ -523,12 +522,12 @@ return {
 		"WinchForce",
 		"WinchResponsiveness",
 		"WinchSpeed",
-		"WinchTarget"
+		"WinchTarget",
 	},
 	SelectionBox = {
 		"LineThickness",
 		"SurfaceColor3",
-		"SurfaceTransparency"
+		"SurfaceTransparency",
 	},
 	FaceControls = {
 		"ChinRaiser",
@@ -580,7 +579,7 @@ return {
 		"TongueDown",
 		"TongueOut",
 		"TongueUp",
-		"UpperLipSuck"
+		"UpperLipSuck",
 	},
 	DebugSettings = {
 		"DataModel",
@@ -590,10 +589,10 @@ return {
 		"PlayerCount",
 		"ReportSoundWarnings",
 		"RobloxVersion",
-		"TickCountPreciseOverride"
+		"TickCountPreciseOverride",
 	},
 	IntValue = {
-		"Value"
+		"Value",
 	},
 	FloorWire = {
 		"CycleOffset",
@@ -603,21 +602,21 @@ return {
 		"TextureSize",
 		"To",
 		"Velocity",
-		"WireRadius"
+		"WireRadius",
 	},
 	Motor = {
 		"CurrentAngle",
 		"DesiredAngle",
-		"MaxVelocity"
+		"MaxVelocity",
 	},
 	Glue = {
 		"F0",
 		"F1",
 		"F2",
-		"F3"
+		"F3",
 	},
 	ChatWindowConfiguration = {
-		"Enabled"
+		"Enabled",
 	},
 	UIGridLayout = {
 		"AbsoluteCellCount",
@@ -625,12 +624,12 @@ return {
 		"CellPadding",
 		"CellSize",
 		"FillDirectionMaxCells",
-		"StartCorner"
+		"StartCorner",
 	},
 	LayerCollector = {
 		"Enabled",
 		"ResetOnSpawn",
-		"ZIndexBehavior"
+		"ZIndexBehavior",
 	},
 	TestService = {
 		"AutoRuns",
@@ -644,10 +643,10 @@ return {
 		"SimulateSecondsLag",
 		"TestCount",
 		"Timeout",
-		"WarnCount"
+		"WarnCount",
 	},
 	SoundGroup = {
-		"Volume"
+		"Volume",
 	},
 	GuiObject = {
 		"Active",
@@ -671,10 +670,10 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	BoxHandleAdornment = {
-		"Size"
+		"Size",
 	},
 	ScrollingFrame = {
 		"AbsoluteCanvasSize",
@@ -715,7 +714,7 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	Humanoid = {
 		"AutoJumpEnabled",
@@ -748,7 +747,7 @@ return {
 		"UseJumpPower",
 		"WalkSpeed",
 		"WalkToPart",
-		"WalkToPoint"
+		"WalkToPoint",
 	},
 	Highlight = {
 		"Adornee",
@@ -757,7 +756,7 @@ return {
 		"FillColor",
 		"FillTransparency",
 		"OutlineColor",
-		"OutlineTransparency"
+		"OutlineTransparency",
 	},
 	GuiService = {
 		"AutoSelectGuiEnabled",
@@ -765,24 +764,24 @@ return {
 		"GuiNavigationEnabled",
 		"MenuIsOpen",
 		"SelectedObject",
-		"TouchControlsEnabled"
+		"TouchControlsEnabled",
 	},
 	AngularVelocity = {
 		"AngularVelocity",
 		"MaxTorque",
 		"ReactionTorqueEnabled",
-		"RelativeTo"
+		"RelativeTo",
 	},
 	CylinderHandleAdornment = {
 		"Angle",
 		"Height",
 		"InnerRadius",
-		"Radius"
+		"Radius",
 	},
 	BloomEffect = {
 		"Intensity",
 		"Size",
-		"Threshold"
+		"Threshold",
 	},
 	Attachment = {
 		"Axis",
@@ -795,16 +794,16 @@ return {
 		"WorldCFrame",
 		"WorldOrientation",
 		"WorldPosition",
-		"WorldSecondaryAxis"
+		"WorldSecondaryAxis",
 	},
 	Light = {
 		"Brightness",
 		"Color",
 		"Enabled",
-		"Shadows"
+		"Shadows",
 	},
 	PitchShiftSoundEffect = {
-		"Octave"
+		"Octave",
 	},
 	ImageButton = {
 		"HoverImage",
@@ -813,7 +812,6 @@ return {
 		"ImageRectOffset",
 		"ImageRectSize",
 		"ImageTransparency",
-		"IsLoaded",
 		"PressedImage",
 		"ResampleMode",
 		"ScaleType",
@@ -841,16 +839,16 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	DialogChoice = {
 		"GoodbyeChoiceActive",
 		"GoodbyeDialog",
 		"ResponseDialog",
-		"UserDialog"
+		"UserDialog",
 	},
 	NumberValue = {
-		"Value"
+		"Value",
 	},
 	JointInstance = {
 		"Active",
@@ -858,7 +856,7 @@ return {
 		"C1",
 		"Enabled",
 		"Part0",
-		"Part1"
+		"Part1",
 	},
 	CylindricalConstraint = {
 		"AngularActuatorType",
@@ -876,7 +874,7 @@ return {
 		"ServoMaxTorque",
 		"TargetAngle",
 		"UpperAngle",
-		"WorldRotationAxis"
+		"WorldRotationAxis",
 	},
 	TerrainDetail = {
 		"ColorMap",
@@ -885,80 +883,80 @@ return {
 		"MetalnessMap",
 		"NormalMap",
 		"RoughnessMap",
-		"StudsPerTile"
+		"StudsPerTile",
 	},
 	PluginMenu = {
 		"Icon",
-		"Title"
+		"Title",
 	},
 	Accessory = {
-		"AccessoryType"
+		"AccessoryType",
 	},
 	LineForce = {
 		"ApplyAtCenterOfMass",
 		"InverseSquareLaw",
 		"Magnitude",
 		"MaxForce",
-		"ReactionForceEnabled"
+		"ReactionForceEnabled",
 	},
 	Skin = {
-		"SkinColor"
+		"SkinColor",
 	},
 	KeyframeMarker = {
-		"Value"
+		"Value",
 	},
 	Animation = {
-		"AnimationId"
+		"AnimationId",
 	},
 	IntConstrainedValue = {
 		"MaxValue",
 		"MinValue",
-		"Value"
+		"Value",
 	},
 	EqualizerSoundEffect = {
 		"HighGain",
 		"LowGain",
-		"MidGain"
+		"MidGain",
 	},
 	Model = {
 		"LevelOfDetail",
 		"PrimaryPart",
-		"WorldPivot"
+		"WorldPivot",
 	},
 	BodyAngularVelocity = {
 		"AngularVelocity",
 		"MaxTorque",
-		"P"
+		"P",
 	},
 	VelocityMotor = {
 		"CurrentAngle",
 		"DesiredAngle",
 		"Hole",
-		"MaxVelocity"
+		"MaxVelocity",
 	},
 	PostEffect = {
-		"Enabled"
+		"Enabled",
 	},
 	Part = {
-		"Shape"
+		"Shape",
 	},
 	ImporterMeshSettings = {
 		"Anchored",
 		"Dimensions",
 		"DoubleSided",
 		"IgnoreVertexColors",
-		"PolygonCount"
+		"PolygonCount",
 	},
 	TeleportOptions = {
 		"ReservedServerAccessCode",
 		"ServerInstanceId",
-		"ShouldReserveServer"
+		"ShouldReserveServer",
 	},
 	ArcHandles = {
-		"Axes"
+		"Axes",
 	},
 	RayValue = {
-		"Value"
+		"Value",
 	},
 	UIPageLayout = {
 		"Animated",
@@ -970,13 +968,13 @@ return {
 		"Padding",
 		"ScrollWheelInputEnabled",
 		"TouchInputEnabled",
-		"TweenTime"
+		"TweenTime",
 	},
 	UIPadding = {
 		"PaddingBottom",
 		"PaddingLeft",
 		"PaddingRight",
-		"PaddingTop"
+		"PaddingTop",
 	},
 	TextButton = {
 		--"ContentText",
@@ -1019,7 +1017,7 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	UIStroke = {
 		"ApplyStrokeMode",
@@ -1027,11 +1025,10 @@ return {
 		"Enabled",
 		"LineJoinMode",
 		"Thickness",
-		"Transparency"
+		"Transparency",
 	},
 	Sound = {
 		"ChannelCount",
-		"IsLoaded",
 		"IsPaused",
 		"IsPlaying",
 		"Looped",
@@ -1046,7 +1043,7 @@ return {
 		"SoundId",
 		"TimeLength",
 		"TimePosition",
-		"Volume"
+		"Volume",
 	},
 	ViewportFrame = {
 		"Ambient",
@@ -1076,7 +1073,7 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	ScreenGui = {
 		"ClipToDeviceSafeArea",
@@ -1088,12 +1085,11 @@ return {
 		"ScreenInsets",
 		"ZIndexBehavior",
 	},
-	
+
 	Color3Value = {
-		"Value"
+		"Value",
 	},
 	VideoFrame = {
-		"IsLoaded",
 		"Looped",
 		"Playing",
 		"Resolution",
@@ -1122,15 +1118,15 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	Vector3Value = {
-		"Value"
+		"Value",
 	},
 	PlayerGui = {
 		"CurrentScreenOrientation",
 		"ScreenOrientation",
-		"SelectionImageObject"
+		"SelectionImageObject",
 	},
 	Frame = {
 		"Active",
@@ -1154,26 +1150,25 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
-		
+		"ZIndex",
 	},
 	UITableLayout = {
 		"FillEmptySpaceColumns",
 		"FillEmptySpaceRows",
 		"MajorAxis",
-		"Padding"
+		"Padding",
 	},
 	UISizeConstraint = {
 		"MaxSize",
-		"MinSize"
+		"MinSize",
 	},
 	UICorner = {
-		"CornerRadius"
+		"CornerRadius",
 	},
 	UIAspectRatioConstraint = {
 		"AspectRatio",
 		"AspectType",
-		"DominantAxis"
+		"DominantAxis",
 	},
 	TextLabel = {
 		--"ContentText",
@@ -1216,7 +1211,7 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	TextBox = {
 		"ClearTextOnFocus",
@@ -1267,18 +1262,18 @@ return {
 		"Size",
 		"SizeConstraint",
 		"Visible",
-		"ZIndex"
+		"ZIndex",
 	},
 	FloatCurve = {
-		"Length"
+		"Length",
 	},
 	StringValue = {
-		"Value"
+		"Value",
 	},
 	StarterGui = {
 		"ScreenOrientation",
 		"ShowDevelopmentGui",
-		"VirtualCursorMode"
+		"VirtualCursorMode",
 	},
 	PackageLink = {
 		"AutoUpdate",
@@ -1287,17 +1282,17 @@ return {
 		"PackageId",
 		"PermissionLevel",
 		"Status",
-		"VersionNumber"
+		"VersionNumber",
 	},
 	ModuleScript = {
 		"LinkedSource",
-		"Source"
+		"Source",
 	},
 	UIGradient = {
 		"Color",
 		"Enabled",
 		"Offset",
 		"Rotation",
-		"Transparency"
+		"Transparency",
 	},
 }

@@ -42,43 +42,71 @@ return {
 		button.ClickableWhenViewportHidden = true
 
 		local widgetsEnabled = Value(false)
-		local function AddWidget(name, children)
-			local id = HttpService:GenerateGUID()
-			return Widget({
-				Id = id,
-				Name = name or id,
-				InitialDockTo = Enum.InitialDockState.Float,
-				InitialEnabled = false,
-				ForceInitialEnabled = true,
-				FloatingSize = Constants.WidgetSize,
-				MinimumSize = Constants.WidgetSize,
 
-				Enabled = widgetsEnabled,
-				[OnChange("Enabled")] = function(isEnabled)
-					widgetsEnabled:set(isEnabled)
+		local isWorking = Value(false)
+		local canBuild = Value(false)
+		local selectedMethod = Value("")
+
+		local MethodButtonSize = UDim2.new(1, 0, 0, 40)
+
+		local CONVERSIONS = {
+			{
+				Id = "toVide",
+				Text = "Convert to Vide Component",
+				Image = "rbxassetid://131881863542969", --"http://www.roblox.com/asset/?id=6031233841",
+				IconSize = 0.85,
+				Applies = function(inst: Instance)
+					return inst:IsA("GuiBase") or inst:IsA("UIBase")
 				end,
-				[Children] = New("Frame")({
-					ZIndex = 1,
-					BackgroundTransparency = 1,
-					Size = UDim2.fromScale(1, 1),
-					[Children] = {
-						New("UIListLayout")({
-							SortOrder = Enum.SortOrder.LayoutOrder,
-							Padding = UDim.new(0, 8),
-						}),
+				Run = function(inst: Instance)
+					return Reader.SerializeToVide(inst)
+				end,
+			},
+			{
+				Id = "toStory",
+				Text = "Convert to Story",
+				Image = "rbxassetid://96954263450238", --"http://www.roblox.com/asset/?id=6031233841",
+				IconSize = 0.9,
+				Applies = function(inst: Instance)
+					return inst:IsA("ModuleScript") and Reader.IsVideApp(inst)
+				end,
+				Run = function(inst: ModuleScript)
+					return Reader.VideAppToStory(inst)
+				end,
+			},
+			{
+				Id = "fromVide",
+				Text = "Build from Component",
+				Image = "rbxassetid://6383105831", --"http://www.roblox.com/asset/?id=6023426938",
+				IconSize = 0.7,
+				Applies = function(inst: Instance)
+					return inst:IsA("ModuleScript") and Reader.IsVideApp(inst)
+				end,
+				Run = function(inst: ModuleScript)
+					return Reader.DeserializeFromVide(inst)
+				end,
+			},
+			{
+				Id = "fromStory",
+				Text = "Build from Story",
+				Image = "rbxassetid://6383105831",
+				IconSize = 0.7,
+				Applies = function(inst: Instance)
+					return inst:IsA("ModuleScript") and Reader.IsStory(inst)
+				end,
+				Run = function(inst: ModuleScript)
+					return Reader.DeserializeFromStory(inst)
+				end,
+			},
+		}
 
-						New("UIPadding")({
-							PaddingLeft = UDim.new(0, 6),
-							PaddingRight = UDim.new(0, 6),
-							PaddingBottom = UDim.new(0, 10),
-							PaddingTop = UDim.new(0, 10),
-						}),
-
-						children,
-					},
-				}),
-			})
+		local CONVERSIONS_BY_ID = {}
+		for _, conversion in CONVERSIONS do
+			CONVERSIONS_BY_ID[conversion.Id] = conversion
 		end
+
+		local elementMethods = Value({})
+		local conversionTargets = {}
 
 		local function CreateMethodButton(props)
 			local rounding = props.Rounding or UDim.new(0, 6)
@@ -161,71 +189,6 @@ return {
 			})
 		end
 
-		local isWorking = Value(false)
-		local canBuild = Value(false)
-		local selectedMethod = Value("")
-
-		local MethodButtonSize = UDim2.new(1, 0, 0, 40)
-
-		local CONVERSIONS = {
-			{
-				Id = "toVide",
-				Text = "Convert to Vide Component",
-				Image = "rbxassetid://131881863542969", --"http://www.roblox.com/asset/?id=6031233841",
-				IconSize = 0.85,
-				Applies = function(inst: Instance)
-					return inst:IsA("GuiBase") or inst:IsA("UIBase")
-				end,
-				Run = function(inst: Instance)
-					return Reader.SerializeToVide(inst)
-				end,
-			},
-			{
-				Id = "toStory",
-				Text = "Convert to Story",
-				Image = "rbxassetid://96954263450238", --"http://www.roblox.com/asset/?id=6031233841",
-				IconSize = 0.9,
-				Applies = function(inst: Instance)
-					return inst:IsA("ModuleScript") and Reader.IsVideApp(inst)
-				end,
-				Run = function(inst: ModuleScript)
-					return Reader.VideAppToStory(inst)
-				end,
-			},
-			{
-				Id = "fromVide",
-				Text = "Build from Component",
-				Image = "rbxassetid://6383105831", --"http://www.roblox.com/asset/?id=6023426938",
-				IconSize = 0.7,
-				Applies = function(inst: Instance)
-					return inst:IsA("ModuleScript") and Reader.IsVideApp(inst)
-				end,
-				Run = function(inst: ModuleScript)
-					return Reader.DeserializeFromVide(inst)
-				end,
-			},
-			{
-				Id = "fromStory",
-				Text = "Build from Story",
-				Image = "rbxassetid://6383105831",
-				IconSize = 0.7,
-				Applies = function(inst: Instance)
-					return inst:IsA("ModuleScript") and Reader.IsStory(inst)
-				end,
-				Run = function(inst: ModuleScript)
-					return Reader.DeserializeFromStory(inst)
-				end,
-			},
-		}
-
-		local CONVERSIONS_BY_ID = {}
-		for _, conversion in CONVERSIONS do
-			CONVERSIONS_BY_ID[conversion.Id] = conversion
-		end
-
-		local elementMethods = Value({})
-		local conversionTargets = {}
-
 		local function updateConversions(instances: { Instance })
 			local newButtons = {}
 			local anyValid = false
@@ -279,9 +242,54 @@ return {
 
 		local items = Value({})
 		local function onSelectionChanged()
+			if not widgetsEnabled:get(false) then
+				return
+			end
+
 			local selection = SelectionService:Get()
 			items:set(selection)
 			updateConversions(selection)
+		end
+
+		local function AddWidget(name, children)
+			local id = HttpService:GenerateGUID()
+			return Widget({
+				Id = id,
+				Name = name or id,
+				InitialDockTo = Enum.InitialDockState.Float,
+				InitialEnabled = false,
+				ForceInitialEnabled = true,
+				FloatingSize = Constants.WidgetSize,
+				MinimumSize = Constants.WidgetSize,
+
+				Enabled = widgetsEnabled,
+				[OnChange("Enabled")] = function(isEnabled)
+					widgetsEnabled:set(isEnabled)
+					if isEnabled then
+						onSelectionChanged()
+					end
+				end,
+				[Children] = New("Frame")({
+					ZIndex = 1,
+					BackgroundTransparency = 1,
+					Size = UDim2.fromScale(1, 1),
+					[Children] = {
+						New("UIListLayout")({
+							SortOrder = Enum.SortOrder.LayoutOrder,
+							Padding = UDim.new(0, 8),
+						}),
+
+						New("UIPadding")({
+							PaddingLeft = UDim.new(0, 6),
+							PaddingRight = UDim.new(0, 6),
+							PaddingBottom = UDim.new(0, 10),
+							PaddingTop = UDim.new(0, 10),
+						}),
+
+						children,
+					},
+				}),
+			})
 		end
 
 		SelectionService.SelectionChanged:Connect(onSelectionChanged)
