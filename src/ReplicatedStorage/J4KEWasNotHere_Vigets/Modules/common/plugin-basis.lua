@@ -186,7 +186,7 @@ return {
 				Image = "rbxassetid://96954263450238", --"http://www.roblox.com/asset/?id=6031233841",
 				IconSize = 0.9,
 				Applies = function(inst: Instance)
-					return inst:IsA("ModuleScript")
+					return inst:IsA("ModuleScript") and Reader.IsVideApp(inst)
 				end,
 				Run = function(inst: ModuleScript)
 					return Reader.VideAppToStory(inst)
@@ -198,10 +198,22 @@ return {
 				Image = "rbxassetid://6383105831", --"http://www.roblox.com/asset/?id=6023426938",
 				IconSize = 0.7,
 				Applies = function(inst: Instance)
-					return inst:IsA("ModuleScript")
+					return inst:IsA("ModuleScript") and Reader.IsVideApp(inst)
 				end,
 				Run = function(inst: ModuleScript)
 					return Reader.DeserializeFromVide(inst)
+				end,
+			},
+			{
+				Id = "fromStory",
+				Text = "Build from Story",
+				Image = "rbxassetid://6383105831",
+				IconSize = 0.7,
+				Applies = function(inst: Instance)
+					return inst:IsA("ModuleScript") and Reader.IsStory(inst)
+				end,
+				Run = function(inst: ModuleScript)
+					return Reader.DeserializeFromStory(inst)
 				end,
 			},
 		}
@@ -458,7 +470,7 @@ return {
 		end)
 
 		return function()
-			widgetsEnabled:set(not widgetsEnabled:get(false))
+			widgetsEnabled:set(false)
 		end
 	end,
 }

@@ -44,7 +44,7 @@ return function(props: {any}?)
     return create "ScreenGui" {
         %s
         elements
-    end
+    }
 end]]
 
 local STORY_TEMPLATE: string = [[--!nolint
@@ -52,11 +52,15 @@ local STORY_TEMPLATE: string = [[--!nolint
 local App = require(%s)
 local Vide = require(%s)
 
+-- Wire specific values into your component's own create{} call as props.controls.<Name>
+local controls = {}
+
 local story = {
     vide = Vide,
-    story = function()
-        return App {} -- pass in your own properties here
-    end
+    controls = controls,
+    story = function(props)
+        %s
+    end,
 }
 
 return story]]
@@ -169,6 +173,36 @@ local function isVide(vide: any): boolean
 	end
 
 	return false
+end
+
+local function isStory(story: any): boolean
+	if not isModule(story) then
+		return false
+	end
+
+	local ok, data = pcall(require, story)
+	if not ok then
+		return false
+	end
+
+	if typeof(data) == "table" and typeof(data.story) == "function" then
+		return true
+	end
+
+	return false
+end
+
+local function isVideApp(inst: any): boolean
+	if not isModule(inst) then
+		return false
+	end
+
+	local ok, data = pcall(require, inst)
+	if not ok then
+		return false
+	end
+
+	return typeof(data) == "function"
 end
 
 local function isValidIdentifier(name: string): boolean
@@ -439,6 +473,15 @@ end
 
 -- Experimental
 
+local DYNAMIC_MARKER = "--> Dynamic Vide Element"
+
+local function isDynamicVideApp(moduleScript: ModuleScript): boolean
+	local ok, source = pcall(function()
+		return moduleScript.Source
+	end)
+	return ok and typeof(source) == "string" and source:find(DYNAMIC_MARKER, 1, true) ~= nil
+end
+
 function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	if not isModule(app) then
 		return nil
@@ -447,6 +490,22 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	local ok, videModule = pcall(locateVide)
 	videModule = (ok and typeof(videModule) == "Instance") and videModule or nil
 
+	local storyBody = if isDynamicVideApp(app)
+		then [[local elements = App(props.controls)
+        if typeof(elements) == "table" then
+            for _, element in elements do
+                if typeof(element) == "Instance" then
+                    element.Parent = props.target
+                end
+            end
+        end
+        return nil]]
+		else [[local element = App(props.controls)
+        if typeof(element) == "Instance" then
+            element.Parent = props.target
+        end
+        return nil]]
+
 	local storyScript = Instance.new("ModuleScript")
 	storyScript.Name = `{app.Name}.story`
 
@@ -454,15 +513,47 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 		string.format(
 			STORY_TEMPLATE,
 			`script.Parent`,
-			if videModule
-				then getRequirePath(videModule)
-				else "nil --[[ TODO: could not locate Vide ]]"
+			if videModule then getRequirePath(videModule) else "nil",
+			storyBody
 		)
 	)
 
 	storyScript.Parent = app
 	return storyScript
 end
+
+function Reader.DeserializeFromStory(moduleScript: ModuleScript): Instance?
+	if not isModule(moduleScript) then
+		return nil
+	end
+
+	local ok, storyData = pcall(require, moduleScript)
+	if not ok or typeof(storyData) ~= "table" or typeof(storyData.story) ~= "function" then
+		warn(`{moduleScript.Name} is not a valid story module`)
+		return nil
+	end
+
+	local ok2, instance = pcall(storyData.story, { controls = storyData.controls or {} })
+	if not ok2 or typeof(instance) ~= "Instance" then
+		warn(`Story {moduleScript.Name} did not return an Instance: {tostring(instance)}`)
+		return nil
+	end
+
+	instance.Parent = moduleScript.Parent or moduleScript
+	return instance
+end
+
+-- Exports
+
+function Reader.IsStory(inst: ModuleScript): boolean
+	return isStory(inst)
+end
+
+function Reader.IsVideApp(inst: ModuleScript): boolean
+	return isVideApp(inst) and not isStory(inst)
+end
+
+-- Control
 
 function Reader.setVide(vide: ModuleScript)
 	if not isModule(vide) or not isVide(vide) then

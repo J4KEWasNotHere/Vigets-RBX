@@ -109,18 +109,18 @@
 		<Item class="Camera" referent="RBXC61E6F7C265C4E5CBDE0FF03C8A6E333">
 			<Properties>
 				<CoordinateFrame name="CFrame">
-					<X>0.189343616</X>
-					<Y>19.858387</Y>
-					<Z>20.1119308</Z>
-					<R00>0.999971628</R00>
-					<R01>-0.00467670709</R01>
-					<R02>0.00591409951</R02>
+					<X>11.6150045</X>
+					<Y>18.0601177</Y>
+					<Z>18.7471695</Z>
+					<R00>0.898305535</R00>
+					<R01>-0.247850269</R01>
+					<R02>0.362791061</R02>
 					<R10>-0</R10>
-					<R11>0.784387112</R11>
-					<R12>0.620271623</R12>
-					<R20>-0.00753977243</R20>
-					<R21>-0.62025404</R21>
-					<R22>0.78436476</R22>
+					<R11>0.825705051</R11>
+					<R12>0.564102173</R12>
+					<R20>-0.439371228</R20>
+					<R21>-0.5067361</R21>
+					<R22>0.741735458</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
 				<token name="CameraType">0</token>
@@ -1052,6 +1052,20 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300000392</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="ServiceVisibilityService" referent="RBX3AD18C17E9C74BC0970B1BF071230A31">
+		<Properties>
+			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
+			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ServiceVisibilityService</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000003ae</UniqueId>
 		</Properties>
 	</Item>
 	<Item class="LuaWebService" referent="RBX22DA3C5963944872B1953D0385253F88">
@@ -6234,7 +6248,7 @@ return {
 				Image = "rbxassetid://96954263450238", --"http://www.roblox.com/asset/?id=6031233841",
 				IconSize = 0.9,
 				Applies = function(inst: Instance)
-					return inst:IsA("ModuleScript")
+					return inst:IsA("ModuleScript") and Reader.IsVideApp(inst)
 				end,
 				Run = function(inst: ModuleScript)
 					return Reader.VideAppToStory(inst)
@@ -6246,10 +6260,22 @@ return {
 				Image = "rbxassetid://6383105831", --"http://www.roblox.com/asset/?id=6023426938",
 				IconSize = 0.7,
 				Applies = function(inst: Instance)
-					return inst:IsA("ModuleScript")
+					return inst:IsA("ModuleScript") and Reader.IsVideApp(inst)
 				end,
 				Run = function(inst: ModuleScript)
 					return Reader.DeserializeFromVide(inst)
+				end,
+			},
+			{
+				Id = "fromStory",
+				Text = "Build from Story",
+				Image = "rbxassetid://6383105831",
+				IconSize = 0.7,
+				Applies = function(inst: Instance)
+					return inst:IsA("ModuleScript") and Reader.IsStory(inst)
+				end,
+				Run = function(inst: ModuleScript)
+					return Reader.DeserializeFromStory(inst)
 				end,
 			},
 		}
@@ -6506,7 +6532,7 @@ return {
 		end)
 
 		return function()
-			widgetsEnabled:set(not widgetsEnabled:get(false))
+			widgetsEnabled:set(false)
 		end
 	end,
 }
@@ -6541,8 +6567,8 @@ return {
 	Name = "Vigets",
 	Icon = "rbxassetid://135928770766655",
 
-	Version = "0.1.0",
-	VersionTip = "-alpha",
+	Version = "0.2.0",
+	VersionTip = "",
 
 	WidgetSize = Vector2.new(230, 200),
 }
@@ -8163,7 +8189,7 @@ return function(props: {any}?)
     return create "ScreenGui" {
         %s
         elements
-    end
+    }
 end]]
 
 local STORY_TEMPLATE: string = [[--!nolint
@@ -8171,11 +8197,15 @@ local STORY_TEMPLATE: string = [[--!nolint
 local App = require(%s)
 local Vide = require(%s)
 
+-- Wire specific values into your component's own create{} call as props.controls.<Name>
+local controls = {}
+
 local story = {
     vide = Vide,
-    story = function()
-        return App {} -- pass in your own properties here
-    end
+    controls = controls,
+    story = function(props)
+        %s
+    end,
 }
 
 return story]]
@@ -8288,6 +8318,36 @@ local function isVide(vide: any): boolean
 	end
 
 	return false
+end
+
+local function isStory(story: any): boolean
+	if not isModule(story) then
+		return false
+	end
+
+	local ok, data = pcall(require, story)
+	if not ok then
+		return false
+	end
+
+	if typeof(data) == "table" and typeof(data.story) == "function" then
+		return true
+	end
+
+	return false
+end
+
+local function isVideApp(inst: any): boolean
+	if not isModule(inst) then
+		return false
+	end
+
+	local ok, data = pcall(require, inst)
+	if not ok then
+		return false
+	end
+
+	return typeof(data) == "function"
 end
 
 local function isValidIdentifier(name: string): boolean
@@ -8558,6 +8618,15 @@ end
 
 -- Experimental
 
+local DYNAMIC_MARKER = "--> Dynamic Vide Element"
+
+local function isDynamicVideApp(moduleScript: ModuleScript): boolean
+	local ok, source = pcall(function()
+		return moduleScript.Source
+	end)
+	return ok and typeof(source) == "string" and source:find(DYNAMIC_MARKER, 1, true) ~= nil
+end
+
 function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	if not isModule(app) then
 		return nil
@@ -8566,6 +8635,22 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	local ok, videModule = pcall(locateVide)
 	videModule = (ok and typeof(videModule) == "Instance") and videModule or nil
 
+	local storyBody = if isDynamicVideApp(app)
+		then [[local elements = App(props.controls)
+        if typeof(elements) == "table" then
+            for _, element in elements do
+                if typeof(element) == "Instance" then
+                    element.Parent = props.target
+                end
+            end
+        end
+        return nil]]
+		else [[local element = App(props.controls)
+        if typeof(element) == "Instance" then
+            element.Parent = props.target
+        end
+        return nil]]
+
 	local storyScript = Instance.new("ModuleScript")
 	storyScript.Name = `{app.Name}.story`
 
@@ -8573,15 +8658,47 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 		string.format(
 			STORY_TEMPLATE,
 			`script.Parent`,
-			if videModule
-				then getRequirePath(videModule)
-				else "nil --[[ TODO: could not locate Vide ]]"
+			if videModule then getRequirePath(videModule) else "nil",
+			storyBody
 		)
 	)
 
 	storyScript.Parent = app
 	return storyScript
 end
+
+function Reader.DeserializeFromStory(moduleScript: ModuleScript): Instance?
+	if not isModule(moduleScript) then
+		return nil
+	end
+
+	local ok, storyData = pcall(require, moduleScript)
+	if not ok or typeof(storyData) ~= "table" or typeof(storyData.story) ~= "function" then
+		warn(`{moduleScript.Name} is not a valid story module`)
+		return nil
+	end
+
+	local ok2, instance = pcall(storyData.story, { controls = storyData.controls or {} })
+	if not ok2 or typeof(instance) ~= "Instance" then
+		warn(`Story {moduleScript.Name} did not return an Instance: {tostring(instance)}`)
+		return nil
+	end
+
+	instance.Parent = moduleScript.Parent or moduleScript
+	return instance
+end
+
+-- Exports
+
+function Reader.IsStory(inst: ModuleScript): boolean
+	return isStory(inst)
+end
+
+function Reader.IsVideApp(inst: ModuleScript): boolean
+	return isVideApp(inst) and not isStory(inst)
+end
+
+-- Control
 
 function Reader.setVide(vide: ModuleScript)
 	if not isModule(vide) or not isVide(vide) then
@@ -15555,20 +15672,6 @@ return values
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c30000039d</UniqueId>
 		</Properties>
 	</Item>
-	<Item class="ServiceVisibilityService" referent="RBX3AD18C17E9C74BC0970B1BF071230A31">
-		<Properties>
-			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
-			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
-			<BinaryString name="AttributesSerialize"></BinaryString>
-			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-			<bool name="DefinesCapabilities">false</bool>
-			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-			<string name="Name">ServiceVisibilityService</string>
-			<int64 name="SourceAssetId">-1</int64>
-			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000003ae</UniqueId>
-		</Properties>
-	</Item>
 	<Item class="HttpService" referent="RBX31922E2D091A4714AAE2DAEE0E93948C">
 		<Properties>
 			<bool name="HttpEnabled">false</bool>
@@ -15589,7 +15692,7 @@ return values
 				<G>0.5</G>
 				<B>0.5</B>
 			</Color3>
-			<float name="Brightness">1</float>
+			<float name="Brightness">1.98124921</float>
 			<Color3 name="ColorShift_Bottom">
 				<R>0</R>
 				<G>0</G>
@@ -15622,9 +15725,12 @@ return values
 			<bool name="Outlines">true</bool>
 			<bool name="PrioritizeLightingQuality">false</bool>
 			<float name="ShadowSoftness">0.5</float>
-			<token name="Technology">2</token>
+			<token name="Technology">1</token>
 			<string name="TimeOfDay">14:00:00</string>
-			<BinaryString name="AttributesSerialize">AQAAACYAAABSQlhfTGlnaHRpbmdUZWNobm9sb2d5VW5pZmllZE1pZ3JhdGlvbgMB</BinaryString>
+			<BinaryString name="AttributesSerialize"><![CDATA[BQAAABQAAABSQlhfQmFja3VwQnJpZ2h0bmVzcwUAAIA/HgAAAFJCWF9CYWNrdXBFeHBvc3Vy
+ZUNvbXBlbnNhdGlvbgUAAAAAIQAAAFJCWF9MaWdodGluZ0NvbXBhdGliaWxpdHlNaWdyYXRl
+ZAMBJgAAAFJCWF9MaWdodGluZ1RlY2hub2xvZ3lVbmlmaWVkTWlncmF0aW9uAwEgAAAAUkJY
+X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAgAAAA==]]></BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -15633,6 +15739,36 @@ return values
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000004a4</UniqueId>
 		</Properties>
+		<Item class="ColorGradingEffect" referent="RBX61822D3CEA354040B5AA49D70FA4130A">
+			<Properties>
+				<token name="TonemapperPreset">1</token>
+				<bool name="Enabled">true</bool>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">ColorGrading</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">6867d00aa452a0ce0a7a04f40000043c</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="BloomEffect" referent="RBXC96B907B1F084D578CD77A3AC9079B51">
+			<Properties>
+				<float name="Intensity">0</float>
+				<float name="Size">24</float>
+				<float name="Threshold">0.949999988</float>
+				<bool name="Enabled">true</bool>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Bloom</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">6867d00aa452a0ce0a7a04f40000043d</UniqueId>
+			</Properties>
+		</Item>
 	</Item>
 	<Item class="VideoService" referent="RBX568B213C937A47AEB2EFDD1044384236">
 		<Properties>
