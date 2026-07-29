@@ -1,4 +1,9 @@
-# Vide Converter for Roblox (Vigets-RBX)
+<div align="center">
+  <h1>
+    <img src="images/Vigets.png" alt="" width="10%" align="middle">
+     Vide Converter for Roblox
+  </h1>
+</div>
 
 ## Features
 
