@@ -9,7 +9,6 @@
 			<token name="AuthorityMode">1</token>
 			<token name="AvatarUnificationMode">0</token>
 			<token name="ClientAnimatorThrottling">0</token>
-			<BinaryString name="CollisionGroupData">AQEABP////8HRGVmYXVsdA==</BinaryString>
 			<Ref name="CurrentCamera">RBXC61E6F7C265C4E5CBDE0FF03C8A6E333</Ref>
 			<double name="DistributedGameTime">0</double>
 			<token name="EnableSLIMAvatars">0</token>
@@ -55,6 +54,7 @@
 			<token name="UseFixedSimulation">0</token>
 			<token name="UseNewLuauTypeSolver">1</token>
 			<token name="ValidateEnabledProximityPrompt">0</token>
+			<BinaryString name="CollisionGroupData">AQEABP////8HRGVmYXVsdA==</BinaryString>
 			<token name="LevelOfDetail">0</token>
 			<CoordinateFrame name="ModelMeshCFrame">
 				<X>0</X>
@@ -106,53 +106,6 @@
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300000002</UniqueId>
 		</Properties>
-		<Item class="Camera" referent="RBXC61E6F7C265C4E5CBDE0FF03C8A6E333">
-			<Properties>
-				<CoordinateFrame name="CFrame">
-					<X>11.6150045</X>
-					<Y>18.0601177</Y>
-					<Z>18.7471695</Z>
-					<R00>0.898305535</R00>
-					<R01>-0.247850269</R01>
-					<R02>0.362791061</R02>
-					<R10>-0</R10>
-					<R11>0.825705051</R11>
-					<R12>0.564102173</R12>
-					<R20>-0.439371228</R20>
-					<R21>-0.5067361</R21>
-					<R22>0.741735458</R22>
-				</CoordinateFrame>
-				<Ref name="CameraSubject">null</Ref>
-				<token name="CameraType">0</token>
-				<float name="FieldOfView">70</float>
-				<token name="FieldOfViewMode">0</token>
-				<CoordinateFrame name="Focus">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>-5</Z>
-					<R00>1</R00>
-					<R01>0</R01>
-					<R02>0</R02>
-					<R10>0</R10>
-					<R11>1</R11>
-					<R12>0</R12>
-					<R20>0</R20>
-					<R21>0</R21>
-					<R22>1</R22>
-				</CoordinateFrame>
-				<bool name="HeadLocked">true</bool>
-				<float name="HeadScale">1</float>
-				<bool name="VRTiltAndRollEnabled">false</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">Camera</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000003ba</UniqueId>
-			</Properties>
-		</Item>
 		<Item class="Terrain" referent="RBX1E2950AF8BD74CB697EBD559C4EA77D9">
 			<Properties>
 				<token name="AcquisitionMethod">0</token>
@@ -268,6 +221,53 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300000433</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="Camera" referent="RBXC61E6F7C265C4E5CBDE0FF03C8A6E333">
+			<Properties>
+				<CoordinateFrame name="CFrame">
+					<X>11.6150045</X>
+					<Y>18.0601177</Y>
+					<Z>18.7471695</Z>
+					<R00>0.898305535</R00>
+					<R01>-0.247850269</R01>
+					<R02>0.362791061</R02>
+					<R10>-0</R10>
+					<R11>0.825705051</R11>
+					<R12>0.564102173</R12>
+					<R20>-0.439371228</R20>
+					<R21>-0.5067361</R21>
+					<R22>0.741735458</R22>
+				</CoordinateFrame>
+				<Ref name="CameraSubject">null</Ref>
+				<token name="CameraType">0</token>
+				<float name="FieldOfView">70</float>
+				<token name="FieldOfViewMode">0</token>
+				<CoordinateFrame name="Focus">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>-5</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<bool name="HeadLocked">true</bool>
+				<float name="HeadScale">1</float>
+				<bool name="VRTiltAndRollEnabled">false</bool>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Camera</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000003ba</UniqueId>
 			</Properties>
 		</Item>
 	</Item>
@@ -490,9 +490,9 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<token name="ChatVersion">0</token>
 			<bool name="CreateDefaultCommands">true</bool>
 			<bool name="CreateDefaultTextChannels">true</bool>
-			<token name="EnableProtectedChat">0</token>
 			<bool name="HasSeenDeprecationDialog">false</bool>
 			<bool name="IsLegacyChatDisabled">false</bool>
+			<token name="PlatformIntegratedChat">0</token>
 			<BinaryString name="AttributesSerialize"></BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
@@ -1742,120 +1742,116 @@ return (create :: any) :: Create
 				<Item class="ModuleScript" referent="RBXB30DBFCBDE6C4D5FBAA69C87A7FC0975">
 					<Properties>
 						<Content name="LinkedSource"><null></null></Content>
-						<ProtectedString name="Source"><![CDATA[local Enum = game and Enum or require "../test/mock".Enum :: never
-local Color3 = game and Color3 or require "../test/mock".Color3 :: never
-
+						<ProtectedString name="Source"><![CDATA[-- instance-defaults.luau
 return {
-    Part = {
-        Material = Enum.Material.SmoothPlastic,
-        Size = vector.create(1, 1, 1),
-        Anchored = true
-    },
+	Part = {
+		Material = Enum.Material.SmoothPlastic,
+		Size = Vector3.new(1, 1, 1),
+		Anchored = true,
+	},
 
-    BillboardGui = {
-        ResetOnSpawn = false,
-        ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    },
+	BillboardGui = {
+		ResetOnSpawn = false,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+	},
 
-    CanvasGroup = nil,
+	CanvasGroup = {},
 
-    Frame = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0
-    },
+	Frame = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
 
-    ImageButton = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0,
-        AutoButtonColor = false
-    },
+	ImageButton = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		AutoButtonColor = false,
+	},
 
-    ImageLabel = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0,
-    },
+	ImageLabel = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
 
-    ScreenGui = {
-        ResetOnSpawn = false,
-        ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    },
+	ScreenGui = {
+		ResetOnSpawn = false,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+	},
 
-    ScrollingFrame = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0,
-        ScrollBarImageColor3 = Color3.new(0, 0, 0)
-    },
-    
-    SurfaceGui = {
-        ResetOnSpawn = false,
-        ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+	ScrollingFrame = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		ScrollBarImageColor3 = Color3.new(0, 0, 0),
+	},
 
-        PixelsPerStud = 50,
-        SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
-    },
-    
-    TextBox = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0,
-        ClearTextOnFocus = false,
-        Font = Enum.Font.SourceSans,
-        Text = "",
-        TextColor3 = Color3.new(0, 0, 0)
-    },
+	SurfaceGui = {
+		ResetOnSpawn = false,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		PixelsPerStud = 50,
+		SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud,
+	},
 
-    TextButton = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0,
-        AutoButtonColor = false,
-        Font = Enum.Font.SourceSans,
-        Text = "",
-        TextColor3 = Color3.new(0, 0, 0)
-    },
-    
-    TextLabel = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0,
-        Font = Enum.Font.SourceSans,
-        Text = "",
-        TextColor3 = Color3.new(0, 0, 0)
-    },
-    
-    UIListLayout = {
-        SortOrder = Enum.SortOrder.LayoutOrder
-    },
-   
-    UIGridLayout = {
-        SortOrder = Enum.SortOrder.LayoutOrder
-    },
+	TextBox = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		ClearTextOnFocus = false,
+		Font = Enum.Font.SourceSans,
+		Text = "",
+		TextColor3 = Color3.new(0, 0, 0),
+	},
 
-    UITableLayout = {
-        SortOrder = Enum.SortOrder.LayoutOrder
-    },
+	TextButton = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		AutoButtonColor = false,
+		Font = Enum.Font.SourceSans,
+		Text = "",
+		TextColor3 = Color3.new(0, 0, 0),
+	},
 
-    UIPageLayout = {
-        SortOrder = Enum.SortOrder.LayoutOrder
-    },
-    
-    VideoFrame = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0
-    },
-    
-    ViewportFrame = {
-        BackgroundColor3 = Color3.new(1, 1, 1),
-        BorderColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0
-    }
-}
-]]></ProtectedString>
+	TextLabel = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		Font = Enum.Font.SourceSans,
+		Text = "",
+		TextColor3 = Color3.new(0, 0, 0),
+	},
+
+	UIListLayout = {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	UIGridLayout = {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	UITableLayout = {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	UIPageLayout = {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	VideoFrame = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
+
+	ViewportFrame = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
+}]]></ProtectedString>
 						<string name="ScriptGuid">{1B18B224-8E00-45EF-97D2-58D8F725D52A}</string>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -11671,10 +11667,12 @@ return {
 	Name = "Vigets",
 	Icon = "rbxassetid://135928770766655",
 
-	Version = "0.2.0",
+	Version = "0.2.6",
 	VersionTip = "",
 
 	WidgetSize = Vector2.new(230, 200),
+
+	DebugEnabled = true,
 }
 
 return module
@@ -11693,274 +11691,95 @@ return module
 					<Item class="ModuleScript" referent="RBXADBF8603C4EB4FAF9B7C7BD591E0D039">
 						<Properties>
 							<Content name="LinkedSource"><null></null></Content>
-							<ProtectedString name="Source"><![CDATA[-- https://pastebin.com/raw/TFSU2s5e
+							<ProtectedString name="Source"><![CDATA[--!strict
+
+local GUI_BASE_PROPERTIES = {
+	"Active",
+	"AnchorPoint",
+	"AutomaticSize",
+	"BackgroundColor3",
+	"BackgroundTransparency",
+	"BorderColor3",
+	"BorderMode",
+	"BorderSizePixel",
+	"ClipsDescendants",
+	"Interactable",
+	"LayoutOrder",
+	"NextSelectionDown",
+	"NextSelectionLeft",
+	"NextSelectionRight",
+	"NextSelectionUp",
+	"Position",
+	"Rotation",
+	"Selectable",
+	"SelectionGroup",
+	"SelectionBehaviorDown",
+	"SelectionBehaviorLeft",
+	"SelectionBehaviorRight",
+	"SelectionBehaviorUp",
+	"SelectionImageObject",
+	"Size",
+	"SizeConstraint",
+	"Visible",
+	"ZIndex",
+}
+
+local TEXT_BASE_PROPERTIES = {
+	"Font",
+	"FontFace",
+	"LineHeight",
+	"MaxVisibleGraphemes",
+	"RichText",
+	"Text",
+	"TextColor3",
+	"TextScaled",
+	"TextSize",
+	"TextStrokeColor3",
+	"TextStrokeTransparency",
+	"TextTransparency",
+	"TextTruncate",
+	"TextWrapped",
+	"TextXAlignment",
+	"TextYAlignment",
+}
+
+local IMAGE_BASE_PROPERTIES = {
+	"Image",
+	"ImageColor3",
+	"ImageRectOffset",
+	"ImageRectSize",
+	"ImageTransparency",
+	"ResampleMode",
+	"ScaleType",
+	"SliceCenter",
+	"SliceScale",
+	"TileSize",
+}
+
+local function merge(...)
+	local result = {}
+	for _, t in ipairs({ ... }) do
+		for _, v in ipairs(t) do
+			table.insert(result, v)
+		end
+	end
+	return result
+end
 
 return {
-	BallSocketConstraint = {
-		"LimitsEnabled",
-		"MaxFrictionTorque",
-		"Radius",
-		"Restitution",
-		"TwistLimitsEnabled",
-		"TwistLowerAngle",
-		"TwistUpperAngle",
-		"UpperAngle",
-	},
-	BrickColorValue = {
-		"Value",
-	},
-	Stats = {
-		"ContactsCount",
-		"DataReceiveKbps",
-		"DataSendKbps",
-		"HeartbeatTimeMs",
-		"InstanceCount",
-		"MovingPrimitivesCount",
-		"PhysicsReceiveKbps",
-		"PhysicsSendKbps",
-		"PhysicsStepTimeMs",
-		"PrimitivesCount",
-	},
-	Smoke = {
-		"Color",
+	--// UI Components
+	Folder = {},
+	Configuration = {},
+
+	ScreenGui = {
+		"ClipToDeviceSafeArea",
+		"DisplayOrder",
 		"Enabled",
-		"Opacity",
-		"RiseVelocity",
-		"Size",
-		"TimeScale",
-	},
-	SurfaceGui = {
-		"Active",
-		"Adornee",
-		"AlwaysOnTop",
-		"Brightness",
-		"CanvasSize",
-		"ClipsDescendants",
-		"Face",
-		"LightInfluence",
-		"PixelsPerStud",
-		"SizingMode",
-		"ToolPunchThroughDistance",
-		"ZOffset",
-	},
-	UIScale = {
-		"Scale",
-	},
-	CFrameValue = {
-		"Value",
-	},
-	InputObject = {
-		"Delta",
-		"KeyCode",
-		"Position",
-		"UserInputState",
-		"UserInputType",
-	},
-	ImageLabel = {
-		"Image",
-		"ImageColor3",
-		"ImageRectOffset",
-		"ImageRectSize",
-		"ImageTransparency",
-		"ResampleMode",
-		"ScaleType",
-		"SliceCenter",
-		"SliceScale",
-		"TileSize",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
-	},
-	NotificationService = {
-		"IsLuaGameDetailsEnabled",
-		"SelectedTheme",
-	},
-	UIListLayout = {
-		"Padding",
-	},
-	PointLight = {
-		"Range",
-	},
-	DoubleConstrainedValue = {
-		"MaxValue",
-		"MinValue",
-		"Value",
-	},
-	RocketPropulsion = {
-		"CartoonFactor",
-		"MaxSpeed",
-		"MaxThrust",
-		"MaxTorque",
-		"Target",
-		"TargetOffset",
-		"TargetRadius",
-		"ThrustD",
-		"ThrustP",
-		"TurnD",
-		"TurnP",
-	},
-	CoreGui = {
-		"SelectionImageObject",
-		"Version",
-	},
-	CanvasGroup = {
-		"GroupColor",
-		"GroupTransparency",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
-	},
-	PluginToolbarButton = {
-		"ClickableWhenViewportHidden",
-		"Enabled",
-		"Icon",
-	},
-	SelectionPartLasso = {
-		"Part",
-	},
-	DataModel = {
-		"CreatorId",
-		"CreatorType",
-		"GameId",
-		"Genre",
-		"JobId",
-		"PlaceId",
-		"PlaceVersion",
-		"PrivateServerId",
-		"PrivateServerOwnerId",
-		"Workspace",
-	},
-	Bone = {
-		"Transform",
-		"TransformedCFrame",
-		"TransformedWorldCFrame",
-	},
-	TerrainRegion = {
-		"SizeInCells",
-	},
-	Texture = {
-		"OffsetStudsU",
-		"OffsetStudsV",
-		"StudsPerTileU",
-		"StudsPerTileV",
-	},
-	PhysicsSettings = {
-		"AllowSleep",
-		"AreAnchorsShown",
-		"AreAssembliesShown",
-		"AreAwakePartsHighlighted",
-		"AreBodyTypesShown",
-		"AreContactIslandsShown",
-		"AreContactPointsShown",
-		"AreJointCoordinatesShown",
-		"AreMechanismsShown",
-		"AreModelCoordsShown",
-		"AreOwnersShown",
-		"ArePartCoordsShown",
-		"AreRegionsShown",
-		"AreTerrainReplicationRegionsShown",
-		"AreTimestepsShown",
-		"AreUnalignedPartsShown",
-		"AreWorldCoordsShown",
-		"DisableCSGv2",
-		"IsInterpolationThrottleShown",
-		"IsReceiveAgeShown",
-		"IsTreeShown",
-		"PhysicsEnvironmentalThrottle",
-		"ShowDecompositionGeometry",
-		"ThrottleAdjustTime",
-		"UseCSGv2",
-	},
-	Script = {
-		"Enabled",
-		"RunContext",
-		"Source",
-	},
-	LocalScript = {
-		"Enabled",
-		"RunContext",
-		"Source",
-	},
-	LineHandleAdornment = {
-		"Length",
-		"Thickness",
-	},
-	HumanoidDescription = {
-		"AccessoryBlob",
-		"BackAccessory",
-		"BodyTypeScale",
-		"ClimbAnimation",
-		"DepthScale",
-		"Face",
-		"FaceAccessory",
-		"FallAnimation",
-		"FrontAccessory",
-		"GraphicTShirt",
-		"HairAccessory",
-		"HatAccessory",
-		"Head",
-		"HeadColor",
-		"HeadScale",
-		"HeightScale",
-		"IdleAnimation",
-		"JumpAnimation",
-		"LeftArm",
-		"LeftArmColor",
-		"LeftLeg",
-		"LeftLegColor",
-		"NeckAccessory",
-		"Pants",
-		"ProportionScale",
-		"RightArm",
-		"RightArmColor",
-		"RightLeg",
-		"RightLegColor",
-		"RunAnimation",
-		"Shirt",
-		"ShouldersAccessory",
-		"SwimAnimation",
-		"Torso",
-		"TorsoColor",
-		"WaistAccessory",
-		"WalkAnimation",
-		"WidthScale",
+		"IgnoreGuiInset",
+		"ResetOnSpawn",
+		"SafeAreaCompatibility",
+		"ScreenInsets",
+		"ZIndexBehavior",
 	},
 	BillboardGui = {
 		"Active",
@@ -11977,402 +11796,80 @@ return {
 		"LightInfluence",
 		"MaxDistance",
 		"PlayerToHideFrom",
+		"ResetOnSpawn",
 		"Size",
 		"SizeOffset",
 		"StudsOffset",
 		"StudsOffsetWorldSpace",
-	},
-	BodyThrust = {
-		"Force",
-		"Location",
-	},
-	UIGridStyleLayout = {
-		"AbsoluteContentSize",
-		"FillDirection",
-		"HorizontalAlignment",
-		"SortOrder",
-		"VerticalAlignment",
-	},
-	UITextSizeConstraint = {
-		"MaxTextSize",
-		"MinTextSize",
-	},
-	WrapLayer = {
-		"BindOffset",
-		"Color",
-		"DebugMode",
-		"Enabled",
-		"Order",
-		"Puffiness",
-		"ReferenceMeshId",
-		"ReferenceOrigin",
-		"ReferenceOriginWorld",
-		"ShrinkFactor",
-	},
-	NoCollisionConstraint = {
-		"Enabled",
-		"Part0",
-		"Part1",
-	},
-	SpecialMesh = {
-		"MeshType",
-	},
-	RodConstraint = {
-		"CurrentDistance",
-		"Length",
-		"LimitAngle0",
-		"LimitAngle1",
-		"LimitsEnabled",
-		"Thickness",
-	},
-	FileMesh = {
-		"MeshId",
-		"TextureId",
-	},
-	Shirt = {
-		"ShirtTemplate",
-	},
-	SlidingBallConstraint = {
-		"ActuatorType",
-		"CurrentPosition",
-		"LimitsEnabled",
-		"LinearResponsiveness",
-		"LowerLimit",
-		"MotorMaxAcceleration",
-		"MotorMaxForce",
-		"Restitution",
-		"ServoMaxForce",
-		"Size",
-		"Speed",
-		"TargetPosition",
-		"UpperLimit",
-		"Velocity",
-	},
-	FlagStand = {
-		"TeamColor",
-	},
-	SkateboardPlatform = {
-		"Controller",
-		"ControllingHumanoid",
-		"Steer",
-		"StickyWheels",
-		"Throttle",
-	},
-	DebuggerWatch = {
-		"Expression",
-	},
-	DataModelMesh = {
-		"Offset",
-		"Scale",
-		"VertexColor",
-	},
-	SkateboardController = {
-		"Steer",
-		"Throttle",
-	},
-	Beam = {
-		"Attachment0",
-		"Attachment1",
-		"Brightness",
-		"Color",
-		"CurveSize0",
-		"CurveSize1",
-		"Enabled",
-		"FaceCamera",
-		"LightEmission",
-		"LightInfluence",
-		"Segments",
-		"Texture",
-		"TextureLength",
-		"TextureMode",
-		"TextureSpeed",
-		"Transparency",
-		"Width0",
-		"Width1",
-		"ZOffset",
-	},
-	Mouse = {
-		"Hit",
-		"Icon",
-		"Origin",
-		"Target",
-		"TargetFilter",
-		"TargetSurface",
-		"UnitRay",
-		"ViewSizeX",
-		"ViewSizeY",
-		"X",
-		"Y",
-	},
-	Constraint = {
-		"Active",
-		"Attachment0",
-		"Attachment1",
-		"Color",
-		"Enabled",
-		"Visible",
-	},
-	Decal = {
-		"Color3",
-		"Texture",
-		"Transparency",
-		"ZIndex",
-	},
-	ImageHandleAdornment = {
-		"Image",
-		"Size",
-	},
-	Clothing = {
-		"Color3",
-	},
-	Lighting = {
-		"Ambient",
-		"Brightness",
-		"ClockTime",
-		"ColorShift_Bottom",
-		"ColorShift_Top",
-		"EnvironmentDiffuseScale",
-		"EnvironmentSpecularScale",
-		"ExposureCompensation",
-		"FogColor",
-		"FogEnd",
-		"FogStart",
-		"GeographicLatitude",
-		"GlobalShadows",
-		"OutdoorAmbient",
-		"ShadowSoftness",
-		"Technology",
-		"TimeOfDay",
-	},
-	RenderSettings = {
-		"AutoFRMLevel",
-		"EagerBulkExecution",
-		"EditQualityLevel",
-		"ExportMergeByMaterial",
-		"FrameRateManager",
-		"GraphicsMode",
-		"MeshCacheSize",
-		"MeshPartDetailLevel",
-		"QualityLevel",
-		"ReloadAssets",
-		"RenderCSGTrianglesDebug",
-		"ShowBoundingBoxes",
-	},
-	ObjectValue = {
-		"Value",
-	},
-	GameSettings = {
-		"AdditionalCoreIncludeDirs",
-		"OverrideStarterScript",
-		"VideoCaptureEnabled",
-		"VideoRecording",
-	},
-	FaceInstance = {
-		"Face",
-	},
-	BodyColors = {
-		"HeadColor",
-		"HeadColor3",
-		"LeftArmColor",
-		"LeftArmColor3",
-		"LeftLegColor",
-		"LeftLegColor3",
-		"RightArmColor",
-		"RightArmColor3",
-		"RightLegColor",
-		"RightLegColor3",
-		"TorsoColor",
-		"TorsoColor3",
-	},
-	ColorCorrectionEffect = {
-		"Brightness",
-		"Contrast",
-		"Saturation",
-		"TintColor",
-	},
-	Speaker = {
-		"ChannelCount",
-		"PlaybackLoudness",
-		"RollOffMaxDistance",
-		"RollOffMinDistance",
-		"RollOffMode",
-		"SoundGroup",
-		"Source",
-		"Volume",
-	},
-	Atmosphere = {
-		"Color",
-		"Decay",
-		"Density",
-		"Glare",
-		"Haze",
-		"Offset",
-	},
-	RopeConstraint = {
-		"CurrentDistance",
-		"Length",
-		"Restitution",
-		"Thickness",
-		"WinchEnabled",
-		"WinchForce",
-		"WinchResponsiveness",
-		"WinchSpeed",
-		"WinchTarget",
-	},
-	SelectionBox = {
-		"LineThickness",
-		"SurfaceColor3",
-		"SurfaceTransparency",
-	},
-	FaceControls = {
-		"ChinRaiser",
-		"ChinRaiserUpperLip",
-		"Corrugator",
-		"EyesLookDown",
-		"EyesLookLeft",
-		"EyesLookRight",
-		"EyesLookUp",
-		"FlatPucker",
-		"Funneler",
-		"JawDrop",
-		"JawLeft",
-		"JawRight",
-		"LeftBrowLowerer",
-		"LeftCheekPuff",
-		"LeftCheekRaiser",
-		"LeftDimpler",
-		"LeftEyeClosed",
-		"LeftEyeUpperLidRaiser",
-		"LeftInnerBrowRaiser",
-		"LeftLipCornerDown",
-		"LeftLipCornerPuller",
-		"LeftLipStretcher",
-		"LeftLowerLipDepressor",
-		"LeftNoseWrinkler",
-		"LeftOuterBrowRaiser",
-		"LeftUpperLipRaiser",
-		"LipPresser",
-		"LipsTogether",
-		"LowerLipSuck",
-		"MouthLeft",
-		"MouthRight",
-		"Pucker",
-		"RightBrowLowerer",
-		"RightCheekPuff",
-		"RightCheekRaiser",
-		"RightDimpler",
-		"RightEyeClosed",
-		"RightEyeUpperLidRaiser",
-		"RightInnerBrowRaiser",
-		"RightLipCornerDown",
-		"RightLipCornerPuller",
-		"RightLipStretcher",
-		"RightLowerLipDepressor",
-		"RightNoseWrinkler",
-		"RightOuterBrowRaiser",
-		"RightUpperLipRaiser",
-		"TongueDown",
-		"TongueOut",
-		"TongueUp",
-		"UpperLipSuck",
-	},
-	DebugSettings = {
-		"DataModel",
-		"InstanceCount",
-		"IsScriptStackTracingEnabled",
-		"JobCount",
-		"PlayerCount",
-		"ReportSoundWarnings",
-		"RobloxVersion",
-		"TickCountPreciseOverride",
-	},
-	IntValue = {
-		"Value",
-	},
-	FloorWire = {
-		"CycleOffset",
-		"From",
-		"StudsBetweenTextures",
-		"Texture",
-		"TextureSize",
-		"To",
-		"Velocity",
-		"WireRadius",
-	},
-	Motor = {
-		"CurrentAngle",
-		"DesiredAngle",
-		"MaxVelocity",
-	},
-	Glue = {
-		"F0",
-		"F1",
-		"F2",
-		"F3",
-	},
-	ChatWindowConfiguration = {
-		"Enabled",
-	},
-	UIGridLayout = {
-		"AbsoluteCellCount",
-		"AbsoluteCellSize",
-		"CellPadding",
-		"CellSize",
-		"FillDirectionMaxCells",
-		"StartCorner",
-	},
-	LayerCollector = {
-		"Enabled",
-		"ResetOnSpawn",
 		"ZIndexBehavior",
 	},
-	TestService = {
-		"AutoRuns",
-		"Description",
-		"ErrorCount",
-		"ExecuteWithStudioRun",
-		"Is30FpsThrottleEnabled",
-		"IsPhysicsEnvironmentalThrottled",
-		"IsSleepAllowed",
-		"NumberOfPlayers",
-		"SimulateSecondsLag",
-		"TestCount",
-		"Timeout",
-		"WarnCount",
-	},
-	SoundGroup = {
-		"Volume",
-	},
-	GuiObject = {
+	SurfaceGui = {
 		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
+		"Adornee",
+		"AlwaysOnTop",
+		"Brightness",
+		"CanvasSize",
 		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
+		"Face",
+		"LightInfluence",
+		"PixelsPerStud",
+		"ResetOnSpawn",
+		"SizingMode",
+		"ToolPunchThroughDistance",
+		"ZIndexBehavior",
+		"ZOffset",
 	},
-	BoxHandleAdornment = {
-		"Size",
-	},
-	ScrollingFrame = {
-		"AbsoluteCanvasSize",
-		"AbsoluteWindowSize",
+
+	--// GuiObjects
+	Frame = merge(GUI_BASE_PROPERTIES, {
+		"Style",
+	}),
+	CanvasGroup = merge(GUI_BASE_PROPERTIES, {
+		"GroupColor3",
+		"GroupTransparency",
+	}),
+	TextLabel = merge(GUI_BASE_PROPERTIES, TEXT_BASE_PROPERTIES),
+	TextButton = merge(GUI_BASE_PROPERTIES, TEXT_BASE_PROPERTIES, {
+		"AutoButtonColor",
+		"Modal",
+		"Selected",
+		"Style",
+	}),
+	TextBox = merge(GUI_BASE_PROPERTIES, TEXT_BASE_PROPERTIES, {
+		"ClearTextOnFocus",
+		"CursorPosition",
+		"MultiLine",
+		"PlaceholderColor3",
+		"PlaceholderText",
+		"SelectionStart",
+		"ShowNativeInput",
+		"TextEditable",
+	}),
+	ImageLabel = merge(GUI_BASE_PROPERTIES, IMAGE_BASE_PROPERTIES),
+	ImageButton = merge(GUI_BASE_PROPERTIES, IMAGE_BASE_PROPERTIES, {
+		"AutoButtonColor",
+		"HoverImage",
+		"Modal",
+		"PressedImage",
+		"Selected",
+		"Style",
+	}),
+	ViewportFrame = merge(GUI_BASE_PROPERTIES, {
+		"Ambient",
+		"CurrentCamera",
+		"ImageColor3",
+		"ImageTransparency",
+		"LightColor",
+		"LightDirection",
+	}),
+	VideoFrame = merge(GUI_BASE_PROPERTIES, {
+		"Looped",
+		"Playing",
+		"TimePosition",
+		"Video",
+		"Volume",
+	}),
+	ScrollingFrame = merge(GUI_BASE_PROPERTIES, {
 		"AutomaticCanvasSize",
 		"BottomImage",
 		"CanvasPosition",
@@ -12388,61 +11885,161 @@ return {
 		"TopImage",
 		"VerticalScrollBarInset",
 		"VerticalScrollBarPosition",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
+	}),
+
+	--// UI Modifiers & Layouts
+	UICorner = { "CornerRadius" },
+	UIStroke = {
+		"ApplyStrokeMode",
+		"Color",
+		"Enabled",
+		"LineJoinMode",
+		"Thickness",
+		"Transparency",
 	},
-	Humanoid = {
-		"AutoJumpEnabled",
-		"AutoRotate",
-		"AutomaticScalingEnabled",
-		"BreakJointsOnDeath",
-		"CameraOffset",
-		"DisplayDistanceType",
-		"DisplayName",
-		"FloorMaterial",
-		"Health",
-		"HealthDisplayDistance",
-		"HealthDisplayType",
-		"HipHeight",
-		"Jump",
-		"JumpHeight",
-		"JumpPower",
-		"MaxHealth",
-		"MaxSlopeAngle",
-		"MoveDirection",
-		"NameDisplayDistance",
-		"NameOcclusion",
-		"PlatformStand",
-		"RequiresNeck",
-		"RigType",
-		"RootPart",
-		"SeatPart",
-		"Sit",
-		"TargetPoint",
-		"UseJumpPower",
-		"WalkSpeed",
-		"WalkToPart",
-		"WalkToPoint",
+	UIGradient = {
+		"Color",
+		"Enabled",
+		"Offset",
+		"Rotation",
+		"Transparency",
+	},
+	UIPadding = {
+		"PaddingBottom",
+		"PaddingLeft",
+		"PaddingRight",
+		"PaddingTop",
+	},
+	UIScale = { "Scale" },
+	UISizeConstraint = { "MaxSize", "MinSize" },
+	UITextSizeConstraint = { "MaxTextSize", "MinTextSize" },
+	UIAspectRatioConstraint = { "AspectRatio", "AspectType", "DominantAxis" },
+
+	UIListLayout = {
+		"Padding",
+		"FillDirection",
+		"HorizontalAlignment",
+		"HorizontalFlex",
+		"ItemLineAlignment",
+		"SortOrder",
+		"VerticalAlignment",
+		"VerticalFlex",
+		"Wraps",
+	},
+	UIGridLayout = {
+		"CellPadding",
+		"CellSize",
+		"FillDirection",
+		"FillDirectionMaxCells",
+		"HorizontalAlignment",
+		"SortOrder",
+		"StartCorner",
+		"VerticalAlignment",
+	},
+	UITableLayout = {
+		"FillDirection",
+		"FillEmptySpaceColumns",
+		"FillEmptySpaceRows",
+		"HorizontalAlignment",
+		"MajorAxis",
+		"Padding",
+		"SortOrder",
+		"VerticalAlignment",
+	},
+	UIPageLayout = {
+		"Animated",
+		"Circular",
+		"CurrentPage",
+		"EasingDirection",
+		"EasingStyle",
+		"FillDirection",
+		"GamepadInputEnabled",
+		"HorizontalAlignment",
+		"Padding",
+		"ScrollWheelInputEnabled",
+		"SortOrder",
+		"TouchInputEnabled",
+		"TweenTime",
+		"VerticalAlignment",
+	},
+	UIFlexItem = {
+		"FlexMode",
+		"GrowRatio",
+		"ItemLineAlignment",
+		"ShrinkRatio",
+	},
+
+	--// Values
+	StringValue = { "Value" },
+	IntValue = { "Value" },
+	NumberValue = { "Value" },
+	BoolValue = { "Value" },
+	ObjectValue = { "Value" },
+	Color3Value = { "Value" },
+	Vector3Value = { "Value" },
+	CFrameValue = { "Value" },
+	RayValue = { "Value" },
+	BrickColorValue = { "Value" },
+	DoubleConstrainedValue = { "MaxValue", "MinValue", "Value" },
+	IntConstrainedValue = { "MaxValue", "MinValue", "Value" },
+
+	--// 3D Objects & Miscellaneous
+	Part = {
+		"Anchored",
+		"CanCollide",
+		"CanQuery",
+		"CanTouch",
+		"CastShadow",
+		"Color",
+		"CustomPhysicalProperties",
+		"Massless",
+		"Material",
+		"MaterialVariant",
+		"Reflectance",
+		"RootPriority",
+		"Shape",
+		"Size",
+		"Transparency",
+	},
+	MeshPart = {
+		"Anchored",
+		"CanCollide",
+		"CanQuery",
+		"CanTouch",
+		"CastShadow",
+		"Color",
+		"CustomPhysicalProperties",
+		"DoubleSided",
+		"Massless",
+		"Material",
+		"MaterialVariant",
+		"MeshId",
+		"Reflectance",
+		"RenderFidelity",
+		"RootPriority",
+		"Size",
+		"TextureID",
+		"Transparency",
+	},
+	Model = {
+		"LevelOfDetail",
+		"PrimaryPart",
+		"WorldPivot",
+		"ModelStreamingMode",
+	},
+	Sound = {
+		"ChannelCount",
+		"Looped",
+		"PlayOnRemove",
+		"PlaybackSpeed",
+		"Playing",
+		"RollOffMaxDistance",
+		"RollOffMinDistance",
+		"RollOffMode",
+		"SoundGroup",
+		"SoundId",
+		"TimePosition",
+		"Volume",
 	},
 	Highlight = {
 		"Adornee",
@@ -12453,31 +12050,6 @@ return {
 		"OutlineColor",
 		"OutlineTransparency",
 	},
-	GuiService = {
-		"AutoSelectGuiEnabled",
-		"CoreGuiNavigationEnabled",
-		"GuiNavigationEnabled",
-		"MenuIsOpen",
-		"SelectedObject",
-		"TouchControlsEnabled",
-	},
-	AngularVelocity = {
-		"AngularVelocity",
-		"MaxTorque",
-		"ReactionTorqueEnabled",
-		"RelativeTo",
-	},
-	CylinderHandleAdornment = {
-		"Angle",
-		"Height",
-		"InnerRadius",
-		"Radius",
-	},
-	BloomEffect = {
-		"Intensity",
-		"Size",
-		"Threshold",
-	},
 	Attachment = {
 		"Axis",
 		"CFrame",
@@ -12485,510 +12057,37 @@ return {
 		"Position",
 		"SecondaryAxis",
 		"Visible",
-		"WorldAxis",
-		"WorldCFrame",
-		"WorldOrientation",
-		"WorldPosition",
-		"WorldSecondaryAxis",
 	},
-	Light = {
-		"Brightness",
-		"Color",
-		"Enabled",
-		"Shadows",
-	},
-	PitchShiftSoundEffect = {
-		"Octave",
-	},
-	ImageButton = {
-		"HoverImage",
-		"Image",
-		"ImageColor3",
-		"ImageRectOffset",
-		"ImageRectSize",
-		"ImageTransparency",
-		"PressedImage",
-		"ResampleMode",
-		"ScaleType",
-		"SliceCenter",
-		"SliceScale",
-		"TileSize",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
-	},
-	DialogChoice = {
-		"GoodbyeChoiceActive",
-		"GoodbyeDialog",
-		"ResponseDialog",
-		"UserDialog",
-	},
-	NumberValue = {
-		"Value",
-	},
-	JointInstance = {
-		"Active",
-		"C0",
-		"C1",
-		"Enabled",
-		"Part0",
-		"Part1",
-	},
-	CylindricalConstraint = {
-		"AngularActuatorType",
-		"AngularLimitsEnabled",
-		"AngularResponsiveness",
-		"AngularRestitution",
-		"AngularSpeed",
-		"AngularVelocity",
-		"CurrentAngle",
-		"InclinationAngle",
-		"LowerAngle",
-		"MotorMaxAngularAcceleration",
-		"MotorMaxTorque",
-		"RotationAxisVisible",
-		"ServoMaxTorque",
-		"TargetAngle",
-		"UpperAngle",
-		"WorldRotationAxis",
-	},
-	TerrainDetail = {
-		"ColorMap",
+	Decal = {
+		"Color3",
 		"Face",
-		"MaterialPattern",
-		"MetalnessMap",
-		"NormalMap",
-		"RoughnessMap",
-		"StudsPerTile",
-	},
-	PluginMenu = {
-		"Icon",
-		"Title",
-	},
-	Accessory = {
-		"AccessoryType",
-	},
-	LineForce = {
-		"ApplyAtCenterOfMass",
-		"InverseSquareLaw",
-		"Magnitude",
-		"MaxForce",
-		"ReactionForceEnabled",
-	},
-	Skin = {
-		"SkinColor",
-	},
-	KeyframeMarker = {
-		"Value",
-	},
-	Animation = {
-		"AnimationId",
-	},
-	IntConstrainedValue = {
-		"MaxValue",
-		"MinValue",
-		"Value",
-	},
-	EqualizerSoundEffect = {
-		"HighGain",
-		"LowGain",
-		"MidGain",
-	},
-	Model = {
-		"LevelOfDetail",
-		"PrimaryPart",
-		"WorldPivot",
-	},
-	BodyAngularVelocity = {
-		"AngularVelocity",
-		"MaxTorque",
-		"P",
-	},
-	VelocityMotor = {
-		"CurrentAngle",
-		"DesiredAngle",
-		"Hole",
-		"MaxVelocity",
-	},
-	PostEffect = {
-		"Enabled",
-	},
-	Part = {
-		"Shape",
-	},
-	ImporterMeshSettings = {
-		"Anchored",
-		"Dimensions",
-		"DoubleSided",
-		"IgnoreVertexColors",
-		"PolygonCount",
-	},
-	TeleportOptions = {
-		"ReservedServerAccessCode",
-		"ServerInstanceId",
-		"ShouldReserveServer",
-	},
-	ArcHandles = {
-		"Axes",
-	},
-	RayValue = {
-		"Value",
-	},
-	UIPageLayout = {
-		"Animated",
-		"Circular",
-		"CurrentPage",
-		"EasingDirection",
-		"EasingStyle",
-		"GamepadInputEnabled",
-		"Padding",
-		"ScrollWheelInputEnabled",
-		"TouchInputEnabled",
-		"TweenTime",
-	},
-	UIPadding = {
-		"PaddingBottom",
-		"PaddingLeft",
-		"PaddingRight",
-		"PaddingTop",
-	},
-	TextButton = {
-		--"ContentText",
-		"Font",
-		"FontFace",
-		"LineHeight",
-		--"MaxVisibleGraphemes",
-		"RichText",
-		"Text",
-		--"TextBounds",
-		"TextColor3",
-		--"TextFits",
-		"TextScaled",
-		"TextSize",
-		"TextStrokeColor3",
-		"TextStrokeTransparency",
-		"TextTransparency",
-		"TextTruncate",
-		"TextWrapped",
-		"TextXAlignment",
-		"TextYAlignment",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
-	},
-	UIStroke = {
-		"ApplyStrokeMode",
-		"Color",
-		"Enabled",
-		"LineJoinMode",
-		"Thickness",
+		"Texture",
 		"Transparency",
-	},
-	Sound = {
-		"ChannelCount",
-		"IsPaused",
-		"IsPlaying",
-		"Looped",
-		"PlayOnRemove",
-		"PlaybackLoudness",
-		"PlaybackSpeed",
-		"Playing",
-		"RollOffMaxDistance",
-		"RollOffMinDistance",
-		"RollOffMode",
-		"SoundGroup",
-		"SoundId",
-		"TimeLength",
-		"TimePosition",
-		"Volume",
-	},
-	ViewportFrame = {
-		"Ambient",
-		"CurrentCamera",
-		"ImageColor3",
-		"ImageTransparency",
-		"LightColor",
-		"LightDirection",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
 		"ZIndex",
 	},
-	ScreenGui = {
-		"ClipToDeviceSafeArea",
-		"DisplayOrder",
-		"Enabled",
-		"IgnoreGuiInset",
-		"ResetOnSpawn",
-		"SafeAreaCompatibility",
-		"ScreenInsets",
-		"ZIndexBehavior",
-	},
-
-	Color3Value = {
-		"Value",
-	},
-	VideoFrame = {
-		"Looped",
-		"Playing",
-		"Resolution",
-		"TimeLength",
-		"TimePosition",
-		"Video",
-		"Volume",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
+	Texture = {
+		"Color3",
+		"Face",
+		"OffsetStudsU",
+		"OffsetStudsV",
+		"StudsPerTileU",
+		"StudsPerTileV",
+		"Texture",
+		"Transparency",
 		"ZIndex",
-	},
-	Vector3Value = {
-		"Value",
-	},
-	PlayerGui = {
-		"CurrentScreenOrientation",
-		"ScreenOrientation",
-		"SelectionImageObject",
-	},
-	Frame = {
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
-	},
-	UITableLayout = {
-		"FillEmptySpaceColumns",
-		"FillEmptySpaceRows",
-		"MajorAxis",
-		"Padding",
-	},
-	UISizeConstraint = {
-		"MaxSize",
-		"MinSize",
-	},
-	UICorner = {
-		"CornerRadius",
-	},
-	UIAspectRatioConstraint = {
-		"AspectRatio",
-		"AspectType",
-		"DominantAxis",
-	},
-	TextLabel = {
-		--"ContentText",
-		"Font",
-		"FontFace",
-		"LineHeight",
-		--"MaxVisibleGraphemes",
-		"RichText",
-		"Text",
-		--"TextBounds",
-		"TextColor3",
-		--"TextFits",
-		"TextScaled",
-		"TextSize",
-		"TextStrokeColor3",
-		"TextStrokeTransparency",
-		"TextTransparency",
-		"TextTruncate",
-		"TextWrapped",
-		"TextXAlignment",
-		"TextYAlignment",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
-	},
-	TextBox = {
-		"ClearTextOnFocus",
-		--"ContentText",
-		"CursorPosition",
-		"Font",
-		"FontFace",
-		"LineHeight",
-		"MaxVisibleGraphemes",
-		"MultiLine",
-		"PlaceholderColor3",
-		"PlaceholderText",
-		"RichText",
-		"SelectionStart",
-		"ShowNativeInput",
-		"Text",
-		--"TextBounds",
-		"TextColor3",
-		"TextEditable",
-		--"TextFits",
-		"TextScaled",
-		"TextSize",
-		"TextStrokeColor3",
-		"TextStrokeTransparency",
-		"TextTransparency",
-		"TextTruncate",
-		"TextWrapped",
-		"TextXAlignment",
-		"TextYAlignment",
-		"Active",
-		"AnchorPoint",
-		"AutomaticSize",
-		"BackgroundColor3",
-		"BackgroundTransparency",
-		"BorderColor3",
-		"BorderMode",
-		"BorderSizePixel",
-		"ClipsDescendants",
-		"LayoutOrder",
-		"NextSelectionDown",
-		"NextSelectionLeft",
-		"NextSelectionRight",
-		"NextSelectionUp",
-		"Position",
-		"Rotation",
-		"Selectable",
-		"SelectionImageObject",
-		"Size",
-		"SizeConstraint",
-		"Visible",
-		"ZIndex",
-	},
-	FloatCurve = {
-		"Length",
-	},
-	StringValue = {
-		"Value",
-	},
-	StarterGui = {
-		"ScreenOrientation",
-		"ShowDevelopmentGui",
-		"VirtualCursorMode",
-	},
-	PackageLink = {
-		"AutoUpdate",
-		"Creator",
-		"PackageAssetName",
-		"PackageId",
-		"PermissionLevel",
-		"Status",
-		"VersionNumber",
 	},
 	ModuleScript = {
-		"LinkedSource",
 		"Source",
 	},
-	UIGradient = {
-		"Color",
-		"Enabled",
-		"Offset",
-		"Rotation",
-		"Transparency",
+	LocalScript = {
+		"Disabled",
+		"RunContext",
+		"Source",
+	},
+	Script = {
+		"Disabled",
+		"RunContext",
+		"Source",
 	},
 }
 ]]></ProtectedString>
@@ -13001,6 +12100,135 @@ return {
 							<int64 name="SourceAssetId">-1</int64>
 							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 							<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300002423</UniqueId>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBX59275CC906844BFDB4E551BAA7A843B6">
+						<Properties>
+							<Content name="LinkedSource"><null></null></Content>
+							<ProtectedString name="Source"><![CDATA[return {
+	Part = {
+		Material = Enum.Material.SmoothPlastic,
+		Size = Vector3.new(1, 1, 1),
+		Anchored = true,
+	},
+
+	BillboardGui = {
+		ResetOnSpawn = false,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+	},
+
+	CanvasGroup = {
+		GroupColor3 = Color3.new(1, 1, 1),
+		GroupTransparency = 0,
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
+
+	Frame = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
+
+	ImageButton = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		AutoButtonColor = false,
+	},
+
+	ImageLabel = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
+
+	ScreenGui = {
+		ResetOnSpawn = false,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+	},
+
+	ScrollingFrame = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		ScrollBarImageColor3 = Color3.new(0, 0, 0),
+	},
+
+	SurfaceGui = {
+		ResetOnSpawn = false,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		PixelsPerStud = 50,
+		SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud,
+	},
+
+	TextBox = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		ClearTextOnFocus = false,
+		Font = Enum.Font.SourceSans,
+		Text = "",
+		TextColor3 = Color3.new(0, 0, 0),
+	},
+
+	TextButton = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		AutoButtonColor = false,
+		Font = Enum.Font.SourceSans,
+		Text = "",
+		TextColor3 = Color3.new(0, 0, 0),
+	},
+
+	TextLabel = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		Font = Enum.Font.SourceSans,
+		Text = "",
+		TextColor3 = Color3.new(0, 0, 0),
+	},
+
+	UIListLayout = {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	UIGridLayout = {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	UITableLayout = {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	UIPageLayout = {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	VideoFrame = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
+
+	ViewportFrame = {
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BorderColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+	},
+}
+]]></ProtectedString>
+							<string name="ScriptGuid">{3A9B61B7-563E-40F4-A55B-34EA8FDFE3D2}</string>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+							<bool name="DefinesCapabilities">false</bool>
+							<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+							<string name="Name">instance-defaults</string>
+							<int64 name="SourceAssetId">-1</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+							<UniqueId name="UniqueId">399d0685438e9f6b0a7e16680000217a</UniqueId>
 						</Properties>
 					</Item>
 				</Item>
@@ -13251,8 +12479,7 @@ end
 	[any]: any,
 }
 
-local DEFAULT_PROPERTIES: { string } = { "Name", "ClassName" }
-local ALLOWED_TYPES: { string } = { "GuiBase", "UIBase", "ScreenGui" }
+local ALLOWED_TYPES: { string } = { "GuiBase", "UIBase", "ScreenGui", "Folder" }
 
 local VIDE_TEMPLATE: string = [[--!nolint
 -- %s
@@ -13315,10 +12542,39 @@ local ELEMENT_FORMAT: string = 'create "%s" {\n\t%s\n}'
 local Reader = {}
 Reader.vide = nil :: ModuleScript?
 
+local Constants = require("../external/constants")
 local InstanceProperties = require("../external/instance-properties") :: { [string]: { string } }
+local InstanceDefaults = require("../external/instance-defaults") :: { [string]: { [string]: any } }
+
 local Lint = require("./simple-linter")
 
+local DEBUG = Constants.DebugEnabled
+
 -- Utility
+
+local function isDefaultValue(className: string, property: string, value: any): boolean
+	-- Omit Name if it is equal to the default class name (e.g. Frame.Name == "Frame")
+	if property == "Name" and value == className then
+		return true
+	end
+
+	local classDefaults = InstanceDefaults[className]
+	if not classDefaults then
+		return false
+	end
+
+	local defaultValue = classDefaults[property]
+	if defaultValue == nil then
+		return false
+	end
+
+	-- Precision check for floating numbers
+	if typeof(value) == "number" and typeof(defaultValue) == "number" then
+		return math.abs(value - defaultValue) < 0.0001
+	end
+
+	return value == defaultValue
+end
 
 local function isModule(inst: ModuleScript?): boolean
 	if inst and typeof(inst) == "Instance" and inst:IsA("ModuleScript") then
@@ -13347,30 +12603,41 @@ local function serializeInstance(instance: Instance): InstanceData?
 	assert(isAllowedType(instance), `{instance.ClassName} is not a valid class name`)
 
 	local data = {}
-
 	local properties = InstanceProperties[instance.ClassName]
 	if not properties then
 		return nil
 	end
 
-	for _, property: string in DEFAULT_PROPERTIES do
-		data[property] = instance[property]
+	-- Check Name property
+	if not isDefaultValue(instance.ClassName, "Name", instance.Name) then
+		data["Name"] = instance.Name
 	end
 
+	data["ClassName"] = instance.ClassName
+
+	-- Check instance-specific properties
 	for _, property: string in properties do
 		if table.find(ProperitesToExclude, property) then
 			continue
 		end
-		data[property] = instance[property]
+
+		local value = instance[property]
+		if isDefaultValue(instance.ClassName, property, value) then
+			continue
+		end
+
+		data[property] = value
 	end
 
 	if #instance:GetChildren() > 0 then
 		data._children = {}
 
 		for _, child in instance:GetChildren() do
-			local _, childData = pcall(serializeInstance, child)
-			if childData then
-				table.insert(data._children, childData)
+			if isAllowedType(child) then
+				local ok, childData = pcall(serializeInstance, child)
+				if ok and childData then
+					table.insert(data._children, childData)
+				end
 			end
 		end
 	end
@@ -13415,6 +12682,7 @@ local function isVide(vide: any): boolean
 
 	local ok, data = pcall(require, vide)
 	if not ok then
+		warn(`Failed to require vide module {vide.Name}: {tostring(data)}`)
 		return false
 	end
 
@@ -13432,6 +12700,9 @@ local function isVideApp(inst: any): boolean
 
 	local ok, data = pcall(require, inst)
 	if not ok then
+		if DEBUG then
+			warn(`Failed to require module {inst.Name}: {tostring(data)}`)
+		end
 		return false
 	end
 
@@ -13445,6 +12716,9 @@ local function isStory(story: any): boolean
 
 	local ok, data = pcall(require, story)
 	if not ok then
+		if DEBUG then
+			warn(`Failed to require story module {story.Name}: {tostring(data)}`)
+		end
 		return false
 	end
 
@@ -13501,7 +12775,7 @@ local function tryPath(path: { string }): ModuleScript?
 		end
 		current = next_
 	end
-	return isModule(current) and (current :: any) or nil
+	return isModule(current :: ModuleScript) and (current :: any) or nil
 end
 
 local function locateVide(): ModuleScript?
@@ -13525,6 +12799,8 @@ local function locateVide(): ModuleScript?
 				Reader.vide = found
 				return found
 			end
+		elseif not ok and root and DEBUG then
+			warn(`Failed to get service {rootName}: {tostring(root)}`)
 		end
 	end
 
@@ -13553,33 +12829,43 @@ end
 
 -- Vide Reader
 
+local function fmt(n: number): string
+	return string.format("%.4g", n)
+end
+
 local function serializeValue(value: any): string
 	local t = typeof(value)
 	if t == "string" then
 		return string.format("%q", value)
-	elseif t == "number" or t == "boolean" then
+	elseif t == "number" then
+		return fmt(value)
+	elseif t == "boolean" then
 		return tostring(value)
 	elseif t == "EnumItem" then
 		return `Enum.{tostring(value.EnumType)}.{value.Name}`
 	elseif t == "UDim2" then
-		return `UDim2.new({value.X.Scale}, {value.X.Offset}, {value.Y.Scale}, {value.Y.Offset})`
+		return `UDim2.new({fmt(value.X.Scale)}, {fmt(value.X.Offset)}, {fmt(value.Y.Scale)}, {fmt(
+			value.Y.Offset
+		)})`
 	elseif t == "UDim" then
-		return `UDim.new({value.Scale}, {value.Offset})`
+		return `UDim.new({fmt(value.Scale)}, {fmt(value.Offset)})`
 	elseif t == "Vector2" then
-		return `Vector2.new({value.X}, {value.Y})`
+		return `Vector2.new({fmt(value.X)}, {fmt(value.Y)})`
 	elseif t == "Color3" then
-		return `Color3.new({value.R}, {value.G}, {value.B})`
+		return `Color3.fromRGB({fmt(math.round(value.R * 255))}, {fmt(math.round(value.G * 255))}, {fmt(
+			math.round(value.B * 255)
+		)})`
 	elseif t == "ColorSequence" then
 		local keypoints = {}
 		for _, kp in value.Keypoints do
 			table.insert(
 				keypoints,
 				string.format(
-					"ColorSequenceKeypoint.new(%s, Color3.new(%s, %s, %s))",
-					tostring(kp.Time),
-					kp.Value.R,
-					kp.Value.G,
-					kp.Value.B
+					"ColorSequenceKeypoint.new(%s, Color3.fromRGB(%s, %s, %s))",
+					fmt(kp.Time),
+					fmt(math.round(kp.Value.R * 255)),
+					fmt(math.round(kp.Value.G * 255)),
+					fmt(math.round(kp.Value.B * 255))
 				)
 			)
 		end
@@ -13591,17 +12877,19 @@ local function serializeValue(value: any): string
 				keypoints,
 				string.format(
 					"NumberSequenceKeypoint.new(%s, %s, %s)",
-					tostring(kp.Time),
-					tostring(kp.Value),
-					tostring(kp.Envelope)
+					fmt(kp.Time),
+					fmt(kp.Value),
+					fmt(kp.Envelope)
 				)
 			)
 		end
 		return `NumberSequence.new({"{"}{table.concat(keypoints, ", ")}{"}"})`
 	elseif t == "NumberRange" then
-		return `NumberRange.new({value.Min}, {value.Max})`
+		return `NumberRange.new({fmt(value.Min)}, {fmt(value.Max)})`
 	elseif t == "Rect" then
-		return `Rect.new({value.Min.X}, {value.Min.Y}, {value.Max.X}, {value.Max.Y})`
+		return `Rect.new({fmt(value.Min.X)}, {fmt(value.Min.Y)}, {fmt(value.Max.X)}, {fmt(
+			value.Max.Y
+		)})`
 	elseif t == "Font" then
 		return `Font.new({string.format("%q", value.Family)}, {tostring(value.Weight)}, {tostring(
 			value.Style
@@ -13686,6 +12974,10 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 		)
 	else
 		local ok2, raw = pcall(readDataIntoVideCode, data)
+		if not ok2 and DEBUG then
+			warn(`Failed to serialize instance {instance.Name} to Vide code: {tostring(raw)}`)
+		end
+
 		raw = ok2 and raw or "nil"
 
 		sourceCode = string.format(VIDE_TEMPLATE, instance.Name, vide_path, raw)
@@ -13948,36 +13240,6 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000004a4</UniqueId>
 		</Properties>
-		<Item class="ColorGradingEffect" referent="RBX61822D3CEA354040B5AA49D70FA4130A">
-			<Properties>
-				<token name="TonemapperPreset">1</token>
-				<bool name="Enabled">true</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">ColorGrading</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<UniqueId name="UniqueId">6867d00aa452a0ce0a7a04f40000043c</UniqueId>
-			</Properties>
-		</Item>
-		<Item class="BloomEffect" referent="RBXC96B907B1F084D578CD77A3AC9079B51">
-			<Properties>
-				<float name="Intensity">0</float>
-				<float name="Size">24</float>
-				<float name="Threshold">0.949999988</float>
-				<bool name="Enabled">true</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">Bloom</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<UniqueId name="UniqueId">6867d00aa452a0ce0a7a04f40000043d</UniqueId>
-			</Properties>
-		</Item>
 	</Item>
 	<Item class="VideoService" referent="RBX568B213C937A47AEB2EFDD1044384236">
 		<Properties>

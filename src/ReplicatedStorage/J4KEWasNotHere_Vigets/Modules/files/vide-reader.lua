@@ -6,8 +6,7 @@ export type InstanceData = {
 	[any]: any,
 }
 
-local DEFAULT_PROPERTIES: { string } = { "Name", "ClassName" }
-local ALLOWED_TYPES: { string } = { "GuiBase", "UIBase", "ScreenGui" }
+local ALLOWED_TYPES: { string } = { "GuiBase", "UIBase", "ScreenGui", "Folder" }
 
 local VIDE_TEMPLATE: string = [[--!nolint
 -- %s
@@ -70,10 +69,39 @@ local ELEMENT_FORMAT: string = 'create "%s" {\n\t%s\n}'
 local Reader = {}
 Reader.vide = nil :: ModuleScript?
 
+local Constants = require("../external/constants")
 local InstanceProperties = require("../external/instance-properties") :: { [string]: { string } }
+local InstanceDefaults = require("../external/instance-defaults") :: { [string]: { [string]: any } }
+
 local Lint = require("./simple-linter")
 
+local DEBUG = Constants.DebugEnabled
+
 -- Utility
+
+local function isDefaultValue(className: string, property: string, value: any): boolean
+	-- Omit Name if it is equal to the default class name (e.g. Frame.Name == "Frame")
+	if property == "Name" and value == className then
+		return true
+	end
+
+	local classDefaults = InstanceDefaults[className]
+	if not classDefaults then
+		return false
+	end
+
+	local defaultValue = classDefaults[property]
+	if defaultValue == nil then
+		return false
+	end
+
+	-- Precision check for floating numbers
+	if typeof(value) == "number" and typeof(defaultValue) == "number" then
+		return math.abs(value - defaultValue) < 0.0001
+	end
+
+	return value == defaultValue
+end
 
 local function isModule(inst: ModuleScript?): boolean
 	if inst and typeof(inst) == "Instance" and inst:IsA("ModuleScript") then
@@ -102,30 +130,41 @@ local function serializeInstance(instance: Instance): InstanceData?
 	assert(isAllowedType(instance), `{instance.ClassName} is not a valid class name`)
 
 	local data = {}
-
 	local properties = InstanceProperties[instance.ClassName]
 	if not properties then
 		return nil
 	end
 
-	for _, property: string in DEFAULT_PROPERTIES do
-		data[property] = instance[property]
+	-- Check Name property
+	if not isDefaultValue(instance.ClassName, "Name", instance.Name) then
+		data["Name"] = instance.Name
 	end
 
+	data["ClassName"] = instance.ClassName
+
+	-- Check instance-specific properties
 	for _, property: string in properties do
 		if table.find(ProperitesToExclude, property) then
 			continue
 		end
-		data[property] = instance[property]
+
+		local value = instance[property]
+		if isDefaultValue(instance.ClassName, property, value) then
+			continue
+		end
+
+		data[property] = value
 	end
 
 	if #instance:GetChildren() > 0 then
 		data._children = {}
 
 		for _, child in instance:GetChildren() do
-			local _, childData = pcall(serializeInstance, child)
-			if childData then
-				table.insert(data._children, childData)
+			if isAllowedType(child) then
+				local ok, childData = pcall(serializeInstance, child)
+				if ok and childData then
+					table.insert(data._children, childData)
+				end
 			end
 		end
 	end
@@ -170,6 +209,7 @@ local function isVide(vide: any): boolean
 
 	local ok, data = pcall(require, vide)
 	if not ok then
+		warn(`Failed to require vide module {vide.Name}: {tostring(data)}`)
 		return false
 	end
 
@@ -187,6 +227,9 @@ local function isVideApp(inst: any): boolean
 
 	local ok, data = pcall(require, inst)
 	if not ok then
+		if DEBUG then
+			warn(`Failed to require module {inst.Name}: {tostring(data)}`)
+		end
 		return false
 	end
 
@@ -200,6 +243,9 @@ local function isStory(story: any): boolean
 
 	local ok, data = pcall(require, story)
 	if not ok then
+		if DEBUG then
+			warn(`Failed to require story module {story.Name}: {tostring(data)}`)
+		end
 		return false
 	end
 
@@ -256,7 +302,7 @@ local function tryPath(path: { string }): ModuleScript?
 		end
 		current = next_
 	end
-	return isModule(current) and (current :: any) or nil
+	return isModule(current :: ModuleScript) and (current :: any) or nil
 end
 
 local function locateVide(): ModuleScript?
@@ -280,6 +326,8 @@ local function locateVide(): ModuleScript?
 				Reader.vide = found
 				return found
 			end
+		elseif not ok and root and DEBUG then
+			warn(`Failed to get service {rootName}: {tostring(root)}`)
 		end
 	end
 
@@ -308,33 +356,43 @@ end
 
 -- Vide Reader
 
+local function fmt(n: number): string
+	return string.format("%.4g", n)
+end
+
 local function serializeValue(value: any): string
 	local t = typeof(value)
 	if t == "string" then
 		return string.format("%q", value)
-	elseif t == "number" or t == "boolean" then
+	elseif t == "number" then
+		return fmt(value)
+	elseif t == "boolean" then
 		return tostring(value)
 	elseif t == "EnumItem" then
 		return `Enum.{tostring(value.EnumType)}.{value.Name}`
 	elseif t == "UDim2" then
-		return `UDim2.new({value.X.Scale}, {value.X.Offset}, {value.Y.Scale}, {value.Y.Offset})`
+		return `UDim2.new({fmt(value.X.Scale)}, {fmt(value.X.Offset)}, {fmt(value.Y.Scale)}, {fmt(
+			value.Y.Offset
+		)})`
 	elseif t == "UDim" then
-		return `UDim.new({value.Scale}, {value.Offset})`
+		return `UDim.new({fmt(value.Scale)}, {fmt(value.Offset)})`
 	elseif t == "Vector2" then
-		return `Vector2.new({value.X}, {value.Y})`
+		return `Vector2.new({fmt(value.X)}, {fmt(value.Y)})`
 	elseif t == "Color3" then
-		return `Color3.new({value.R}, {value.G}, {value.B})`
+		return `Color3.fromRGB({fmt(math.round(value.R * 255))}, {fmt(math.round(value.G * 255))}, {fmt(
+			math.round(value.B * 255)
+		)})`
 	elseif t == "ColorSequence" then
 		local keypoints = {}
 		for _, kp in value.Keypoints do
 			table.insert(
 				keypoints,
 				string.format(
-					"ColorSequenceKeypoint.new(%s, Color3.new(%s, %s, %s))",
-					tostring(kp.Time),
-					kp.Value.R,
-					kp.Value.G,
-					kp.Value.B
+					"ColorSequenceKeypoint.new(%s, Color3.fromRGB(%s, %s, %s))",
+					fmt(kp.Time),
+					fmt(math.round(kp.Value.R * 255)),
+					fmt(math.round(kp.Value.G * 255)),
+					fmt(math.round(kp.Value.B * 255))
 				)
 			)
 		end
@@ -346,17 +404,19 @@ local function serializeValue(value: any): string
 				keypoints,
 				string.format(
 					"NumberSequenceKeypoint.new(%s, %s, %s)",
-					tostring(kp.Time),
-					tostring(kp.Value),
-					tostring(kp.Envelope)
+					fmt(kp.Time),
+					fmt(kp.Value),
+					fmt(kp.Envelope)
 				)
 			)
 		end
 		return `NumberSequence.new({"{"}{table.concat(keypoints, ", ")}{"}"})`
 	elseif t == "NumberRange" then
-		return `NumberRange.new({value.Min}, {value.Max})`
+		return `NumberRange.new({fmt(value.Min)}, {fmt(value.Max)})`
 	elseif t == "Rect" then
-		return `Rect.new({value.Min.X}, {value.Min.Y}, {value.Max.X}, {value.Max.Y})`
+		return `Rect.new({fmt(value.Min.X)}, {fmt(value.Min.Y)}, {fmt(value.Max.X)}, {fmt(
+			value.Max.Y
+		)})`
 	elseif t == "Font" then
 		return `Font.new({string.format("%q", value.Family)}, {tostring(value.Weight)}, {tostring(
 			value.Style
@@ -441,6 +501,10 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 		)
 	else
 		local ok2, raw = pcall(readDataIntoVideCode, data)
+		if not ok2 and DEBUG then
+			warn(`Failed to serialize instance {instance.Name} to Vide code: {tostring(raw)}`)
+		end
+
 		raw = ok2 and raw or "nil"
 
 		sourceCode = string.format(VIDE_TEMPLATE, instance.Name, vide_path, raw)
