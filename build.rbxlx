@@ -1054,6 +1054,20 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300000392</UniqueId>
 		</Properties>
 	</Item>
+	<Item class="ServiceVisibilityService" referent="RBX3AD18C17E9C74BC0970B1BF071230A31">
+		<Properties>
+			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
+			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ServiceVisibilityService</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000003ae</UniqueId>
+		</Properties>
+	</Item>
 	<Item class="LuaWebService" referent="RBX22DA3C5963944872B1953D0385253F88">
 		<Properties>
 			<BinaryString name="AttributesSerialize"></BinaryString>
@@ -11667,7 +11681,7 @@ return {
 	Name = "Vigets",
 	Icon = "rbxassetid://135928770766655",
 
-	Version = "0.2.6",
+	Version = "0.2.11",
 	VersionTip = "",
 
 	WidgetSize = Vector2.new(230, 200),
@@ -11754,6 +11768,29 @@ local IMAGE_BASE_PROPERTIES = {
 	"SliceCenter",
 	"SliceScale",
 	"TileSize",
+}
+
+local BASE_PART_PROPERTIES = {
+	"Anchored",
+	"CanCollide",
+	"CanQuery",
+	"CanTouch",
+	"CastShadow",
+	"Color",
+	"PivotOffset",
+	"Position",
+	"Orientation",
+	"CustomPhysicalProperties",
+	"Massless",
+	"Material",
+	"MaterialVariant",
+	"Reflectance",
+	"RootPriority",
+	"Shape",
+	"Size",
+	"Transparency",
+	"Locked",
+	"AudioCanCollide",
 }
 
 local function merge(...)
@@ -11910,6 +11947,15 @@ return {
 		"PaddingRight",
 		"PaddingTop",
 	},
+	UIShadow = {
+		"Enabled",
+		"BlurRadius",
+		"Offset",
+		"Spread",
+		"Transparency",
+		"ZIndex",
+	},
+
 	UIScale = { "Scale" },
 	UISizeConstraint = { "MaxSize", "MinSize" },
 	UITextSizeConstraint = { "MaxTextSize", "MinTextSize" },
@@ -11984,43 +12030,20 @@ return {
 	IntConstrainedValue = { "MaxValue", "MinValue", "Value" },
 
 	--// 3D Objects & Miscellaneous
-	Part = {
-		"Anchored",
-		"CanCollide",
-		"CanQuery",
-		"CanTouch",
-		"CastShadow",
-		"Color",
-		"CustomPhysicalProperties",
-		"Massless",
-		"Material",
-		"MaterialVariant",
-		"Reflectance",
-		"RootPriority",
+	Part = merge(BASE_PART_PROPERTIES, {
 		"Shape",
-		"Size",
-		"Transparency",
-	},
-	MeshPart = {
-		"Anchored",
-		"CanCollide",
-		"CanQuery",
-		"CanTouch",
-		"CastShadow",
-		"Color",
-		"CustomPhysicalProperties",
+	}),
+	MeshPart = merge(BASE_PART_PROPERTIES, {
 		"DoubleSided",
-		"Massless",
-		"Material",
-		"MaterialVariant",
 		"MeshId",
-		"Reflectance",
 		"RenderFidelity",
-		"RootPriority",
-		"Size",
 		"TextureID",
-		"Transparency",
-	},
+		"HasSkinnedMesh",
+		"MeshId",
+	}),
+	UnionOperation = merge(BASE_PART_PROPERTIES, {
+		"UsePartColor",
+	}),
 	Model = {
 		"LevelOfDetail",
 		"PrimaryPart",
@@ -12089,6 +12112,24 @@ return {
 		"RunContext",
 		"Source",
 	},
+	Camera = {
+		"CameraSubject",
+		"CameraType",
+		"CFrame",
+		"FieldOfView",
+		"DiagonalFieldOfView",
+		"FieldOfViewMode",
+		"MaxAxisFieldOfView",
+		"Focus",
+		"HeadLocked",
+		"HeadScale",
+	},
+	WorldModel = {
+		"Origin",
+		"PrimaryPart",
+		"Scale",
+		"WorldPivot",
+	},
 }
 ]]></ProtectedString>
 							<string name="ScriptGuid">{0CF1B671-2FFF-4CEE-8F3E-2D3C459F5503}</string>
@@ -12108,13 +12149,27 @@ return {
 							<ProtectedString name="Source"><![CDATA[return {
 	Part = {
 		Material = Enum.Material.SmoothPlastic,
-		Size = Vector3.new(1, 1, 1),
+		Size = Vector3.new(4, 1, 2),
 		Anchored = true,
 	},
 
 	BillboardGui = {
 		ResetOnSpawn = false,
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		Adornee = ".__readasnil",
+		Active = true,
+		Enabled = true,
+		ExtentsOffset = Vector3.new(0, 0, 0),
+		ExtentsOffsetWorldSpace = false,
+		LightInfluence = 1,
+		MaxDistance = math.huge,
+		PlayerToHideFrom = ".__readasnil",
+		Size = UDim2.fromOffset(200, 50),
+		SizeOffset = Vector2.new(0, 0),
+		StudsOffset = Vector3.new(0, 0, 0),
+		StudsOffsetWorldSpace = Vector3.new(0, 0, 0),
+		ClipsDescendants = true,
+		AlwaysOnTop = false,
 	},
 
 	CanvasGroup = {
@@ -12122,12 +12177,48 @@ return {
 		GroupTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
+		Active = true,
+		Selectable = false,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+		SelectionImageObject = ".__readasnil",
+
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	Frame = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
+		Active = true,
+		Selectable = false,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		ClipsDescendants = false,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	ImageButton = {
@@ -12135,17 +12226,69 @@ return {
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
 		AutoButtonColor = false,
+		Active = true,
+		Selectable = false,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		ClipsDescendants = false,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	ImageLabel = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
+		Active = true,
+		Selectable = false,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+
+		ResampleMode = Enum.ResamplerMode.Default,
+		Rotation = 0,
+		ScaleType = Enum.ScaleType.Stretch,
+		SliceCenter = Rect.new(0, 0, 0, 0),
+		SliceScale = 1,
+		TileSize = UDim2.new(1, 0, 1, 0),
+
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		ClipsDescendants = false,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	ScreenGui = {
 		ResetOnSpawn = false,
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		Enabled = true,
+		IgnoreGuiInset = false,
+		Active = true,
+		Selectable = false,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
 	},
 
 	ScrollingFrame = {
@@ -12153,13 +12296,46 @@ return {
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
 		ScrollBarImageColor3 = Color3.new(0, 0, 0),
+		Active = true,
+		Selectable = false,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+		Rotation = 0,
+
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		ClipsDescendants = false,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	SurfaceGui = {
-		ResetOnSpawn = false,
+		Face = Enum.NormalId.Front,
+		ClipsDescendants = true,
+		ResetOnSpawn = true,
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 		PixelsPerStud = 50,
+		LightInfluence = 1,
+		MaxDistance = 1000,
+		Enabled = true,
+		AlwaysOnTop = false,
+		Adornee = ".__readasnil",
 		SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud,
+		Active = true,
+		Selectable = false,
+		SelectionGroup = false,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
 	},
 
 	TextBox = {
@@ -12170,6 +12346,14 @@ return {
 		Font = Enum.Font.SourceSans,
 		Text = "",
 		TextColor3 = Color3.new(0, 0, 0),
+		Active = true,
+		Selectable = true,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+		Rotation = 0,
 	},
 
 	TextButton = {
@@ -12180,6 +12364,14 @@ return {
 		Font = Enum.Font.SourceSans,
 		Text = "",
 		TextColor3 = Color3.new(0, 0, 0),
+		Active = true,
+		Selectable = true,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+		Rotation = 0,
 	},
 
 	TextLabel = {
@@ -12189,14 +12381,62 @@ return {
 		Font = Enum.Font.SourceSans,
 		Text = "",
 		TextColor3 = Color3.new(0, 0, 0),
+		Active = true,
+		Selectable = false,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+		Rotation = 0,
+	},
+
+	UIStroke = {
+		ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+		BorderOffset = Vector2.new(0, 0),
+		LineJoinMode = Enum.LineJoinMode.Round,
+		StrokeSizingMode = Enum.StrokeSizingMode.FixedSize,
+		ZIndex = 1,
+		Enabled = true,
+	},
+
+	UIShadow = {
+		BlurRadius = UDim.new(0, 20),
+		Offset = UDim2.fromOffset(0, 10),
+		Spread = UDim2.fromOffset(0, 10),
+		Transparency = 0.5,
+		ZIndex = -1,
+		Enabled = true,
 	},
 
 	UIListLayout = {
 		SortOrder = Enum.SortOrder.LayoutOrder,
+		FillDirection = Enum.FillDirection.Vertical,
+		Wraps = false,
+		Padding = UDim.new(0, 0),
+		ItemLineAlignment = Enum.ItemLineAlignment.Automatic,
+		HorizontalAlignment = Enum.HorizontalAlignment.Left,
+		VerticalAlignment = Enum.VerticalAlignment.Top,
+		VerticalFlex = Enum.UIFlexAlignment.None,
+		HorizontalFlex = Enum.UIFlexAlignment.None,
 	},
 
 	UIGridLayout = {
 		SortOrder = Enum.SortOrder.LayoutOrder,
+		FillDirection = Enum.FillDirection.Horizontal,
+		Wraps = false,
+		Padding = UDim.new(0, 0),
+		FillDirectionMaxCells = 0,
+		StartCorner = Enum.StartCorner.TopLeft,
+		HorizontalAlignment = Enum.HorizontalAlignment.Left,
+		VerticalAlignment = Enum.VerticalAlignment.Top,
+	},
+
+	UIGradient = {
+		Enabled = true,
+		Offset = UDim.new(0, 0),
+		Rotation = 0,
+		Transparency = NumberSequence.new(0),
 	},
 
 	UITableLayout = {
@@ -12205,6 +12445,10 @@ return {
 
 	UIPageLayout = {
 		SortOrder = Enum.SortOrder.LayoutOrder,
+	},
+
+	UIFlexItem = {
+		ItemLineAlignment = Enum.ItemLineAlignment.Automatic,
 	},
 
 	VideoFrame = {
@@ -12217,6 +12461,34 @@ return {
 		BackgroundColor3 = Color3.new(1, 1, 1),
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
+		Active = true,
+		Selectable = false,
+		SelectionGroup = 0,
+		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
+		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+		Rotation = 0,
+	},
+
+	Camera = {
+		CameraSubject = ".__readasnil",
+		CameraType = Enum.CameraType.Fixed,
+		CFrame = CFrame.identity,
+		FieldOfView = 70,
+		DiagonalFieldOfView = 88.877,
+		FieldOfViewMode = Enum.FieldOfViewMode.Vertical,
+		MaxAxisFieldOfView = 70,
+		Focus = CFrame.identity,
+		HeadLocked = true,
+		HeadScale = 1,
+	},
+
+	WorldModel = {
+		Origin = CFrame.identity,
+		PrimaryPart = ".__readasnil",
+		Scale = 1,
+		WorldPivot = CFrame.identity,
 	},
 }
 ]]></ProtectedString>
@@ -12481,8 +12753,36 @@ end
 
 local ALLOWED_TYPES: { string } = { "GuiBase", "UIBase", "ScreenGui", "Folder" }
 
+local Complex_Types: { string } = {
+	"PVInstance",
+
+	-- Just in case.. i really should just remove this..
+	"WorldModel",
+	"Model",
+	"BasePart",
+	"Part",
+	"MeshPart",
+	"UnionOperation",
+	"NegateOperation",
+	"Terrain",
+	"Bone",
+	"Attachment",
+	"Motor6D",
+	"Motor",
+	"Weld",
+	"WeldConstraint",
+	"SpecialMesh",
+	"Sound",
+	"ParticleEmitter",
+	"Beam",
+	"Trail",
+	"Camera",
+	"Animation",
+	"Sky",
+	"Atmosphere",
+}
+
 local VIDE_TEMPLATE: string = [[--!nolint
--- %s
 
 --> Vide API: https://centau.github.io/vide/api/reactivity-core.html
 local Vide = require(%s)
@@ -12490,11 +12790,11 @@ local create = Vide.create
 
 --> Vide Element
 return function(props: {any}?)
-    return %s
+%s
 end]]
 
 local DYNAMIC_VIDE_TEMPLATE: string = [[--!nolint
--- %s
+
 local RunService = game:GetService("RunService")
 
 --> Vide API: https://centau.github.io/vide/api/reactivity-core.html
@@ -12503,20 +12803,20 @@ local create = Vide.create
 
 local isPreview = RunService:IsStudio() and not RunService:IsRunning()
 
---> Dynamic Vide Element
 return function(props: {any}?)
-    local elements = {
-        %s
-    }
+	%s
+	local elements = {
+		%s
+	}
 
-    if isPreview and not (props and props.__vigetOverride) then
-        return elements
-    end
+	if isPreview and not (props and props.__vigetOverride) then
+		return elements
+	end
 
-    return create "ScreenGui" {
-        %s
-        elements
-    }
+	return create "ScreenGui" {
+		%s
+		elements
+	}
 end]]
 
 local STORY_TEMPLATE: string = [[--!nolint
@@ -12528,11 +12828,11 @@ local Vide = require(%s)
 local controls = {}
 
 local story = {
-    vide = Vide,
-    controls = controls,
-    story = function(props)
-        %s
-    end,
+	vide = Vide,
+	controls = controls,
+	story = function(props)
+		%s
+	end,
 }
 
 return story]]
@@ -12541,6 +12841,100 @@ local ELEMENT_FORMAT: string = 'create "%s" {\n\t%s\n}'
 
 local Reader = {}
 Reader.vide = nil :: ModuleScript?
+
+-- Resource collection state (populated during serialization pass)
+local CurrentResources = nil
+local ResourceNameMap: { [string]: boolean } = {}
+local ResourcePathMap: { [string]: string } = {}
+
+local function sanitizeIdentifier(name: string): string
+	if not name or name == "" then
+		return "resource"
+	end
+	local s = name:gsub("[^%w_]", "_")
+	if s:match("^[0-9]") then
+		s = "_" .. s
+	end
+	return s
+end
+
+local function makeUniqueName(base: string): string
+	local name = base
+	local i = 1
+	while ResourceNameMap[name] do
+		name = string.format("%s%03d", base, i)
+		i = i + 1
+	end
+	return name
+end
+
+local function isValidIdentifier(name: string): boolean
+	return name:match("^[%a_][%w_]*$") ~= nil
+end
+
+local function getRequirePath(inst: Instance): string
+	local parts: { string } = {}
+	local current: Instance? = inst
+
+	while current and current.Parent and current.Parent ~= game do
+		table.insert(parts, 1, current.Name)
+		current = current.Parent
+	end
+
+	local serviceName = current and current.ClassName or "ReplicatedStorage"
+	local path = string.format("game.%s", serviceName)
+
+	for _, part in parts do
+		path ..= if isValidIdentifier(part) then "." .. part else string.format("[%q]", part)
+	end
+
+	return path
+end
+
+local function registerResource(inst: Instance): string
+	if not CurrentResources then
+		CurrentResources = {}
+		ResourceNameMap = {}
+		ResourcePathMap = {}
+	end
+
+	local requirePath = getRequirePath(inst)
+	if ResourcePathMap[requirePath] then
+		return ResourcePathMap[requirePath]
+	end
+
+	local base = sanitizeIdentifier(inst.Name ~= "" and inst.Name or inst.ClassName)
+	local varName = makeUniqueName(base)
+	ResourceNameMap[varName] = true
+	ResourcePathMap[requirePath] = varName
+
+	table.insert(
+		CurrentResources,
+		{ varName = varName, instance = inst, requirePath = requirePath }
+	)
+	return varName
+end
+
+local function buildResourceCode(resourcePrefix: string): string
+	if not CurrentResources or #CurrentResources == 0 then
+		return ""
+	end
+
+	local name = resourcePrefix or ".rscs"
+	local scriptRef = if isValidIdentifier(name)
+		then "script." .. name
+		else "script[" .. string.format("%q", name) .. "]"
+
+	local lines: { string } = {}
+	table.insert(lines, "\t-- Resources")
+	table.insert(lines, string.format("\tlocal resources = %s:Clone()", scriptRef))
+
+	for _, r in ipairs(CurrentResources) do
+		table.insert(lines, string.format("\tlocal %s = resources[%q]", r.varName, r.varName))
+	end
+
+	return table.concat(lines, "\n")
+end
 
 local Constants = require("../external/constants")
 local InstanceProperties = require("../external/instance-properties") :: { [string]: { string } }
@@ -12564,6 +12958,12 @@ local function isDefaultValue(className: string, property: string, value: any): 
 	end
 
 	local defaultValue = classDefaults[property]
+	-- Special marker: when default is the sentinel string ".__readasnil",
+	-- treat it as a default of actual nil so properties explicitly nil are ignored.
+	if defaultValue == ".__readasnil" then
+		return value == nil
+	end
+
 	if defaultValue == nil then
 		return false
 	end
@@ -12597,10 +12997,27 @@ local function isAllowedType(inst: Instance): boolean
 	return false
 end
 
+local function isComplexType(inst: Instance): boolean
+	if typeof(inst) ~= "Instance" then
+		return false
+	end
+
+	for _, classType in Complex_Types do
+		if inst:IsA(classType) or classType == inst.ClassName then
+			return true
+		end
+	end
+
+	return false
+end
+
 local ProperitesToExclude: { string } = { "IsLoaded" }
 
 local function serializeInstance(instance: Instance): InstanceData?
-	assert(isAllowedType(instance), `{instance.ClassName} is not a valid class name`)
+	assert(
+		isAllowedType(instance) or isComplexType(instance),
+		`{instance.ClassName} is not a valid class name`
+	)
 
 	local data = {}
 	local properties = InstanceProperties[instance.ClassName]
@@ -12633,7 +13050,16 @@ local function serializeInstance(instance: Instance): InstanceData?
 		data._children = {}
 
 		for _, child in instance:GetChildren() do
-			if isAllowedType(child) then
+			if isComplexType(child) then
+				-- Too complex/unsafe to decompose into properties (physics, meshes,
+				-- welds, world models, etc). Keep a live reference so it can be
+				-- cloned wholesale instead of rebuilt property-by-property.
+				table.insert(data._children, {
+					Name = child.Name,
+					ClassName = child.ClassName,
+					_complexInstance = child,
+				})
+			elseif isAllowedType(child) then
 				local ok, childData = pcall(serializeInstance, child)
 				if ok and childData then
 					table.insert(data._children, childData)
@@ -12646,20 +13072,37 @@ local function serializeInstance(instance: Instance): InstanceData?
 end
 
 local function createFromSerializedInstance(data: InstanceData): Instance
+	if data._complexInstance then
+		local ok, clone = pcall(function()
+			return (data._complexInstance :: Instance):Clone()
+		end)
+
+		assert(ok and clone, `Failed to clone complex instance for {data.Name}`)
+
+		if data.Name then
+			clone.Name = data.Name
+		end
+
+		return clone
+	end
+
 	local ok, instance = pcall(Instance.new, data.ClassName)
 
-	assert(isAllowedType(instance), `{data.ClassName} is not a valid class name`)
+	assert(
+		isAllowedType(instance) or isComplexType(instance),
+		`{data.ClassName} is not a valid class name`
+	)
 	assert(ok, `Cannot create an instance of class "{data.ClassName}" from {data.Name}`)
 
 	for property, value in data do
 		if property == "_children" then
 			for _, childData in value do
 				local child = createFromSerializedInstance(childData)
-				if child and isAllowedType(child) then
+				if child and (isAllowedType(child) or isComplexType(child)) then
 					child.Parent = instance
 				end
 			end
-		else
+		elseif property ~= "_complexInstance" then
 			local ok2, result = pcall(function()
 				instance[property] = value
 			end)
@@ -12727,29 +13170,6 @@ local function isStory(story: any): boolean
 	end
 
 	return false
-end
-
-local function isValidIdentifier(name: string): boolean
-	return name:match("^[%a_][%w_]*$") ~= nil
-end
-
-local function getRequirePath(inst: Instance): string
-	local parts: { string } = {}
-	local current: Instance? = inst
-
-	while current and current.Parent and current.Parent ~= game do
-		table.insert(parts, 1, current.Name)
-		current = current.Parent
-	end
-
-	local serviceName = current and current.ClassName or "ReplicatedStorage"
-	local path = string.format("game.%s", serviceName)
-
-	for _, part in parts do
-		path ..= if isValidIdentifier(part) then "." .. part else string.format("[%q]", part)
-	end
-
-	return path
 end
 
 -- Known package locations, checked before falling back to a scoped search.
@@ -12851,6 +13271,17 @@ local function serializeValue(value: any): string
 		return `UDim.new({fmt(value.Scale)}, {fmt(value.Offset)})`
 	elseif t == "Vector2" then
 		return `Vector2.new({fmt(value.X)}, {fmt(value.Y)})`
+	elseif t == "Vector3" then
+		return `Vector3.new({fmt(value.X)}, {fmt(value.Y)}, {fmt(value.Z)})`
+	elseif t == "Instance" then
+		-- Register instance as a resource and return the variable name to reference it
+		local ok, varName = pcall(function()
+			return registerResource(value)
+		end)
+		if ok and type(varName) == "string" then
+			return varName
+		end
+		return "nil"
 	elseif t == "Color3" then
 		return `Color3.fromRGB({fmt(math.round(value.R * 255))}, {fmt(math.round(value.G * 255))}, {fmt(
 			math.round(value.B * 255)
@@ -12900,6 +13331,16 @@ local function serializeValue(value: any): string
 end
 
 local function readDataIntoVideCode(data: InstanceData): string
+	if data._complexInstance then
+		-- Complex children are referenced (cloned resource), never rebuilt as
+		-- a nested create{} call.
+		local ok, varName = pcall(registerResource, data._complexInstance)
+		if ok and type(varName) == "string" then
+			return varName
+		end
+		return "nil"
+	end
+
 	local keys: { string } = {}
 	for property in data do
 		if property ~= "_children" and property ~= "ClassName" then
@@ -12915,7 +13356,14 @@ local function readDataIntoVideCode(data: InstanceData): string
 
 	if data._children then
 		for _, childData in data._children do
-			table.insert(lines, readDataIntoVideCode(childData))
+			if childData._complexInstance then
+				local ok, varName = pcall(registerResource, childData._complexInstance)
+				if ok and type(varName) == "string" then
+					table.insert(lines, varName)
+				end
+			else
+				table.insert(lines, readDataIntoVideCode(childData))
+			end
 		end
 	end
 
@@ -12961,14 +13409,24 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 		local childLines: { string } = {}
 		if data._children then
 			for _, childData in data._children do
-				table.insert(childLines, "\t\t" .. readDataIntoVideCode(childData) .. ",")
+				if childData._complexInstance then
+					local ok2, varName = pcall(registerResource, childData._complexInstance)
+					if ok2 and type(varName) == "string" then
+						table.insert(childLines, "\t\t" .. varName .. ",")
+					end
+				else
+					table.insert(childLines, "\t\t" .. readDataIntoVideCode(childData) .. ",")
+				end
 			end
 		end
 
+		-- Build resources collected while serializing properties/values
+		local resourceCode = buildResourceCode(".rscs")
+
 		sourceCode = string.format(
 			DYNAMIC_VIDE_TEMPLATE,
-			instance.Name,
 			vide_path,
+			resourceCode,
 			table.concat(childLines, "\n"),
 			table.concat(propLines, "\n")
 		)
@@ -12980,14 +13438,36 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 
 		raw = ok2 and raw or "nil"
 
-		sourceCode = string.format(VIDE_TEMPLATE, instance.Name, vide_path, raw)
+		-- Build resources (if any) and inject them into the function body so they're cloned per-call
+		local resourceCode = buildResourceCode(".rscs")
+		local body = resourceCode ~= "" and (resourceCode .. "\n\treturn " .. raw)
+			or ("\treturn " .. raw)
+
+		sourceCode = string.format(VIDE_TEMPLATE, vide_path, body)
 	end
 
 	local ModuleScript = Instance.new("ModuleScript")
 	ModuleScript.Name = `{instance.Name}-Vide`
 	ModuleScript.Source = Lint(sourceCode)
 
+	if CurrentResources and #CurrentResources > 0 then
+		local resourceFolder = Instance.new("Folder")
+		resourceFolder.Name = instance.Name .. "_resources"
+		resourceFolder.Parent = ModuleScript
+
+		for _, r in ipairs(CurrentResources) do
+			local clone = r.instance:Clone()
+			clone.Name = r.varName
+			clone.Parent = resourceFolder
+		end
+	end
+
 	ModuleScript.Parent = workspace
+
+	CurrentResources = nil
+	ResourceNameMap = {}
+	ResourcePathMap = {}
+
 	return ModuleScript
 end
 
@@ -13157,20 +13637,6 @@ return Reader
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c30000039d</UniqueId>
-		</Properties>
-	</Item>
-	<Item class="ServiceVisibilityService" referent="RBX3AD18C17E9C74BC0970B1BF071230A31">
-		<Properties>
-			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
-			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
-			<BinaryString name="AttributesSerialize"></BinaryString>
-			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-			<bool name="DefinesCapabilities">false</bool>
-			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-			<string name="Name">ServiceVisibilityService</string>
-			<int64 name="SourceAssetId">-1</int64>
-			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000003ae</UniqueId>
 		</Properties>
 	</Item>
 	<Item class="HttpService" referent="RBX31922E2D091A4714AAE2DAEE0E93948C">
