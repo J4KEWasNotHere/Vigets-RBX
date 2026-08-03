@@ -63,6 +63,29 @@ local IMAGE_BASE_PROPERTIES = {
 	"TileSize",
 }
 
+local BASE_PART_PROPERTIES = {
+	"Anchored",
+	"CanCollide",
+	"CanQuery",
+	"CanTouch",
+	"CastShadow",
+	"Color",
+	"PivotOffset",
+	"Position",
+	"Orientation",
+	"CustomPhysicalProperties",
+	"Massless",
+	"Material",
+	"MaterialVariant",
+	"Reflectance",
+	"RootPriority",
+	"Shape",
+	"Size",
+	"Transparency",
+	"Locked",
+	"AudioCanCollide",
+}
+
 local function merge(...)
 	local result = {}
 	for _, t in ipairs({ ... }) do
@@ -217,6 +240,15 @@ return {
 		"PaddingRight",
 		"PaddingTop",
 	},
+	UIShadow = {
+		"Enabled",
+		"BlurRadius",
+		"Offset",
+		"Spread",
+		"Transparency",
+		"ZIndex",
+	},
+
 	UIScale = { "Scale" },
 	UISizeConstraint = { "MaxSize", "MinSize" },
 	UITextSizeConstraint = { "MaxTextSize", "MinTextSize" },
@@ -291,43 +323,20 @@ return {
 	IntConstrainedValue = { "MaxValue", "MinValue", "Value" },
 
 	--// 3D Objects & Miscellaneous
-	Part = {
-		"Anchored",
-		"CanCollide",
-		"CanQuery",
-		"CanTouch",
-		"CastShadow",
-		"Color",
-		"CustomPhysicalProperties",
-		"Massless",
-		"Material",
-		"MaterialVariant",
-		"Reflectance",
-		"RootPriority",
+	Part = merge(BASE_PART_PROPERTIES, {
 		"Shape",
-		"Size",
-		"Transparency",
-	},
-	MeshPart = {
-		"Anchored",
-		"CanCollide",
-		"CanQuery",
-		"CanTouch",
-		"CastShadow",
-		"Color",
-		"CustomPhysicalProperties",
+	}),
+	MeshPart = merge(BASE_PART_PROPERTIES, {
 		"DoubleSided",
-		"Massless",
-		"Material",
-		"MaterialVariant",
 		"MeshId",
-		"Reflectance",
 		"RenderFidelity",
-		"RootPriority",
-		"Size",
 		"TextureID",
-		"Transparency",
-	},
+		"HasSkinnedMesh",
+		"MeshId",
+	}),
+	UnionOperation = merge(BASE_PART_PROPERTIES, {
+		"UsePartColor",
+	}),
 	Model = {
 		"LevelOfDetail",
 		"PrimaryPart",
@@ -395,5 +404,23 @@ return {
 		"Disabled",
 		"RunContext",
 		"Source",
+	},
+	Camera = {
+		"CameraSubject",
+		"CameraType",
+		"CFrame",
+		"FieldOfView",
+		"DiagonalFieldOfView",
+		"FieldOfViewMode",
+		"MaxAxisFieldOfView",
+		"Focus",
+		"HeadLocked",
+		"HeadScale",
+	},
+	WorldModel = {
+		"Origin",
+		"PrimaryPart",
+		"Scale",
+		"WorldPivot",
 	},
 }

@@ -8,8 +8,36 @@ export type InstanceData = {
 
 local ALLOWED_TYPES: { string } = { "GuiBase", "UIBase", "ScreenGui", "Folder" }
 
+local Complex_Types: { string } = {
+	"PVInstance",
+
+	-- Just in case.. i really should just remove this..
+	"WorldModel",
+	"Model",
+	"BasePart",
+	"Part",
+	"MeshPart",
+	"UnionOperation",
+	"NegateOperation",
+	"Terrain",
+	"Bone",
+	"Attachment",
+	"Motor6D",
+	"Motor",
+	"Weld",
+	"WeldConstraint",
+	"SpecialMesh",
+	"Sound",
+	"ParticleEmitter",
+	"Beam",
+	"Trail",
+	"Camera",
+	"Animation",
+	"Sky",
+	"Atmosphere",
+}
+
 local VIDE_TEMPLATE: string = [[--!nolint
--- %s
 
 --> Vide API: https://centau.github.io/vide/api/reactivity-core.html
 local Vide = require(%s)
@@ -17,11 +45,11 @@ local create = Vide.create
 
 --> Vide Element
 return function(props: {any}?)
-    return %s
+%s
 end]]
 
 local DYNAMIC_VIDE_TEMPLATE: string = [[--!nolint
--- %s
+
 local RunService = game:GetService("RunService")
 
 --> Vide API: https://centau.github.io/vide/api/reactivity-core.html
@@ -30,20 +58,20 @@ local create = Vide.create
 
 local isPreview = RunService:IsStudio() and not RunService:IsRunning()
 
---> Dynamic Vide Element
 return function(props: {any}?)
-    local elements = {
-        %s
-    }
+	%s
+	local elements = {
+		%s
+	}
 
-    if isPreview and not (props and props.__vigetOverride) then
-        return elements
-    end
+	if isPreview and not (props and props.__vigetOverride) then
+		return elements
+	end
 
-    return create "ScreenGui" {
-        %s
-        elements
-    }
+	return create "ScreenGui" {
+		%s
+		elements
+	}
 end]]
 
 local STORY_TEMPLATE: string = [[--!nolint
@@ -55,11 +83,11 @@ local Vide = require(%s)
 local controls = {}
 
 local story = {
-    vide = Vide,
-    controls = controls,
-    story = function(props)
-        %s
-    end,
+	vide = Vide,
+	controls = controls,
+	story = function(props)
+		%s
+	end,
 }
 
 return story]]
@@ -68,6 +96,100 @@ local ELEMENT_FORMAT: string = 'create "%s" {\n\t%s\n}'
 
 local Reader = {}
 Reader.vide = nil :: ModuleScript?
+
+-- Resource collection state (populated during serialization pass)
+local CurrentResources = nil
+local ResourceNameMap: { [string]: boolean } = {}
+local ResourcePathMap: { [string]: string } = {}
+
+local function sanitizeIdentifier(name: string): string
+	if not name or name == "" then
+		return "resource"
+	end
+	local s = name:gsub("[^%w_]", "_")
+	if s:match("^[0-9]") then
+		s = "_" .. s
+	end
+	return s
+end
+
+local function makeUniqueName(base: string): string
+	local name = base
+	local i = 1
+	while ResourceNameMap[name] do
+		name = string.format("%s%03d", base, i)
+		i = i + 1
+	end
+	return name
+end
+
+local function isValidIdentifier(name: string): boolean
+	return name:match("^[%a_][%w_]*$") ~= nil
+end
+
+local function getRequirePath(inst: Instance): string
+	local parts: { string } = {}
+	local current: Instance? = inst
+
+	while current and current.Parent and current.Parent ~= game do
+		table.insert(parts, 1, current.Name)
+		current = current.Parent
+	end
+
+	local serviceName = current and current.ClassName or "ReplicatedStorage"
+	local path = string.format("game.%s", serviceName)
+
+	for _, part in parts do
+		path ..= if isValidIdentifier(part) then "." .. part else string.format("[%q]", part)
+	end
+
+	return path
+end
+
+local function registerResource(inst: Instance): string
+	if not CurrentResources then
+		CurrentResources = {}
+		ResourceNameMap = {}
+		ResourcePathMap = {}
+	end
+
+	local requirePath = getRequirePath(inst)
+	if ResourcePathMap[requirePath] then
+		return ResourcePathMap[requirePath]
+	end
+
+	local base = sanitizeIdentifier(inst.Name ~= "" and inst.Name or inst.ClassName)
+	local varName = makeUniqueName(base)
+	ResourceNameMap[varName] = true
+	ResourcePathMap[requirePath] = varName
+
+	table.insert(
+		CurrentResources,
+		{ varName = varName, instance = inst, requirePath = requirePath }
+	)
+	return varName
+end
+
+local function buildResourceCode(resourcePrefix: string): string
+	if not CurrentResources or #CurrentResources == 0 then
+		return ""
+	end
+
+	local name = resourcePrefix or ".rscs"
+	local scriptRef = if isValidIdentifier(name)
+		then "script." .. name
+		else "script[" .. string.format("%q", name) .. "]"
+
+	local lines: { string } = {}
+	table.insert(lines, "\t-- Resources")
+	table.insert(lines, string.format("\tlocal resources = %s:Clone()", scriptRef))
+
+	for _, r in ipairs(CurrentResources) do
+		table.insert(lines, string.format("\tlocal %s = resources[%q]", r.varName, r.varName))
+	end
+
+	return table.concat(lines, "\n")
+end
 
 local Constants = require("../external/constants")
 local InstanceProperties = require("../external/instance-properties") :: { [string]: { string } }
@@ -91,6 +213,12 @@ local function isDefaultValue(className: string, property: string, value: any): 
 	end
 
 	local defaultValue = classDefaults[property]
+	-- Special marker: when default is the sentinel string ".__readasnil",
+	-- treat it as a default of actual nil so properties explicitly nil are ignored.
+	if defaultValue == ".__readasnil" then
+		return value == nil
+	end
+
 	if defaultValue == nil then
 		return false
 	end
@@ -124,10 +252,27 @@ local function isAllowedType(inst: Instance): boolean
 	return false
 end
 
+local function isComplexType(inst: Instance): boolean
+	if typeof(inst) ~= "Instance" then
+		return false
+	end
+
+	for _, classType in Complex_Types do
+		if inst:IsA(classType) or classType == inst.ClassName then
+			return true
+		end
+	end
+
+	return false
+end
+
 local ProperitesToExclude: { string } = { "IsLoaded" }
 
 local function serializeInstance(instance: Instance): InstanceData?
-	assert(isAllowedType(instance), `{instance.ClassName} is not a valid class name`)
+	assert(
+		isAllowedType(instance) or isComplexType(instance),
+		`{instance.ClassName} is not a valid class name`
+	)
 
 	local data = {}
 	local properties = InstanceProperties[instance.ClassName]
@@ -160,7 +305,16 @@ local function serializeInstance(instance: Instance): InstanceData?
 		data._children = {}
 
 		for _, child in instance:GetChildren() do
-			if isAllowedType(child) then
+			if isComplexType(child) then
+				-- Too complex/unsafe to decompose into properties (physics, meshes,
+				-- welds, world models, etc). Keep a live reference so it can be
+				-- cloned wholesale instead of rebuilt property-by-property.
+				table.insert(data._children, {
+					Name = child.Name,
+					ClassName = child.ClassName,
+					_complexInstance = child,
+				})
+			elseif isAllowedType(child) then
 				local ok, childData = pcall(serializeInstance, child)
 				if ok and childData then
 					table.insert(data._children, childData)
@@ -173,20 +327,37 @@ local function serializeInstance(instance: Instance): InstanceData?
 end
 
 local function createFromSerializedInstance(data: InstanceData): Instance
+	if data._complexInstance then
+		local ok, clone = pcall(function()
+			return (data._complexInstance :: Instance):Clone()
+		end)
+
+		assert(ok and clone, `Failed to clone complex instance for {data.Name}`)
+
+		if data.Name then
+			clone.Name = data.Name
+		end
+
+		return clone
+	end
+
 	local ok, instance = pcall(Instance.new, data.ClassName)
 
-	assert(isAllowedType(instance), `{data.ClassName} is not a valid class name`)
+	assert(
+		isAllowedType(instance) or isComplexType(instance),
+		`{data.ClassName} is not a valid class name`
+	)
 	assert(ok, `Cannot create an instance of class "{data.ClassName}" from {data.Name}`)
 
 	for property, value in data do
 		if property == "_children" then
 			for _, childData in value do
 				local child = createFromSerializedInstance(childData)
-				if child and isAllowedType(child) then
+				if child and (isAllowedType(child) or isComplexType(child)) then
 					child.Parent = instance
 				end
 			end
-		else
+		elseif property ~= "_complexInstance" then
 			local ok2, result = pcall(function()
 				instance[property] = value
 			end)
@@ -254,29 +425,6 @@ local function isStory(story: any): boolean
 	end
 
 	return false
-end
-
-local function isValidIdentifier(name: string): boolean
-	return name:match("^[%a_][%w_]*$") ~= nil
-end
-
-local function getRequirePath(inst: Instance): string
-	local parts: { string } = {}
-	local current: Instance? = inst
-
-	while current and current.Parent and current.Parent ~= game do
-		table.insert(parts, 1, current.Name)
-		current = current.Parent
-	end
-
-	local serviceName = current and current.ClassName or "ReplicatedStorage"
-	local path = string.format("game.%s", serviceName)
-
-	for _, part in parts do
-		path ..= if isValidIdentifier(part) then "." .. part else string.format("[%q]", part)
-	end
-
-	return path
 end
 
 -- Known package locations, checked before falling back to a scoped search.
@@ -378,6 +526,17 @@ local function serializeValue(value: any): string
 		return `UDim.new({fmt(value.Scale)}, {fmt(value.Offset)})`
 	elseif t == "Vector2" then
 		return `Vector2.new({fmt(value.X)}, {fmt(value.Y)})`
+	elseif t == "Vector3" then
+		return `Vector3.new({fmt(value.X)}, {fmt(value.Y)}, {fmt(value.Z)})`
+	elseif t == "Instance" then
+		-- Register instance as a resource and return the variable name to reference it
+		local ok, varName = pcall(function()
+			return registerResource(value)
+		end)
+		if ok and type(varName) == "string" then
+			return varName
+		end
+		return "nil"
 	elseif t == "Color3" then
 		return `Color3.fromRGB({fmt(math.round(value.R * 255))}, {fmt(math.round(value.G * 255))}, {fmt(
 			math.round(value.B * 255)
@@ -427,6 +586,16 @@ local function serializeValue(value: any): string
 end
 
 local function readDataIntoVideCode(data: InstanceData): string
+	if data._complexInstance then
+		-- Complex children are referenced (cloned resource), never rebuilt as
+		-- a nested create{} call.
+		local ok, varName = pcall(registerResource, data._complexInstance)
+		if ok and type(varName) == "string" then
+			return varName
+		end
+		return "nil"
+	end
+
 	local keys: { string } = {}
 	for property in data do
 		if property ~= "_children" and property ~= "ClassName" then
@@ -442,7 +611,14 @@ local function readDataIntoVideCode(data: InstanceData): string
 
 	if data._children then
 		for _, childData in data._children do
-			table.insert(lines, readDataIntoVideCode(childData))
+			if childData._complexInstance then
+				local ok, varName = pcall(registerResource, childData._complexInstance)
+				if ok and type(varName) == "string" then
+					table.insert(lines, varName)
+				end
+			else
+				table.insert(lines, readDataIntoVideCode(childData))
+			end
 		end
 	end
 
@@ -488,14 +664,24 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 		local childLines: { string } = {}
 		if data._children then
 			for _, childData in data._children do
-				table.insert(childLines, "\t\t" .. readDataIntoVideCode(childData) .. ",")
+				if childData._complexInstance then
+					local ok2, varName = pcall(registerResource, childData._complexInstance)
+					if ok2 and type(varName) == "string" then
+						table.insert(childLines, "\t\t" .. varName .. ",")
+					end
+				else
+					table.insert(childLines, "\t\t" .. readDataIntoVideCode(childData) .. ",")
+				end
 			end
 		end
 
+		-- Build resources collected while serializing properties/values
+		local resourceCode = buildResourceCode(".rscs")
+
 		sourceCode = string.format(
 			DYNAMIC_VIDE_TEMPLATE,
-			instance.Name,
 			vide_path,
+			resourceCode,
 			table.concat(childLines, "\n"),
 			table.concat(propLines, "\n")
 		)
@@ -507,14 +693,36 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 
 		raw = ok2 and raw or "nil"
 
-		sourceCode = string.format(VIDE_TEMPLATE, instance.Name, vide_path, raw)
+		-- Build resources (if any) and inject them into the function body so they're cloned per-call
+		local resourceCode = buildResourceCode(".rscs")
+		local body = resourceCode ~= "" and (resourceCode .. "\n\treturn " .. raw)
+			or ("\treturn " .. raw)
+
+		sourceCode = string.format(VIDE_TEMPLATE, vide_path, body)
 	end
 
 	local ModuleScript = Instance.new("ModuleScript")
 	ModuleScript.Name = `{instance.Name}-Vide`
 	ModuleScript.Source = Lint(sourceCode)
 
+	if CurrentResources and #CurrentResources > 0 then
+		local resourceFolder = Instance.new("Folder")
+		resourceFolder.Name = instance.Name .. "_resources"
+		resourceFolder.Parent = ModuleScript
+
+		for _, r in ipairs(CurrentResources) do
+			local clone = r.instance:Clone()
+			clone.Name = r.varName
+			clone.Parent = resourceFolder
+		end
+	end
+
 	ModuleScript.Parent = workspace
+
+	CurrentResources = nil
+	ResourceNameMap = {}
+	ResourcePathMap = {}
+
 	return ModuleScript
 end
 
