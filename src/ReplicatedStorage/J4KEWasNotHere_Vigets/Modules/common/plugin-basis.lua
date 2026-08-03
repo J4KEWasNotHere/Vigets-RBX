@@ -111,7 +111,9 @@ return {
 		local function CreateMethodButton(props)
 			local rounding = props.Rounding or UDim.new(0, 6)
 			local isSelected = props.Selected or Value(false)
-			local hasImage = Value(props.Image and props.Image ~= "" or false)
+			local iconColorStyle = props.IconColorStyle
+				or props.TextColorStyle
+				or Enum.StudioStyleGuideColor.ButtonText
 
 			local modifier = getModifier({
 				Enabled = true,
@@ -130,6 +132,12 @@ return {
 					"Spring",
 					40
 				),
+				BorderColor3 = getMotionState(
+					themeProvider:GetColor(Enum.StudioStyleGuideColor.ButtonBorder, modifier),
+					"Spring",
+					40
+				),
+				BorderSizePixel = 1,
 				BackgroundTransparency = 0,
 				Text = "",
 
@@ -166,10 +174,6 @@ return {
 						LayoutOrder = 0,
 						Size = UDim2.fromScale(props.IconSize or 1, props.IconSize or 1),
 						Image = props.Image or "",
-						Visible = Computed(function()
-							return unwrap(hasImage)
-						end),
-
 						[Children] = {
 							New("UIAspectRatioConstraint")({}),
 						},
@@ -182,7 +186,14 @@ return {
 						AutomaticSize = Enum.AutomaticSize.X,
 						TextXAlignment = Enum.TextXAlignment.Left,
 						Text = props.Text,
-						TextColor3 = Color3.fromRGB(255, 255, 255),
+						TextColor3 = getMotionState(
+							themeProvider:GetColor(
+								props.TextColorStyle or Enum.StudioStyleGuideColor.ButtonText,
+								modifier
+							),
+							"Spring",
+							40
+						),
 						TextSize = 15,
 					}),
 				},
@@ -371,7 +382,14 @@ return {
 														and "http://www.roblox.com/asset/?id=6023565916"
 													or "http://www.roblox.com/asset/?id=6031071050"
 											end),
+											ImageColor3 = themeProvider:GetColor(
+												Enum.StudioStyleGuideColor.DimmedText,
+												Enum.StudioStyleGuideModifier.Default
+											),
 											Size = UDim2.fromOffset(42, 42),
+											[Children] = {
+												New("UIAspectRatioConstraint")({}),
+											},
 										}),
 
 										Label({
@@ -379,12 +397,14 @@ return {
 												local noneSelected = "Nothing is selected yet.."
 												local invalidSelected =
 													"Selected instance(s) aren't compatible!"
-												local result = #unwrap(items) == 0 and noneSelected
+												return #unwrap(items) == 0 and noneSelected
 													or invalidSelected
-												return result
 											end),
 											TextSize = 14,
-											TextColor3 = Color3.fromRGB(180, 180, 180),
+											TextColor3 = themeProvider:GetColor(
+												Enum.StudioStyleGuideColor.DimmedText,
+												Enum.StudioStyleGuideModifier.Default
+											),
 										}),
 									},
 								})
