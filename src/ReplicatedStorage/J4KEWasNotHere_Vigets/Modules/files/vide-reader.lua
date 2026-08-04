@@ -780,13 +780,6 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	return storyScript
 end
 
-local function read(value)
-	if typeof(value) == "function" then
-		return value()
-	end
-	return value
-end
-
 function Reader.DeserializeFromStory(moduleScript: ModuleScript): Instance?
 	if not isModule(moduleScript) then
 		return nil
