@@ -10,16 +10,18 @@ local ALLOWED_TYPES: { string } = { "GuiBase", "UIBase", "ScreenGui", "Folder" }
 
 local Complex_Types: { string } = {
 	"PVInstance",
+	"BaseScript",
+	"BaseRemoteEvent",
 
-	-- Just in case.. i really should just remove this..
-	"WorldModel",
-	"Model",
-	"BasePart",
-	"Part",
-	"MeshPart",
-	"UnionOperation",
-	"NegateOperation",
-	"Terrain",
+	"ModuleScript",
+	"RemoteFunction",
+
+	"BindableEvent",
+	"BindableFunction",
+	"Animation",
+	"AnimationTrack",
+	"Actor",
+
 	"Bone",
 	"Attachment",
 	"Motor6D",
@@ -28,13 +30,8 @@ local Complex_Types: { string } = {
 	"WeldConstraint",
 	"SpecialMesh",
 	"Sound",
-	"ParticleEmitter",
-	"Beam",
-	"Trail",
 	"Camera",
 	"Animation",
-	"Sky",
-	"Atmosphere",
 }
 
 local VIDE_TEMPLATE: string = [[--!nolint
@@ -213,8 +210,6 @@ local function isDefaultValue(className: string, property: string, value: any): 
 	end
 
 	local defaultValue = classDefaults[property]
-	-- Special marker: when default is the sentinel string ".__readasnil",
-	-- treat it as a default of actual nil so properties explicitly nil are ignored.
 	if defaultValue == ".__readasnil" then
 		return value == nil
 	end
@@ -306,9 +301,6 @@ local function serializeInstance(instance: Instance): InstanceData?
 
 		for _, child in instance:GetChildren() do
 			if isComplexType(child) then
-				-- Too complex/unsafe to decompose into properties (physics, meshes,
-				-- welds, world models, etc). Keep a live reference so it can be
-				-- cloned wholesale instead of rebuilt property-by-property.
 				table.insert(data._children, {
 					Name = child.Name,
 					ClassName = child.ClassName,
@@ -587,8 +579,6 @@ end
 
 local function readDataIntoVideCode(data: InstanceData): string
 	if data._complexInstance then
-		-- Complex children are referenced (cloned resource), never rebuilt as
-		-- a nested create{} call.
 		local ok, varName = pcall(registerResource, data._complexInstance)
 		if ok and type(varName) == "string" then
 			return varName
@@ -707,7 +697,7 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 
 	if CurrentResources and #CurrentResources > 0 then
 		local resourceFolder = Instance.new("Folder")
-		resourceFolder.Name = instance.Name .. "_resources"
+		resourceFolder.Name = ".rscs"
 		resourceFolder.Parent = ModuleScript
 
 		for _, r in ipairs(CurrentResources) do
