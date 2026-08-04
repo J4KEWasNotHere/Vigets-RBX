@@ -12,16 +12,16 @@ local Complex_Types: { string } = {
 	"PVInstance",
 	"BaseScript",
 	"BaseRemoteEvent",
-
+	
 	"ModuleScript",
 	"RemoteFunction",
-
+	
 	"BindableEvent",
 	"BindableFunction",
 	"Animation",
 	"AnimationTrack",
 	"Actor",
-
+	
 	"Bone",
 	"Attachment",
 	"Motor6D",
@@ -199,7 +199,6 @@ local DEBUG = Constants.DebugEnabled
 -- Utility
 
 local function isDefaultValue(className: string, property: string, value: any): boolean
-	-- Omit Name if it is equal to the default class name (e.g. Frame.Name == "Frame")
 	if property == "Name" and value == className then
 		return true
 	end
@@ -210,6 +209,7 @@ local function isDefaultValue(className: string, property: string, value: any): 
 	end
 
 	local defaultValue = classDefaults[property]
+	
 	if defaultValue == ".__readasnil" then
 		return value == nil
 	end
@@ -218,7 +218,6 @@ local function isDefaultValue(className: string, property: string, value: any): 
 		return false
 	end
 
-	-- Precision check for floating numbers
 	if typeof(value) == "number" and typeof(defaultValue) == "number" then
 		return math.abs(value - defaultValue) < 0.0001
 	end
@@ -275,14 +274,12 @@ local function serializeInstance(instance: Instance): InstanceData?
 		return nil
 	end
 
-	-- Check Name property
 	if not isDefaultValue(instance.ClassName, "Name", instance.Name) then
 		data["Name"] = instance.Name
 	end
 
 	data["ClassName"] = instance.ClassName
 
-	-- Check instance-specific properties
 	for _, property: string in properties do
 		if table.find(ProperitesToExclude, property) then
 			continue
@@ -521,7 +518,6 @@ local function serializeValue(value: any): string
 	elseif t == "Vector3" then
 		return `Vector3.new({fmt(value.X)}, {fmt(value.Y)}, {fmt(value.Z)})`
 	elseif t == "Instance" then
-		-- Register instance as a resource and return the variable name to reference it
 		local ok, varName = pcall(function()
 			return registerResource(value)
 		end)
@@ -633,7 +629,6 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 	local sourceCode = ""
 
 	if instance.ClassName == "ScreenGui" then
-		-- Extract properties for the ScreenGui wrapper itself
 		local propKeys: { string } = {}
 		for property in data do
 			if property ~= "_children" and property ~= "ClassName" then
@@ -650,7 +645,6 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 			)
 		end
 
-		-- Extract children elements for the preview table
 		local childLines: { string } = {}
 		if data._children then
 			for _, childData in data._children do
@@ -665,7 +659,6 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 			end
 		end
 
-		-- Build resources collected while serializing properties/values
 		local resourceCode = buildResourceCode(".rscs")
 
 		sourceCode = string.format(
@@ -683,7 +676,6 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 
 		raw = ok2 and raw or "nil"
 
-		-- Build resources (if any) and inject them into the function body so they're cloned per-call
 		local resourceCode = buildResourceCode(".rscs")
 		local body = resourceCode ~= "" and (resourceCode .. "\n\treturn " .. raw)
 			or ("\treturn " .. raw)
@@ -788,6 +780,13 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	return storyScript
 end
 
+local function read(value)
+	if typeof(value) == "function" then
+		return value()
+	end
+	return value
+end
+
 function Reader.DeserializeFromStory(moduleScript: ModuleScript): Instance?
 	if not isModule(moduleScript) then
 		return nil
@@ -808,7 +807,19 @@ function Reader.DeserializeFromStory(moduleScript: ModuleScript): Instance?
 	local ok2, dynamic = pcall(isDynamicVideApp, appModule)
 	dynamic = ok2 and dynamic or false
 
-	local ok3, instance = pcall(AppFn, if dynamic then { __vigetOverride = true } else {})
+	local ok4, storyData = pcall(require, moduleScript)
+	
+	local controls = (ok4 and typeof(storyData) == "table" and typeof(storyData.controls) == "table")
+		and storyData.controls
+		or {}
+
+	local props = table.clone(controls)
+	
+	if dynamic then
+		props.__vigetOverride = true
+	end
+
+	local ok3, instance = pcall(AppFn, props)
 	if not ok3 or typeof(instance) ~= "Instance" then
 		warn(`Story {moduleScript.Name} did not return an Instance: {tostring(instance)}`)
 		return nil
