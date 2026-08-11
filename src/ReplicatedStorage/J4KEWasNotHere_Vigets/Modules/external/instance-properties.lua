@@ -218,7 +218,14 @@ return {
 	}),
 
 	--// UI Modifiers & Layouts
-	UICorner = { "CornerRadius" },
+	UICorner = {
+		"CornerRadius",
+
+		"BottomLeftRadius",
+		"BottomRightRadius",
+		"TopLeftRadius",
+		"TopRightRadius",
+	},
 	UIStroke = {
 		"ApplyStrokeMode",
 		"Color",

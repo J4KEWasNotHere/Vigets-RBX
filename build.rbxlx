@@ -226,18 +226,18 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 		<Item class="Camera" referent="RBXC61E6F7C265C4E5CBDE0FF03C8A6E333">
 			<Properties>
 				<CoordinateFrame name="CFrame">
-					<X>11.6150045</X>
-					<Y>18.0601177</Y>
-					<Z>18.7471695</Z>
-					<R00>0.898305535</R00>
-					<R01>-0.247850269</R01>
-					<R02>0.362791061</R02>
-					<R10>-0</R10>
-					<R11>0.825705051</R11>
-					<R12>0.564102173</R12>
-					<R20>-0.439371228</R20>
-					<R21>-0.5067361</R21>
-					<R22>0.741735458</R22>
+					<X>13.8483505</X>
+					<Y>22.2641029</Y>
+					<Z>13.3722401</Z>
+					<R00>0.798554599</R00>
+					<R01>-0.41858381</R01>
+					<R02>0.432548463</R02>
+					<R10>-2.98023224e-08</R10>
+					<R11>0.718611598</R11>
+					<R12>0.695411563</R12>
+					<R20>-0.601922452</R20>
+					<R21>-0.555324078</R21>
+					<R22>0.573850572</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
 				<token name="CameraType">0</token>
@@ -1052,20 +1052,6 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c300000392</UniqueId>
-		</Properties>
-	</Item>
-	<Item class="ServiceVisibilityService" referent="RBX3AD18C17E9C74BC0970B1BF071230A31">
-		<Properties>
-			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
-			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
-			<BinaryString name="AttributesSerialize"></BinaryString>
-			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-			<bool name="DefinesCapabilities">false</bool>
-			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-			<string name="Name">ServiceVisibilityService</string>
-			<int64 name="SourceAssetId">-1</int64>
-			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000003ae</UniqueId>
 		</Properties>
 	</Item>
 	<Item class="LuaWebService" referent="RBX22DA3C5963944872B1953D0385253F88">
@@ -11713,7 +11699,7 @@ return {
 	Name = "Vigets",
 	Icon = "rbxassetid://135928770766655",
 
-	Version = "0.2.12",
+	Version = "0.3.4",
 	VersionTip = "",
 
 	WidgetSize = Vector2.new(230, 200),
@@ -11957,7 +11943,14 @@ return {
 	}),
 
 	--// UI Modifiers & Layouts
-	UICorner = { "CornerRadius" },
+	UICorner = {
+		"CornerRadius",
+
+		"BottomLeftRadius",
+		"BottomRightRadius",
+		"TopLeftRadius",
+		"TopRightRadius",
+	},
 	UIStroke = {
 		"ApplyStrokeMode",
 		"Color",
@@ -12180,9 +12173,29 @@ return {
 							<Content name="LinkedSource"><null></null></Content>
 							<ProtectedString name="Source"><![CDATA[return {
 	Part = {
-		Material = Enum.Material.SmoothPlastic,
+		Material = Enum.Material.Plastic,
 		Size = Vector3.new(4, 1, 2),
-		Anchored = true,
+		Anchored = false,
+		Shape = Enum.PartType.Block,
+
+		Color = Color3.fromRGB(163, 162, 165),
+		Transparency = 0,
+		Reflectance = 0,
+		CanCollide = true,
+		CanTouch = true,
+		CanQuery = true,
+		CastShadow = true,
+		Locked = false,
+		Massless = false,
+		CollisionGroup = "Default",
+		RootPriority = 0,
+
+		TopSurface = Enum.SurfaceType.Studs,
+		BottomSurface = Enum.SurfaceType.Studs,
+		FrontSurface = Enum.SurfaceType.Smooth,
+		BackSurface = Enum.SurfaceType.Smooth,
+		LeftSurface = Enum.SurfaceType.Smooth,
+		RightSurface = Enum.SurfaceType.Smooth,
 	},
 
 	BillboardGui = {
@@ -12200,24 +12213,31 @@ return {
 		SizeOffset = Vector2.new(0, 0),
 		StudsOffset = Vector3.new(0, 0, 0),
 		StudsOffsetWorldSpace = Vector3.new(0, 0, 0),
-		ClipsDescendants = true,
+		ClipsDescendants = false,
 		AlwaysOnTop = false,
+		DistanceStep = 0,
+		Brightness = 1,
 	},
 
 	CanvasGroup = {
 		GroupColor3 = Color3.new(1, 1, 1),
 		GroupTransparency = 0,
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
-		Active = true,
+		Active = false,
 		Selectable = false,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
 		SelectionImageObject = ".__readasnil",
 
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
+		Rotation = 0,
 		ZIndex = 1,
 		AnchorPoint = Vector2.new(0, 0),
 		AutomaticSize = Enum.AutomaticSize.None,
@@ -12231,16 +12251,20 @@ return {
 
 	Frame = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
-		Active = true,
+		Active = false,
 		Selectable = false,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
 
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
+		Rotation = 0,
 		ZIndex = 1,
 		AnchorPoint = Vector2.new(0, 0),
 		AutomaticSize = Enum.AutomaticSize.None,
@@ -12255,17 +12279,27 @@ return {
 
 	ImageButton = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
 		AutoButtonColor = false,
 		Active = true,
 		Selectable = false,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
 
+		Image = "",
+		ImageColor3 = Color3.new(1, 1, 1),
+		ImageTransparency = 0,
+		ImageRectOffset = Vector2.new(0, 0),
+		ImageRectSize = Vector2.new(0, 0),
+
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
+		Rotation = 0,
 		ZIndex = 1,
 		AnchorPoint = Vector2.new(0, 0),
 		AutomaticSize = Enum.AutomaticSize.None,
@@ -12280,16 +12314,22 @@ return {
 
 	ImageLabel = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
 		Active = true,
 		Selectable = false,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
 
+		Image = "",
+		ImageColor3 = Color3.new(1, 1, 1),
+		ImageTransparency = 0,
+		ImageRectOffset = Vector2.new(0, 0),
+		ImageRectSize = Vector2.new(0, 0),
 		ResampleMode = Enum.ResamplerMode.Default,
 		Rotation = 0,
 		ScaleType = Enum.ScaleType.Stretch,
@@ -12297,6 +12337,8 @@ return {
 		SliceScale = 1,
 		TileSize = UDim2.new(1, 0, 1, 0),
 
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
 		ZIndex = 1,
 		AnchorPoint = Vector2.new(0, 0),
 		AutomaticSize = Enum.AutomaticSize.None,
@@ -12314,9 +12356,10 @@ return {
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 		Enabled = true,
 		IgnoreGuiInset = false,
+		DisplayOrder = 0,
 		Active = true,
 		Selectable = false,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
@@ -12325,23 +12368,35 @@ return {
 
 	ScrollingFrame = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
 		ScrollBarImageColor3 = Color3.new(0, 0, 0),
+		ScrollBarThickness = 12,
+		ScrollBarImageTransparency = 0,
+		ScrollingEnabled = true,
+		ScrollingDirection = Enum.ScrollingDirection.XY,
+		VerticalScrollBarInset = Enum.ScrollBarInset.None,
+		VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right,
+		CanvasSize = UDim2.new(0, 0, 2, 0),
+		CanvasPosition = Vector2.new(0, 0),
+		ElasticBehavior = Enum.ElasticBehavior.WhenScrollable,
 		Active = true,
 		Selectable = false,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
 		Rotation = 0,
 
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
 		ZIndex = 1,
 		AnchorPoint = Vector2.new(0, 0),
 		AutomaticSize = Enum.AutomaticSize.None,
 		BorderMode = Enum.BorderMode.Outline,
-		ClipsDescendants = false,
+		ClipsDescendants = true,
 		Interactable = true,
 		Visible = true,
 		LayoutOrder = 0,
@@ -12361,6 +12416,8 @@ return {
 		AlwaysOnTop = false,
 		Adornee = ".__readasnil",
 		SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud,
+		CanvasSize = Vector2.new(200, 50),
+		Brightness = 1,
 		Active = true,
 		Selectable = false,
 		SelectionGroup = false,
@@ -12372,55 +12429,135 @@ return {
 
 	TextBox = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
 		ClearTextOnFocus = false,
 		Font = Enum.Font.SourceSans,
 		Text = "",
 		TextColor3 = Color3.new(0, 0, 0),
+		TextSize = 14,
+		TextWrapped = false,
+		TextScaled = false,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		TextYAlignment = Enum.TextYAlignment.Center,
+		TextTransparency = 0,
+		TextStrokeColor3 = Color3.new(0, 0, 0),
+		TextStrokeTransparency = 1,
+		TextTruncate = Enum.TextTruncate.None,
+		RichText = false,
+		LineHeight = 1,
+		PlaceholderText = "",
+		PlaceholderColor3 = Color3.fromRGB(178, 178, 178),
+		MultiLine = false,
+		TextEditable = true,
+		ShowNativeInput = true,
 		Active = true,
 		Selectable = true,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
 		Rotation = 0,
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		ClipsDescendants = false,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	TextButton = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
 		AutoButtonColor = false,
 		Font = Enum.Font.SourceSans,
 		Text = "",
 		TextColor3 = Color3.new(0, 0, 0),
+		TextSize = 14,
+		TextWrapped = false,
+		TextScaled = false,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		TextYAlignment = Enum.TextYAlignment.Center,
+		TextTransparency = 0,
+		TextStrokeColor3 = Color3.new(0, 0, 0),
+		TextStrokeTransparency = 1,
+		TextTruncate = Enum.TextTruncate.None,
+		RichText = false,
+		LineHeight = 1,
 		Active = true,
 		Selectable = true,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
 		Rotation = 0,
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		ClipsDescendants = false,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	TextLabel = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
 		Font = Enum.Font.SourceSans,
 		Text = "",
 		TextColor3 = Color3.new(0, 0, 0),
+		TextSize = 14,
+		TextWrapped = false,
+		TextScaled = false,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		TextYAlignment = Enum.TextYAlignment.Center,
+		TextTransparency = 0,
+		TextStrokeColor3 = Color3.new(0, 0, 0),
+		TextStrokeTransparency = 1,
+		TextTruncate = Enum.TextTruncate.None,
+		RichText = false,
+		LineHeight = 1,
 		Active = true,
 		Selectable = false,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
+
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
 		Rotation = 0,
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		ClipsDescendants = false,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	UIStroke = {
@@ -12428,6 +12565,9 @@ return {
 		BorderOffset = Vector2.new(0, 0),
 		LineJoinMode = Enum.LineJoinMode.Round,
 		StrokeSizingMode = Enum.StrokeSizingMode.FixedSize,
+		Color = Color3.new(0, 0, 0),
+		Thickness = 1,
+		Transparency = 0,
 		ZIndex = 1,
 		Enabled = true,
 	},
@@ -12458,6 +12598,8 @@ return {
 		FillDirection = Enum.FillDirection.Horizontal,
 		Wraps = false,
 		Padding = UDim.new(0, 0),
+		CellPadding = UDim2.new(0, 5, 0, 5),
+		CellSize = UDim2.new(0, 100, 0, 100),
 		FillDirectionMaxCells = 0,
 		StartCorner = Enum.StartCorner.TopLeft,
 		HorizontalAlignment = Enum.HorizontalAlignment.Left,
@@ -12469,43 +12611,119 @@ return {
 		Offset = UDim.new(0, 0),
 		Rotation = 0,
 		Transparency = NumberSequence.new(0),
+		Color = ColorSequence.new(Color3.new(1, 1, 1)),
 	},
 
 	UITableLayout = {
 		SortOrder = Enum.SortOrder.LayoutOrder,
+		FillEmptySpaceColumns = false,
+		FillEmptySpaceRows = false,
+		Padding = Vector2.new(0, 0),
+		MajorAxis = Enum.TableMajorAxis.RowMajor,
 	},
 
 	UIPageLayout = {
 		SortOrder = Enum.SortOrder.LayoutOrder,
+		Circular = false,
+		GamepadInputEnabled = true,
+		ScrollWheelInputEnabled = true,
+		TouchInputEnabled = true,
+		EasingDirection = Enum.EasingDirection.Out,
+		EasingStyle = Enum.EasingStyle.Quad,
+		TweenTime = 0.5,
+		Padding = UDim.new(0, 0),
+		FillDirection = Enum.FillDirection.Horizontal,
+		HorizontalAlignment = Enum.HorizontalAlignment.Left,
+		VerticalAlignment = Enum.VerticalAlignment.Top,
 	},
 
 	UIFlexItem = {
 		ItemLineAlignment = Enum.ItemLineAlignment.Automatic,
+		FlexMode = Enum.UIFlexMode.None,
+		GrowRatio = 0,
+		ShrinkRatio = 1,
+	},
+
+	UICorner = {
+		CornerRadius = UDim.new(0, 8),
+
+		BottomLeftRadius = UDim.new(0, 8),
+		BottomRightRadius = UDim.new(0, 8),
+		TopLeftRadius = UDim.new(0, 8),
+		TopRightRadius = UDim.new(0, 8),
+	},
+
+	UIPadding = {
+		PaddingTop = UDim.new(0, 0),
+		PaddingBottom = UDim.new(0, 0),
+		PaddingLeft = UDim.new(0, 0),
+		PaddingRight = UDim.new(0, 0),
+	},
+
+	UIAspectRatioConstraint = {
+		AspectRatio = 1,
+		AspectType = Enum.AspectType.FitWithinMaxSize,
+		DominantAxis = Enum.DominantAxis.Width,
+	},
+
+	UISizeConstraint = {
+		MinSize = Vector2.new(0, 0),
+		MaxSize = Vector2.new(math.huge, math.huge),
+	},
+
+	UITextSizeConstraint = {
+		MinTextSize = 1,
+		MaxTextSize = 100,
 	},
 
 	VideoFrame = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
+		Video = "",
+		Looped = false,
+		Playing = false,
+		TimePosition = 0,
+		Volume = 1,
 	},
 
 	ViewportFrame = {
 		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0,
 		BorderColor3 = Color3.new(0, 0, 0),
 		BorderSizePixel = 0,
+		Ambient = Color3.new(0, 0, 0),
+		LightColor = Color3.new(1, 1, 1),
+		LightDirection = Vector3.new(-1, -1, -1),
+		CurrentCamera = ".__readasnil",
+		ImageColor3 = Color3.new(1, 1, 1),
+		ImageTransparency = 0,
 		Active = true,
 		Selectable = false,
-		SelectionGroup = 0,
+		SelectionGroup = false,
 		SelectionBehaviorDown = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorLeft = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorRight = Enum.SelectionBehavior.Escape,
 		SelectionBehaviorUp = Enum.SelectionBehavior.Escape,
 		Rotation = 0,
+
+		Position = UDim2.new(0, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
+		ZIndex = 1,
+		AnchorPoint = Vector2.new(0, 0),
+		AutomaticSize = Enum.AutomaticSize.None,
+		BorderMode = Enum.BorderMode.Outline,
+		ClipsDescendants = false,
+		Interactable = true,
+		Visible = true,
+		LayoutOrder = 0,
+		SizeConstraint = Enum.SizeConstraint.RelativeXY,
+		Style = Enum.FrameStyle.Custom,
 	},
 
 	Camera = {
 		CameraSubject = ".__readasnil",
-		CameraType = Enum.CameraType.Fixed,
+		CameraType = Enum.CameraType.Custom,
 		CFrame = CFrame.identity,
 		FieldOfView = 70,
 		DiagonalFieldOfView = 88.877,
@@ -12514,6 +12732,7 @@ return {
 		Focus = CFrame.identity,
 		HeadLocked = true,
 		HeadScale = 1,
+		NearPlaneZ = -0.1,
 	},
 
 	WorldModel = {
@@ -12787,16 +13006,18 @@ local ALLOWED_TYPES: { string } = { "GuiBase", "UIBase", "ScreenGui", "Folder" }
 
 local Complex_Types: { string } = {
 	"PVInstance",
+	"BaseScript",
+	"BaseRemoteEvent",
 
-	-- Just in case.. i really should just remove this..
-	"WorldModel",
-	"Model",
-	"BasePart",
-	"Part",
-	"MeshPart",
-	"UnionOperation",
-	"NegateOperation",
-	"Terrain",
+	"ModuleScript",
+	"RemoteFunction",
+
+	"BindableEvent",
+	"BindableFunction",
+	"Animation",
+	"AnimationTrack",
+	"Actor",
+
 	"Bone",
 	"Attachment",
 	"Motor6D",
@@ -12805,13 +13026,8 @@ local Complex_Types: { string } = {
 	"WeldConstraint",
 	"SpecialMesh",
 	"Sound",
-	"ParticleEmitter",
-	"Beam",
-	"Trail",
 	"Camera",
 	"Animation",
-	"Sky",
-	"Atmosphere",
 }
 
 local VIDE_TEMPLATE: string = [[--!nolint
@@ -12878,6 +13094,16 @@ Reader.vide = nil :: ModuleScript?
 local CurrentResources = nil
 local ResourceNameMap: { [string]: boolean } = {}
 local ResourcePathMap: { [string]: string } = {}
+
+local Constants = require("../external/constants")
+local InstanceProperties = require("../external/instance-properties") :: { [string]: { string } }
+local InstanceDefaults = require("../external/instance-defaults") :: { [string]: { [string]: any } }
+
+local Lint = require("./simple-linter")
+
+local DEBUG = Constants.DebugEnabled
+
+-- Utility
 
 local function sanitizeIdentifier(name: string): string
 	if not name or name == "" then
@@ -12968,18 +13194,9 @@ local function buildResourceCode(resourcePrefix: string): string
 	return table.concat(lines, "\n")
 end
 
-local Constants = require("../external/constants")
-local InstanceProperties = require("../external/instance-properties") :: { [string]: { string } }
-local InstanceDefaults = require("../external/instance-defaults") :: { [string]: { [string]: any } }
-
-local Lint = require("./simple-linter")
-
-local DEBUG = Constants.DebugEnabled
-
--- Utility
+-- Main Utility
 
 local function isDefaultValue(className: string, property: string, value: any): boolean
-	-- Omit Name if it is equal to the default class name (e.g. Frame.Name == "Frame")
 	if property == "Name" and value == className then
 		return true
 	end
@@ -12990,8 +13207,7 @@ local function isDefaultValue(className: string, property: string, value: any): 
 	end
 
 	local defaultValue = classDefaults[property]
-	-- Special marker: when default is the sentinel string ".__readasnil",
-	-- treat it as a default of actual nil so properties explicitly nil are ignored.
+
 	if defaultValue == ".__readasnil" then
 		return value == nil
 	end
@@ -13000,7 +13216,6 @@ local function isDefaultValue(className: string, property: string, value: any): 
 		return false
 	end
 
-	-- Precision check for floating numbers
 	if typeof(value) == "number" and typeof(defaultValue) == "number" then
 		return math.abs(value - defaultValue) < 0.0001
 	end
@@ -13057,16 +13272,60 @@ local function serializeInstance(instance: Instance): InstanceData?
 		return nil
 	end
 
-	-- Check Name property
+	local cornerOverrides: { [string]: boolean }
+	local forceIncludeCorners: boolean = false
+
+	if instance.ClassName == "UICorner" then
+		cornerOverrides = {}
+		local inst = instance :: UICorner
+
+		local tl = inst.TopLeftRadius
+		local tr = inst.TopRightRadius
+		local bl = inst.BottomLeftRadius
+		local br = inst.BottomRightRadius
+
+		if tl == tr and tr == bl and bl == br then
+			cornerOverrides["TopLeftRadius"] = true
+			cornerOverrides["TopRightRadius"] = true
+			cornerOverrides["BottomLeftRadius"] = true
+			cornerOverrides["BottomRightRadius"] = true
+
+			data["CornerRadius"] = tl
+		else
+			cornerOverrides["CornerRadius"] = true
+			forceIncludeCorners = true
+
+			data["TopLeftRadius"] = tl
+			data["TopRightRadius"] = tr
+			data["BottomLeftRadius"] = bl
+			data["BottomRightRadius"] = br
+		end
+	end
+
 	if not isDefaultValue(instance.ClassName, "Name", instance.Name) then
 		data["Name"] = instance.Name
 	end
 
 	data["ClassName"] = instance.ClassName
 
-	-- Check instance-specific properties
 	for _, property: string in properties do
 		if table.find(ProperitesToExclude, property) then
+			continue
+		end
+
+		if cornerOverrides and cornerOverrides[property] then
+			continue
+		end
+
+		if
+			forceIncludeCorners
+			and (
+				property == "TopLeftRadius"
+				or property == "TopRightRadius"
+				or property == "BottomLeftRadius"
+				or property == "BottomRightRadius"
+			)
+		then
 			continue
 		end
 
@@ -13083,9 +13342,6 @@ local function serializeInstance(instance: Instance): InstanceData?
 
 		for _, child in instance:GetChildren() do
 			if isComplexType(child) then
-				-- Too complex/unsafe to decompose into properties (physics, meshes,
-				-- welds, world models, etc). Keep a live reference so it can be
-				-- cloned wholesale instead of rebuilt property-by-property.
 				table.insert(data._children, {
 					Name = child.Name,
 					ClassName = child.ClassName,
@@ -13306,7 +13562,6 @@ local function serializeValue(value: any): string
 	elseif t == "Vector3" then
 		return `Vector3.new({fmt(value.X)}, {fmt(value.Y)}, {fmt(value.Z)})`
 	elseif t == "Instance" then
-		-- Register instance as a resource and return the variable name to reference it
 		local ok, varName = pcall(function()
 			return registerResource(value)
 		end)
@@ -13364,8 +13619,6 @@ end
 
 local function readDataIntoVideCode(data: InstanceData): string
 	if data._complexInstance then
-		-- Complex children are referenced (cloned resource), never rebuilt as
-		-- a nested create{} call.
 		local ok, varName = pcall(registerResource, data._complexInstance)
 		if ok and type(varName) == "string" then
 			return varName
@@ -13399,6 +13652,11 @@ local function readDataIntoVideCode(data: InstanceData): string
 		end
 	end
 
+	-- Format as `create "CLASSNAME" {}` if there are no properties or children
+	if #lines == 0 then
+		return string.format('create "%s" {}', data.ClassName)
+	end
+
 	return string.format(ELEMENT_FORMAT, data.ClassName, table.concat(lines, ",\n"))
 end
 
@@ -13420,7 +13678,6 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 	local sourceCode = ""
 
 	if instance.ClassName == "ScreenGui" then
-		-- Extract properties for the ScreenGui wrapper itself
 		local propKeys: { string } = {}
 		for property in data do
 			if property ~= "_children" and property ~= "ClassName" then
@@ -13437,7 +13694,6 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 			)
 		end
 
-		-- Extract children elements for the preview table
 		local childLines: { string } = {}
 		if data._children then
 			for _, childData in data._children do
@@ -13452,7 +13708,6 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 			end
 		end
 
-		-- Build resources collected while serializing properties/values
 		local resourceCode = buildResourceCode(".rscs")
 
 		sourceCode = string.format(
@@ -13470,7 +13725,6 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 
 		raw = ok2 and raw or "nil"
 
-		-- Build resources (if any) and inject them into the function body so they're cloned per-call
 		local resourceCode = buildResourceCode(".rscs")
 		local body = resourceCode ~= "" and (resourceCode .. "\n\treturn " .. raw)
 			or ("\treturn " .. raw)
@@ -13484,7 +13738,7 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 
 	if CurrentResources and #CurrentResources > 0 then
 		local resourceFolder = Instance.new("Folder")
-		resourceFolder.Name = instance.Name .. "_resources"
+		resourceFolder.Name = ".rscs"
 		resourceFolder.Parent = ModuleScript
 
 		for _, r in ipairs(CurrentResources) do
@@ -13595,7 +13849,23 @@ function Reader.DeserializeFromStory(moduleScript: ModuleScript): Instance?
 	local ok2, dynamic = pcall(isDynamicVideApp, appModule)
 	dynamic = ok2 and dynamic or false
 
-	local ok3, instance = pcall(AppFn, if dynamic then { __vigetOverride = true } else {})
+	local ok4, storyData = pcall(require, moduleScript)
+
+	local controls = (
+		ok4
+		and typeof(storyData) == "table"
+		and typeof(storyData.controls) == "table"
+	)
+			and storyData.controls
+		or {}
+
+	local props = table.clone(controls)
+
+	if dynamic then
+		props.__vigetOverride = true
+	end
+
+	local ok3, instance = pcall(AppFn, props)
 	if not ok3 or typeof(instance) ~= "Instance" then
 		warn(`Story {moduleScript.Name} did not return an Instance: {tostring(instance)}`)
 		return nil
@@ -13669,6 +13939,20 @@ return Reader
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c30000039d</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="ServiceVisibilityService" referent="RBX3AD18C17E9C74BC0970B1BF071230A31">
+		<Properties>
+			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
+			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ServiceVisibilityService</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000003ae</UniqueId>
 		</Properties>
 	</Item>
 	<Item class="HttpService" referent="RBX31922E2D091A4714AAE2DAEE0E93948C">

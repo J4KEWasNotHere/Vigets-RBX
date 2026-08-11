@@ -12,16 +12,16 @@ local Complex_Types: { string } = {
 	"PVInstance",
 	"BaseScript",
 	"BaseRemoteEvent",
-	
+
 	"ModuleScript",
 	"RemoteFunction",
-	
+
 	"BindableEvent",
 	"BindableFunction",
 	"Animation",
 	"AnimationTrack",
 	"Actor",
-	
+
 	"Bone",
 	"Attachment",
 	"Motor6D",
@@ -98,6 +98,16 @@ Reader.vide = nil :: ModuleScript?
 local CurrentResources = nil
 local ResourceNameMap: { [string]: boolean } = {}
 local ResourcePathMap: { [string]: string } = {}
+
+local Constants = require("../external/constants")
+local InstanceProperties = require("../external/instance-properties") :: { [string]: { string } }
+local InstanceDefaults = require("../external/instance-defaults") :: { [string]: { [string]: any } }
+
+local Lint = require("./simple-linter")
+
+local DEBUG = Constants.DebugEnabled
+
+-- Utility
 
 local function sanitizeIdentifier(name: string): string
 	if not name or name == "" then
@@ -188,15 +198,7 @@ local function buildResourceCode(resourcePrefix: string): string
 	return table.concat(lines, "\n")
 end
 
-local Constants = require("../external/constants")
-local InstanceProperties = require("../external/instance-properties") :: { [string]: { string } }
-local InstanceDefaults = require("../external/instance-defaults") :: { [string]: { [string]: any } }
-
-local Lint = require("./simple-linter")
-
-local DEBUG = Constants.DebugEnabled
-
--- Utility
+-- Main Utility
 
 local function isDefaultValue(className: string, property: string, value: any): boolean
 	if property == "Name" and value == className then
@@ -209,7 +211,7 @@ local function isDefaultValue(className: string, property: string, value: any): 
 	end
 
 	local defaultValue = classDefaults[property]
-	
+
 	if defaultValue == ".__readasnil" then
 		return value == nil
 	end
@@ -274,6 +276,36 @@ local function serializeInstance(instance: Instance): InstanceData?
 		return nil
 	end
 
+	local cornerOverrides: { [string]: boolean }
+	local forceIncludeCorners: boolean = false
+
+	if instance.ClassName == "UICorner" then
+		cornerOverrides = {}
+		local inst = instance :: UICorner
+
+		local tl = inst.TopLeftRadius
+		local tr = inst.TopRightRadius
+		local bl = inst.BottomLeftRadius
+		local br = inst.BottomRightRadius
+
+		if tl == tr and tr == bl and bl == br then
+			cornerOverrides["TopLeftRadius"] = true
+			cornerOverrides["TopRightRadius"] = true
+			cornerOverrides["BottomLeftRadius"] = true
+			cornerOverrides["BottomRightRadius"] = true
+
+			data["CornerRadius"] = tl
+		else
+			cornerOverrides["CornerRadius"] = true
+			forceIncludeCorners = true
+
+			data["TopLeftRadius"] = tl
+			data["TopRightRadius"] = tr
+			data["BottomLeftRadius"] = bl
+			data["BottomRightRadius"] = br
+		end
+	end
+
 	if not isDefaultValue(instance.ClassName, "Name", instance.Name) then
 		data["Name"] = instance.Name
 	end
@@ -282,6 +314,22 @@ local function serializeInstance(instance: Instance): InstanceData?
 
 	for _, property: string in properties do
 		if table.find(ProperitesToExclude, property) then
+			continue
+		end
+
+		if cornerOverrides and cornerOverrides[property] then
+			continue
+		end
+
+		if
+			forceIncludeCorners
+			and (
+				property == "TopLeftRadius"
+				or property == "TopRightRadius"
+				or property == "BottomLeftRadius"
+				or property == "BottomRightRadius"
+			)
+		then
 			continue
 		end
 
@@ -608,6 +656,11 @@ local function readDataIntoVideCode(data: InstanceData): string
 		end
 	end
 
+	-- Format as `create "CLASSNAME" {}` if there are no properties or children
+	if #lines == 0 then
+		return string.format('create "%s" {}', data.ClassName)
+	end
+
 	return string.format(ELEMENT_FORMAT, data.ClassName, table.concat(lines, ",\n"))
 end
 
@@ -801,13 +854,17 @@ function Reader.DeserializeFromStory(moduleScript: ModuleScript): Instance?
 	dynamic = ok2 and dynamic or false
 
 	local ok4, storyData = pcall(require, moduleScript)
-	
-	local controls = (ok4 and typeof(storyData) == "table" and typeof(storyData.controls) == "table")
-		and storyData.controls
+
+	local controls = (
+		ok4
+		and typeof(storyData) == "table"
+		and typeof(storyData.controls) == "table"
+	)
+			and storyData.controls
 		or {}
 
 	local props = table.clone(controls)
-	
+
 	if dynamic then
 		props.__vigetOverride = true
 	end
