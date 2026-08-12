@@ -34,18 +34,17 @@ local Complex_Types: { string } = {
 	"Animation",
 }
 
-local VIDE_TEMPLATE: string = [[--!nolint
+local VIDE_TEMPLATE: string = [[--!strict
 
 --> Vide API: https://centau.github.io/vide/api/reactivity-core.html
 local Vide = require(%s)
 local create = Vide.create
 
---> Vide Element
-return function(props: {any}?)
+return function(props)
 %s
 end]]
 
-local DYNAMIC_VIDE_TEMPLATE: string = [[--!nolint
+local DYNAMIC_VIDE_TEMPLATE: string = [[--!strict
 
 local RunService = game:GetService("RunService")
 
@@ -55,7 +54,7 @@ local create = Vide.create
 
 local isPreview = RunService:IsStudio() and not RunService:IsRunning()
 
-return function(props: {any}?)
+return function(props)
 	%s
 	local elements = {
 		%s
@@ -71,7 +70,7 @@ return function(props: {any}?)
 	}
 end]]
 
-local STORY_TEMPLATE: string = [[--!nolint
+local STORY_TEMPLATE: string = [[--!strict
 
 local App = require(%s)
 local Vide = require(%s)
@@ -79,17 +78,33 @@ local Vide = require(%s)
 -- Wire specific values into your component's own create{} call as props.controls.<Name>
 local controls = {}
 
+local function unwrap(element: any, props: {[any]: any})
+	if not props.target then
+		return
+	end
+	
+	if typeof(element) == "Instance" then
+		element.Parent = props.target
+	elseif typeof(element) == "table" then
+		for _, child in element do
+			if typeof(child) == "Instance" then
+				child.Parent = props.target
+			end
+		end
+	end
+end
+
 local story = {
 	vide = Vide,
 	controls = controls,
 	story = function(props)
-		%s
+		local element = App(props.controls)
+		unwrap(element, props)
+		return nil
 	end,
 }
 
 return story]]
-
-local ELEMENT_FORMAT: string = 'create "%s" {\n\t%s\n}'
 
 local Reader = {}
 Reader.vide = nil :: ModuleScript?
@@ -467,9 +482,8 @@ end
 -- Known package locations, checked before falling back to a scoped search.
 local COMMON_VIDE_PATHS: { { string } } = {
 	{ "ReplicatedStorage", "Packages", "Vide" },
+	{ "ReplicatedStorage", "Modules", "Vide" },
 	{ "ReplicatedStorage", "Vide" },
-	{ "ServerScriptService", "Packages", "Vide" },
-	{ "ServerStorage", "Packages", "Vide" },
 }
 local SEARCH_ROOTS: { string } = { "ReplicatedStorage", "ServerScriptService", "ServerStorage" }
 
@@ -541,8 +555,31 @@ end
 
 -- Vide Reader
 
+const MAX_INT = 1e+15 - 1
+const MIN_INT = -MAX_INT
+const READABLE_SMALL = 1e-4
+
 local function fmt(n: number): string
-	return string.format("%.4g", n)
+	if n ~= n then
+		return "nan"
+	elseif n == math.huge or n > MAX_INT then
+		return "math.huge"
+	elseif n == -math.huge or n < MIN_INT then
+		return "-math.huge"
+	elseif n == 0 then
+		return "0"
+	elseif math.abs(n) < READABLE_SMALL then
+		local sign = n < 0 and "-" or ""
+		return `{sign}1e{math.floor(math.log10(math.abs(n)))}`
+	else
+		local magnitude = math.floor(math.log10(math.abs(n)))
+		local decimals = math.max(0, 3 - magnitude) -- keep ~4 sig figs
+		local result = string.format("%." .. decimals .. "f", n)
+		if decimals > 0 then
+			result = result:gsub("0+$", ""):gsub("%.$", "")
+		end
+		return result
+	end
 end
 
 local function serializeValue(value: any): string
@@ -556,9 +593,23 @@ local function serializeValue(value: any): string
 	elseif t == "EnumItem" then
 		return `Enum.{tostring(value.EnumType)}.{value.Name}`
 	elseif t == "UDim2" then
-		return `UDim2.new({fmt(value.X.Scale)}, {fmt(value.X.Offset)}, {fmt(value.Y.Scale)}, {fmt(
-			value.Y.Offset
-		)})`
+		if
+			value.X.Scale == 0
+			and value.Y.Scale == 0
+			and value.X.Offset == 0
+			and value.Y.Offset == 0
+		then
+			return "UDim2.fromScale(0, 0, 0, 0)"
+		end
+		if value.X.Scale == 0 and value.Y.Scale == 0 then
+			return `UDim2.fromOffset({fmt(value.X.Offset)}, {fmt(value.Y.Offset)})`
+		elseif value.X.Offset == 0 and value.Y.Offset == 0 then
+			return `UDim2.fromScale({fmt(value.X.Scale)}, {fmt(value.Y.Scale)})`
+		else
+			return `UDim2.new({fmt(value.X.Scale)}, {fmt(value.X.Offset)}, {fmt(value.Y.Scale)}, {fmt(
+				value.Y.Offset
+			)})`
+		end
 	elseif t == "UDim" then
 		return `UDim.new({fmt(value.Scale)}, {fmt(value.Offset)})`
 	elseif t == "Vector2" then
@@ -621,7 +672,14 @@ local function serializeValue(value: any): string
 	end
 end
 
-local function readDataIntoVideCode(data: InstanceData): string
+local ELEMENT_FORMAT: string = 'create "%s" {\n\t%s\n}'
+local ELEMENT_FORMAT_BRACKETS: string = 'create("%s")({\n\t%s\n})'
+
+local function readDataIntoVideCode(data: InstanceData, options: { [string]: any }?): string
+	local wrap = options and options.WrapCreations
+	local fmtSingle = if wrap then 'create("%s")({})' else 'create "%s" {}'
+	local fmtFull = if wrap then ELEMENT_FORMAT_BRACKETS else ELEMENT_FORMAT
+
 	if data._complexInstance then
 		local ok, varName = pcall(registerResource, data._complexInstance)
 		if ok and type(varName) == "string" then
@@ -651,20 +709,19 @@ local function readDataIntoVideCode(data: InstanceData): string
 					table.insert(lines, varName)
 				end
 			else
-				table.insert(lines, readDataIntoVideCode(childData))
+				table.insert(lines, readDataIntoVideCode(childData, options))
 			end
 		end
 	end
 
-	-- Format as `create "CLASSNAME" {}` if there are no properties or children
 	if #lines == 0 then
-		return string.format('create "%s" {}', data.ClassName)
+		return string.format(fmtSingle, data.ClassName)
 	end
 
-	return string.format(ELEMENT_FORMAT, data.ClassName, table.concat(lines, ",\n"))
+	return string.format(fmtFull, data.ClassName, table.concat(lines, ",\n"))
 end
 
-function Reader.SerializeToVide(instance: Instance): ModuleScript?
+function Reader.SerializeToVide(instance: Instance, options: { [string]: any }?): ModuleScript?
 	local data = serializeInstance(instance)
 	if not data then
 		return nil
@@ -674,7 +731,7 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 	vide_inst = (ok and typeof(vide_inst) == "Instance") and vide_inst or nil
 
 	if not vide_inst then
-		warn("Vidgets: could not locate Vide automatically - fill in the require() path by hand")
+		warn("Vigets: could not locate Vide automatically - fill in the require() path by hand")
 	end
 
 	local vide_path = if vide_inst then getRequirePath(vide_inst) else "nil"
@@ -707,7 +764,10 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 						table.insert(childLines, "\t\t" .. varName .. ",")
 					end
 				else
-					table.insert(childLines, "\t\t" .. readDataIntoVideCode(childData) .. ",")
+					table.insert(
+						childLines,
+						"\t\t" .. readDataIntoVideCode(childData, options) .. ","
+					)
 				end
 			end
 		end
@@ -722,7 +782,7 @@ function Reader.SerializeToVide(instance: Instance): ModuleScript?
 			table.concat(propLines, "\n")
 		)
 	else
-		local ok2, raw = pcall(readDataIntoVideCode, data)
+		local ok2, raw = pcall(readDataIntoVideCode, data, options)
 		if not ok2 and DEBUG then
 			warn(`Failed to serialize instance {instance.Name} to Vide code: {tostring(raw)}`)
 		end
@@ -801,33 +861,14 @@ function Reader.VideAppToStory(app: ModuleScript): ModuleScript?
 	local ok, videModule = pcall(locateVide)
 	videModule = (ok and typeof(videModule) == "Instance") and videModule or nil
 
-	local storyBody = if isDynamicVideApp(app)
-		then [[local elements = App(props.controls)
-        if typeof(elements) == "table" then
-            for _, element in elements do
-                if typeof(element) == "Instance" then
-                    element.Parent = props.target
-                end
-            end
-        end
-        return nil]]
-		else [[local element = App(props.controls)
-        if typeof(element) == "Instance" then
-            element.Parent = props.target
-        end
-        return nil]]
-
 	local storyScript = Instance.new("ModuleScript")
 	storyScript.Name = `{app.Name}.story`
 
-	storyScript.Source = Lint(
-		string.format(
-			STORY_TEMPLATE,
-			`script.Parent`,
-			if videModule then getRequirePath(videModule) else "nil",
-			storyBody
-		)
-	)
+	storyScript.Source = Lint(string.format(
+		STORY_TEMPLATE,
+		`script.Parent`, -- no exact path yet..
+		if videModule then getRequirePath(videModule) else "nil"
+	))
 
 	storyScript.Parent = app
 	return storyScript

@@ -3,6 +3,8 @@ local HttpService = game:GetService("HttpService")
 local ChangeHistoryService = game:GetService("ChangeHistoryService")
 local SelectionService = game:GetService("Selection")
 
+local settings_basis = require("./settings-basis")
+
 type pluginRoot = typeof(script.Parent.Parent.Parent)
 
 return {
@@ -58,8 +60,8 @@ return {
 				Applies = function(inst: Instance)
 					return inst:IsA("GuiBase") or inst:IsA("UIBase")
 				end,
-				Run = function(inst: Instance)
-					return Reader.SerializeToVide(inst)
+				Run = function(inst: Instance, options)
+					return Reader.SerializeToVide(inst, options)
 				end,
 			},
 			{
@@ -105,15 +107,22 @@ return {
 			CONVERSIONS_BY_ID[conversion.Id] = conversion
 		end
 
+		local function unwrapValues(tb)
+			local copy = {}
+
+			for i, v in tb do
+				copy[i] = unwrap(v)
+			end
+
+			return copy
+		end
+
 		local elementMethods = Value({})
 		local conversionTargets = {}
 
 		local function CreateMethodButton(props)
 			local rounding = props.Rounding or UDim.new(0, 6)
 			local isSelected = props.Selected or Value(false)
-			local iconColorStyle = props.IconColorStyle
-				or props.TextColorStyle
-				or Enum.StudioStyleGuideColor.ButtonText
 
 			local modifier = getModifier({
 				Enabled = true,
@@ -306,192 +315,191 @@ return {
 		SelectionService.SelectionChanged:Connect(onSelectionChanged)
 		onSelectionChanged()
 
-		local RECORDING_NAME = "Vidgets_Build"
+		local RECORDING_NAME = "Vigets_Build"
 		local function beginRecording(): string?
-			local id = ChangeHistoryService:TryBeginRecording(RECORDING_NAME, "Vidgets conversion")
+			local id = ChangeHistoryService:TryBeginRecording(RECORDING_NAME, "Vigets conversion")
 			if not id then
 				task.wait()
-				id = ChangeHistoryService:TryBeginRecording(RECORDING_NAME, "Vidgets conversion")
+				id = ChangeHistoryService:TryBeginRecording(RECORDING_NAME, "Vigets conversion")
 			end
 			return id
 		end
 
-		local _mainWidget =
-			AddWidget(`{Constants.Name} | {Constants.Version}{Constants.VersionTip}`, {
-				New("ScrollingFrame")({
-					Size = UDim2.fromScale(1, 0),
-					AutomaticCanvasSize = Enum.AutomaticSize.Y,
-					CanvasSize = UDim2.fromScale(0, 0),
+		local ExportedSettings = settings_basis.start(toolbar, pluginInstance, pluginRoot)
 
-					BackgroundTransparency = 1,
-					ScrollBarThickness = 0,
-					ScrollBarImageTransparency = 1,
+		AddWidget(`{Constants.Name} | {Constants.Version}{Constants.VersionTip}`, {
+			New("ScrollingFrame")({
+				Size = UDim2.fromScale(1, 0),
+				AutomaticCanvasSize = Enum.AutomaticSize.Y,
+				CanvasSize = UDim2.fromScale(0, 0),
 
-					[Children] = {
-						New("UIListLayout")({
-							SortOrder = Enum.SortOrder.LayoutOrder,
-							Padding = UDim.new(0, 8),
-							HorizontalAlignment = Enum.HorizontalAlignment.Center,
-						}),
+				BackgroundTransparency = 1,
+				ScrollBarThickness = 0,
+				ScrollBarImageTransparency = 1,
 
-						New("UIFlexItem")({
-							FlexMode = Enum.UIFlexMode.Fill,
-						}),
+				[Children] = {
+					New("UIListLayout")({
+						SortOrder = Enum.SortOrder.LayoutOrder,
+						Padding = UDim.new(0, 8),
+						HorizontalAlignment = Enum.HorizontalAlignment.Center,
+					}),
 
-						Computed(function()
-							if unwrap(canBuild) then
-								return New("ScrollingFrame")({
-									BackgroundTransparency = 1,
-									Size = UDim2.new(1, 0, 1, 0),
-									AutomaticCanvasSize = Enum.AutomaticSize.Y,
-									CanvasSize = UDim2.fromScale(0, 0),
-									ScrollBarThickness = 0,
-									ScrollBarImageTransparency = 1,
-									[Children] = {
-										New("UIListLayout")({
-											SortOrder = Enum.SortOrder.LayoutOrder,
-											Padding = UDim.new(0, 8),
-										}),
-										unwrap(elementMethods),
-									},
-								})
-							else
-								return New("Frame")({
-									BackgroundTransparency = 1,
-									Size = UDim2.fromScale(1, 1),
+					New("UIFlexItem")({
+						FlexMode = Enum.UIFlexMode.Fill,
+					}),
 
-									[Children] = {
-										New("UIListLayout")({
-											SortOrder = Enum.SortOrder.LayoutOrder,
-											Padding = UDim.new(0, 8),
-											HorizontalAlignment = Enum.HorizontalAlignment.Center,
-											VerticalAlignment = Enum.VerticalAlignment.Center,
-										}),
-
-										New("UIPadding")({
-											PaddingLeft = UDim.new(0.15, 0),
-											PaddingRight = UDim.new(0.15, 0),
-											PaddingBottom = UDim.new(0, 12),
-											PaddingTop = UDim.new(0, 12),
-										}),
-
-										New("ImageLabel")({
-											BackgroundTransparency = 1,
-											Image = Computed(function()
-												return #unwrap(items) == 0
-														and "http://www.roblox.com/asset/?id=6023565916"
-													or "http://www.roblox.com/asset/?id=6031071050"
-											end),
-											ImageColor3 = themeProvider:GetColor(
-												Enum.StudioStyleGuideColor.DimmedText,
-												Enum.StudioStyleGuideModifier.Default
-											),
-											Size = UDim2.fromOffset(42, 42),
-											[Children] = {
-												New("UIAspectRatioConstraint")({}),
-											},
-										}),
-
-										Label({
-											Text = Computed(function()
-												local noneSelected = "Nothing is selected yet.."
-												local invalidSelected =
-													"Selected instance(s) aren't compatible!"
-												return #unwrap(items) == 0 and noneSelected
-													or invalidSelected
-											end),
-											TextSize = 14,
-											TextColor3 = themeProvider:GetColor(
-												Enum.StudioStyleGuideColor.DimmedText,
-												Enum.StudioStyleGuideModifier.Default
-											),
-										}),
-									},
-								})
-							end
-						end, function(instance)
-							if instance then
-								instance:Destroy()
-							end
-						end),
-					},
-				}),
-
-				Seperator({}),
-
-				MainButton({
-					Text = "Build",
-					Size = UDim2.new(1, 0, 0, 24),
-					Enabled = Computed(function()
-						return not unwrap(isWorking)
-							and unwrap(canBuild)
-							and unwrap(selectedMethod) ~= ""
-					end),
-					Activated = function()
-						local method = unwrap(selectedMethod)
-						local conversion = CONVERSIONS_BY_ID[method]
-						local targets = conversion and conversionTargets[method]
-
-						if not conversion or not targets or #targets == 0 then
-							warn(
-								"Vidgets: select at least one compatible instance and a conversion first"
-							)
-							return
-						end
-
-						isWorking:set(true)
-
-						local recordingId = beginRecording()
-						if not recordingId then
-							warn(
-								"Vidgets: could not begin change history recording - try clicking Build again"
-							)
-							isWorking:set(false)
-							return
-						end
-
-						local builtCount = 0
-						local failedCount = 0
-						local toSelect = {}
-
-						for _, inst in targets do
-							local ok, result = pcall(conversion.Run, inst)
-							if ok and result then
-								builtCount += 1
-								table.insert(toSelect, result)
-							else
-								failedCount += 1
-								warn(
-									`Vidgets: build failed for {inst:GetFullName()} - {tostring(
-										result
-									)}`
-								)
-							end
-						end
-
-						isWorking:set(false)
-
-						if builtCount > 0 then
-							ChangeHistoryService:FinishRecording(
-								recordingId,
-								Enum.FinishRecordingOperation.Commit
-							)
-							SelectionService:Set(toSelect)
-							if failedCount > 0 then
-								warn(
-									`Vidgets: built {builtCount} instance(s), {failedCount} failed`
-								)
-							end
+					Computed(function()
+						if unwrap(canBuild) then
+							return New("ScrollingFrame")({
+								BackgroundTransparency = 1,
+								Size = UDim2.new(1, 0, 1, 0),
+								AutomaticCanvasSize = Enum.AutomaticSize.Y,
+								CanvasSize = UDim2.fromScale(0, 0),
+								ScrollBarThickness = 0,
+								ScrollBarImageTransparency = 1,
+								[Children] = {
+									New("UIListLayout")({
+										SortOrder = Enum.SortOrder.LayoutOrder,
+										Padding = UDim.new(0, 8),
+									}),
+									unwrap(elementMethods),
+								},
+							})
 						else
-							ChangeHistoryService:FinishRecording(
-								recordingId,
-								Enum.FinishRecordingOperation.Cancel
-							)
-							warn("Vidgets: build failed for all selected instances")
+							return New("Frame")({
+								BackgroundTransparency = 1,
+								Size = UDim2.fromScale(1, 1),
+
+								[Children] = {
+									New("UIListLayout")({
+										SortOrder = Enum.SortOrder.LayoutOrder,
+										Padding = UDim.new(0, 8),
+										HorizontalAlignment = Enum.HorizontalAlignment.Center,
+										VerticalAlignment = Enum.VerticalAlignment.Center,
+									}),
+
+									New("UIPadding")({
+										PaddingLeft = UDim.new(0.15, 0),
+										PaddingRight = UDim.new(0.15, 0),
+										PaddingBottom = UDim.new(0, 12),
+										PaddingTop = UDim.new(0, 12),
+									}),
+
+									New("ImageLabel")({
+										BackgroundTransparency = 1,
+										Image = Computed(function()
+											return #unwrap(items) == 0
+													and "http://www.roblox.com/asset/?id=6023565916"
+												or "http://www.roblox.com/asset/?id=6031071050"
+										end),
+										ImageColor3 = themeProvider:GetColor(
+											Enum.StudioStyleGuideColor.DimmedText,
+											Enum.StudioStyleGuideModifier.Default
+										),
+										Size = UDim2.fromOffset(42, 42),
+										[Children] = {
+											New("UIAspectRatioConstraint")({}),
+										},
+									}),
+
+									Label({
+										Text = Computed(function()
+											local noneSelected = "Nothing is selected yet.."
+											local invalidSelected =
+												"Selected instance(s) aren't compatible!"
+											return #unwrap(items) == 0 and noneSelected
+												or invalidSelected
+										end),
+										TextSize = 14,
+										TextColor3 = themeProvider:GetColor(
+											Enum.StudioStyleGuideColor.DimmedText,
+											Enum.StudioStyleGuideModifier.Default
+										),
+									}),
+								},
+							})
 						end
-					end,
-				}),
-			})
+					end, function(instance)
+						if instance then
+							instance:Destroy()
+						end
+					end),
+				},
+			}),
+
+			Seperator({}),
+
+			MainButton({
+				Text = "Build",
+				Size = UDim2.new(1, 0, 0, 24),
+				Enabled = Computed(function()
+					return not unwrap(isWorking)
+						and unwrap(canBuild)
+						and unwrap(selectedMethod) ~= ""
+				end),
+				Activated = function()
+					local method = unwrap(selectedMethod)
+					local conversion = CONVERSIONS_BY_ID[method]
+					local targets = conversion and conversionTargets[method]
+
+					if not conversion or not targets or #targets == 0 then
+						warn(
+							"Vigets: select at least one compatible instance and a conversion first"
+						)
+						return
+					end
+
+					isWorking:set(true)
+
+					local recordingId = beginRecording()
+					if not recordingId then
+						warn(
+							"Vigets: could not begin change history recording - try clicking Build again; if issue persists please restart studio."
+						)
+						isWorking:set(false)
+						return
+					end
+
+					local builtCount = 0
+					local failedCount = 0
+					local toSelect = {}
+
+					local unwrappedSettings = unwrapValues(ExportedSettings)
+
+					for _, inst in targets do
+						local ok, result = pcall(conversion.Run, inst, unwrappedSettings)
+						if ok and result then
+							builtCount += 1
+							table.insert(toSelect, result)
+						else
+							failedCount += 1
+							warn(
+								`Vigets: build failed for {inst:GetFullName()} - {tostring(result)}`
+							)
+						end
+					end
+
+					isWorking:set(false)
+
+					if builtCount > 0 then
+						ChangeHistoryService:FinishRecording(
+							recordingId,
+							Enum.FinishRecordingOperation.Commit
+						)
+						SelectionService:Set(toSelect)
+						if failedCount > 0 then
+							warn(`Vigets: built {builtCount} instance(s), {failedCount} failed`)
+						end
+					else
+						ChangeHistoryService:FinishRecording(
+							recordingId,
+							Enum.FinishRecordingOperation.Cancel
+						)
+						warn("Vigets: build failed for all selected instances")
+					end
+				end,
+			}),
+		})
 
 		button.Click:Connect(function()
 			widgetsEnabled:set(not widgetsEnabled:get(false))
