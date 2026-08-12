@@ -1,4 +1,5 @@
 return {
+	-- .
 	VideWallyDirectory = "centau_vide@",
 	VideVersions = {
 		["0.4.1"] = {
