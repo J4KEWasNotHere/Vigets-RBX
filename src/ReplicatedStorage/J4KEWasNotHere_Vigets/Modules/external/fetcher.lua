@@ -194,10 +194,10 @@ function Fetcher.installVide(vide: ModuleScript)
 	local ModulesFolder = ReplicatedStorage:FindFirstChild("Modules")
 		or new("Folder", { Name = "Modules", Parent = ReplicatedStorage })
 
-	if ModulesFolder:FindFirstChild("Vide") then
-		vide:Destroy()
-		return ModulesFolder.Vide, ModulesFolder
+	if ModulesFolder:FindFirstChild("Vide") and ModulesFolder.Vide:IsA("ModuleScript") then
+		ModulesFolder.Vide:Destroy()
 	end
+
 	vide.Name = "Vide"
 	vide.Parent = ModulesFolder
 	return vide, ModulesFolder
