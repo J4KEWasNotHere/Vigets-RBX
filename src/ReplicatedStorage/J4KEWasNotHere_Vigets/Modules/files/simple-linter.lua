@@ -23,8 +23,6 @@ local WORD_KEYWORDS = {
 	"then",
 }
 
--- Replaces string/comment bodies with spaces (keeping newlines) so bracket
--- and keyword scanning below ignores anything inside them.
 local function maskStringsAndComments(source: string): string
 	local out = table.create(#source)
 	local n = #source
@@ -107,12 +105,15 @@ local function maskStringsAndComments(source: string): string
 	return table.concat(out)
 end
 
-local function scanTokens(maskedLine: string): { string }
-	local tokens, i, n = {}, 1, #maskedLine
+type Token = { value: string, pos: number, hug: boolean? }
+
+local function scanTokens(maskedLine: string): { Token }
+	local tokens: { Token } = {}
+	local i, n = 1, #maskedLine
 	while i <= n do
 		local c = maskedLine:sub(i, i)
 		if c == "{" or c == "}" or c == "(" or c == ")" or c == "[" or c == "]" then
-			table.insert(tokens, c)
+			table.insert(tokens, { value = c, pos = i })
 			i += 1
 		elseif c:match("[%a_]") then
 			local j = i
@@ -122,7 +123,7 @@ local function scanTokens(maskedLine: string): { string }
 			local word = maskedLine:sub(i, j - 1)
 			for _, kw in WORD_KEYWORDS do
 				if word == kw then
-					table.insert(tokens, word)
+					table.insert(tokens, { value = word, pos = i })
 					break
 				end
 			end
@@ -132,6 +133,30 @@ local function scanTokens(maskedLine: string): { string }
 		end
 	end
 	return tokens
+end
+
+local function isOpenBracket(v: string): boolean
+	return v == "{" or v == "(" or v == "["
+end
+
+local function isCloseBracket(v: string): boolean
+	return v == "}" or v == ")" or v == "]"
+end
+
+local function isCloser(v: string): boolean
+	return isCloseBracket(v) or v == "end" or v == "until"
+end
+
+local function markHugs(tokens: { Token }, maskedLine: string)
+	for idx = 1, #tokens - 1 do
+		local a, b = tokens[idx], tokens[idx + 1]
+		if a.value == "(" and b.value == "{" then
+			local between = maskedLine:sub(a.pos + 1, b.pos - 1)
+			if between:match("^%s*$") then
+				a.hug = true
+			end
+		end
+	end
 end
 
 local function splitLines(s: string): { string }
@@ -150,6 +175,17 @@ local function indent(code: string): string
 	local depth = 0
 	local blockStack: { string } = {}
 
+	local bracketStack: { boolean } = {}
+
+	local function popBracket(stack: { boolean }): boolean
+		if #stack == 0 then
+			return true
+		end
+		local contributing = stack[#stack]
+		table.remove(stack)
+		return contributing
+	end
+
 	for idx = 1, #rawLines do
 		local trimmed = rawLines[idx]:match("^%s*(.-)%s*$")
 		local maskedTrimmed = maskedLines[idx]:match("^%s*(.-)%s*$") or ""
@@ -160,42 +196,59 @@ local function indent(code: string): string
 		end
 
 		local tokens = scanTokens(maskedTrimmed)
+		markHugs(tokens, maskedTrimmed)
 
-		local leadingCloses = 0
+		local depthAtLineStart = depth
+
+		local shadowStack = table.clone(bracketStack)
+		local shadowDepth = depth
 		for _, tok in tokens do
-			if tok == "}" or tok == ")" or tok == "]" or tok == "end" or tok == "until" then
-				leadingCloses += 1
-			else
+			if not isCloser(tok.value) then
 				break
+			end
+			if isCloseBracket(tok.value) then
+				if popBracket(shadowStack) then
+					shadowDepth = math.max(shadowDepth - 1, 0)
+				end
+			else -- "end" or "until"
+				shadowDepth = math.max(shadowDepth - 1, 0)
 			end
 		end
 
-		local displayDepth = math.max(depth - leadingCloses, 0)
+		local displayDepth = shadowDepth
 		if maskedTrimmed:match("^else%f[%A]") or maskedTrimmed:match("^elseif%f[%A]") then
-			displayDepth = math.max(depth - 1, 0)
+			displayDepth = math.max(depthAtLineStart - 1, 0)
 		end
 
 		table.insert(out, string.rep(INDENT, displayDepth) .. trimmed)
 
+		-- Real pass: mutate depth/bracketStack/blockStack for every token.
 		for _, tok in tokens do
-			if tok == "{" or tok == "(" or tok == "[" then
-				depth += 1
-			elseif tok == "}" or tok == ")" or tok == "]" then
-				depth = math.max(depth - 1, 0)
-			elseif tok == "do" then
+			local v = tok.value
+			if isOpenBracket(v) then
+				local contributing = not tok.hug
+				table.insert(bracketStack, contributing)
+				if contributing then
+					depth += 1
+				end
+			elseif isCloseBracket(v) then
+				if popBracket(bracketStack) then
+					depth = math.max(depth - 1, 0)
+				end
+			elseif v == "do" then
 				if blockStack[#blockStack] == "for-while-pending" then
 					blockStack[#blockStack] = "do"
 				else
 					depth += 1
 					table.insert(blockStack, "do")
 				end
-			elseif tok == "for" or tok == "while" then
+			elseif v == "for" or v == "while" then
 				table.insert(blockStack, "for-while-pending")
 				depth += 1
-			elseif tok == "function" or tok == "if" or tok == "repeat" then
-				table.insert(blockStack, tok)
+			elseif v == "function" or v == "if" or v == "repeat" then
+				table.insert(blockStack, v)
 				depth += 1
-			elseif tok == "end" or tok == "until" then
+			elseif v == "end" or v == "until" then
 				depth = math.max(depth - 1, 0)
 				table.remove(blockStack)
 			end

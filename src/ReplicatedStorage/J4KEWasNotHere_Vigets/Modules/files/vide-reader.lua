@@ -34,7 +34,7 @@ local Complex_Types: { string } = {
 	"Animation",
 }
 
-local VIDE_TEMPLATE: string = [[--!strict
+local VIDE_TEMPLATE: string = [[--!nolint
 
 --> Vide API: https://centau.github.io/vide/api/reactivity-core.html
 local Vide = require(%s)
@@ -44,7 +44,7 @@ return function(props)
 %s
 end]]
 
-local DYNAMIC_VIDE_TEMPLATE: string = [[--!strict
+local DYNAMIC_VIDE_TEMPLATE: string = [[--!nolint
 
 local RunService = game:GetService("RunService")
 
@@ -70,7 +70,7 @@ return function(props)
 	}
 end]]
 
-local STORY_TEMPLATE: string = [[--!strict
+local STORY_TEMPLATE: string = [[--!nolint
 
 local App = require(%s)
 local Vide = require(%s)

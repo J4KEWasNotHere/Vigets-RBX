@@ -3,7 +3,7 @@ const Constants = {
 	Icon = "rbxassetid://135928770766655",
 	SettingsIcon = "rbxassetid://77235068921027",
 
-	Version = "1.0.10",
+	Version = "1.0.12",
 	VersionTip = "",
 
 	WidgetSize = Vector2.new(230, 200),
