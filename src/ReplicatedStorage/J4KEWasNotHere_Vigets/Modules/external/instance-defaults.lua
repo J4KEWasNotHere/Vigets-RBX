@@ -247,6 +247,7 @@ return {
 	},
 
 	SurfaceGui = {
+		ZOffset = 0,
 		Face = Enum.NormalId.Front,
 		ClipsDescendants = true,
 		ResetOnSpawn = true,
@@ -258,6 +259,7 @@ return {
 		AlwaysOnTop = false,
 		Adornee = ".__readasnil",
 		SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud,
+		ToolPunchThroughDistance = 0,
 		CanvasSize = Vector2.new(200, 50),
 		Brightness = 1,
 		Active = true,
@@ -488,6 +490,7 @@ return {
 		Animated = true,
 		EasingStyle = Enum.EasingStyle.Back,
 		TweenTime = 1,
+		CurrentPage = ".__readasnil",
 		SortOrder = Enum.SortOrder.LayoutOrder,
 		Circular = false,
 		GamepadInputEnabled = true,
@@ -666,6 +669,7 @@ return {
 	UIDragDetector = {
 		ActivatedCursorIcon = "",
 		BoundingBehavior = Enum.UIDragDetectorBoundingBehavior.Automatic,
+		BoundingUI = ".__readasnil",
 		CursorIcon = "",
 		DragRelativity = Enum.UIDragDetectorDragRelativity.Absolute,
 		DragSpace = Enum.UIDragDetectorDragSpace.Parent,

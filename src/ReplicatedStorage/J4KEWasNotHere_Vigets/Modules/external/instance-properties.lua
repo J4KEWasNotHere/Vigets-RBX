@@ -120,6 +120,7 @@ return {
 		"Active",
 		"Adornee",
 		"AlwaysOnTop",
+		"Enabled",
 		"Brightness",
 		"ClipsDescendants",
 		"CurrentDistance",
@@ -241,8 +242,14 @@ return {
 		"ScrollingDirection",
 		"ScrollingEnabled",
 		"TopImage",
+		"BottomImage",
 		"VerticalScrollBarInset",
 		"VerticalScrollBarPosition",
+		"AutomaticCanvasSize",
+		"HorizontalScrollBarInset",
+		"CanvasSize",
+		"CanvasPosition",
+		"ElasticBehavior",
 	}),
 
 	--// UI Modifiers & Layouts
@@ -261,6 +268,9 @@ return {
 		"LineJoinMode",
 		"Thickness",
 		"Transparency",
+		"BorderOffset",
+		"StrokeSizingMode",
+		"ZIndex",
 	},
 	UIGradient = {
 		"Color",

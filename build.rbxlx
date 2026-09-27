@@ -12,6 +12,7 @@
 			<Ref name="CurrentCamera">RBXC61E6F7C265C4E5CBDE0FF03C8A6E333</Ref>
 			<double name="DistributedGameTime">0</double>
 			<token name="EnableSLIMAvatars">0</token>
+			<token name="ExpandedTerrain">0</token>
 			<bool name="ExplicitAutoJoints">true</bool>
 			<bool name="FallHeightEnabled">true</bool>
 			<float name="FallenPartsDestroyHeight">-500</float>
@@ -27,6 +28,7 @@
 			<token name="ImprovedPhysicsReplication">0</token>
 			<token name="LayeredClothingCacheOptimizations">0</token>
 			<token name="LuauTypeCheckMode">0</token>
+			<token name="MapTVRemoteToGamepadKeycodes">0</token>
 			<token name="MeshPartHeadsAndAccessories">0</token>
 			<token name="MeshStreamingAndImprovedLods">0</token>
 			<token name="ModelStreamingBehavior">0</token>
@@ -44,6 +46,7 @@
 			<token name="SandboxedInstanceMode">0</token>
 			<token name="SignalBehavior2">0</token>
 			<token name="StreamOutBehavior">0</token>
+			<bool name="StreamingAdaptiveRadius">false</bool>
 			<bool name="StreamingEnabled">false</bool>
 			<token name="StreamingIntegrityMode">0</token>
 			<int name="StreamingMinRadius">64</int>
@@ -52,9 +55,23 @@
 			<token name="TouchEventsUseCollisionGroups">0</token>
 			<bool name="TouchesUseCollisionGroups">false</bool>
 			<token name="UseFixedSimulation">0</token>
+			<token name="UseInputSink">0</token>
 			<token name="UseNewLuauTypeSolver">1</token>
 			<token name="ValidateEnabledProximityPrompt">0</token>
+			<bool name="AutoSimulate">true</bool>
 			<BinaryString name="CollisionGroupData">AQEABP////8HRGVmYXVsdA==</BinaryString>
+			<Vector3 name="GravityDirection">
+				<X>0</X>
+				<Y>-1</Y>
+				<Z>0</Z>
+			</Vector3>
+			<float name="SimulationRate">1</float>
+			<float name="Wind">0</float>
+			<Vector3 name="WindDirection">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+			</Vector3>
 			<token name="LevelOfDetail">0</token>
 			<CoordinateFrame name="ModelMeshCFrame">
 				<X>0</X>
@@ -226,27 +243,27 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 		<Item class="Camera" referent="RBXC61E6F7C265C4E5CBDE0FF03C8A6E333">
 			<Properties>
 				<CoordinateFrame name="CFrame">
-					<X>-27.9681473</X>
-					<Y>-57.8424911</Y>
-					<Z>54.5005188</Z>
+					<X>-57.4038811</X>
+					<Y>-80.52771</Y>
+					<Z>90.4475174</Z>
 					<R00>-0.77369833</R00>
-					<R01>-0.277974844</R01>
+					<R01>-0.277974635</R01>
 					<R02>0.569316268</R02>
-					<R10>1.4901163e-08</R10>
+					<R10>-0</R10>
 					<R11>0.898607075</R11>
-					<R12>0.438754559</R12>
-					<R20>-0.633554339</R20>
-					<R21>0.339463681</R21>
-					<R22>-0.69525063</R22>
+					<R12>0.43875432</R12>
+					<R20>-0.633554161</R20>
+					<R21>0.339463472</R21>
+					<R22>-0.695250809</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
 				<token name="CameraType">0</token>
 				<float name="FieldOfView">70</float>
 				<token name="FieldOfViewMode">0</token>
 				<CoordinateFrame name="Focus">
-					<X>-34.9687004</X>
-					<Y>-63.2376022</Y>
-					<Z>63.049614</Z>
+					<X>-64.4043884</X>
+					<Y>-85.9227829</Y>
+					<Z>98.9965591</Z>
 					<R00>1</R00>
 					<R01>0</R01>
 					<R02>0</R02>
@@ -393,7 +410,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<bool name="BanningEnabled">true</bool>
 			<bool name="CharacterAutoLoads">true</bool>
 			<int name="MaxPlayersInternal">12</int>
-			<int name="PreferredPlayersInternal">0</int>
+			<int name="PreferredPlayersInternal">1</int>
 			<float name="RespawnTime">5</float>
 			<bool name="UseStrafingAnimations">false</bool>
 			<BinaryString name="AttributesSerialize"></BinaryString>
@@ -519,6 +536,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				</Font>
 				<float name="HeightScale">1</float>
 				<token name="HorizontalAlignment">1</token>
+				<token name="TextChannelDisplayMode">0</token>
 				<Color3 name="TextColor3">
 					<R>1</R>
 					<G>1</G>
@@ -770,6 +788,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<token name="LoadCharacterLayeredClothing">0</token>
 			<token name="LuaCharacterController">0</token>
 			<float name="NameDisplayDistance">100</float>
+			<Ref name="PlaceAvatarRules">null</Ref>
 			<int name="PlayerModuleStatus">0</int>
 			<bool name="UserEmotesEnabled">true</bool>
 			<BinaryString name="AttributesSerialize"></BinaryString>
@@ -1105,6 +1124,11 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 		</Properties>
 		<Item class="Folder" referent="RBXC1C862A777874715BFFE380BD3F36880">
 			<Properties>
+				<Color3 name="IconTint">
+					<R>0</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
@@ -1147,6 +1171,11 @@ basis.start(plugin, pluginRoot)
 			</Item>
 			<Item class="Folder" referent="RBX0D73CF24278846D6973415BC58EB8CEA">
 				<Properties>
+					<Color3 name="IconTint">
+						<R>0</R>
+						<G>0</G>
+						<B>0</B>
+					</Color3>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
@@ -1174,6 +1203,11 @@ basis.start(plugin, pluginRoot)
 				</Item>
 				<Item class="Folder" referent="RBX48D2067F41BE44E3A555D7828B50A1E9">
 					<Properties>
+						<Color3 name="IconTint">
+							<R>0</R>
+							<G>0</G>
+							<B>0</B>
+						</Color3>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
@@ -1185,6 +1219,11 @@ basis.start(plugin, pluginRoot)
 					</Properties>
 					<Item class="Folder" referent="RBX07101B6A4AAB455BA20AA3DF63A4B4B5">
 						<Properties>
+							<Color3 name="IconTint">
+								<R>0</R>
+								<G>0</G>
+								<B>0</B>
+							</Color3>
 							<BinaryString name="AttributesSerialize"></BinaryString>
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
@@ -1282,6 +1321,11 @@ return restrictRead("Fusion", {
 							</Properties>
 							<Item class="Folder" referent="RBXE7CA5E5F22854B4581C85F00BC227F28">
 								<Properties>
+									<Color3 name="IconTint">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
 									<BinaryString name="AttributesSerialize"></BinaryString>
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
@@ -2412,6 +2456,11 @@ return unpackType]]></ProtectedString>
 							</Item>
 							<Item class="Folder" referent="RBXFC279455C67048DBB33F29F6F70CCB4E">
 								<Properties>
+									<Color3 name="IconTint">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
 									<BinaryString name="AttributesSerialize"></BinaryString>
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
@@ -2492,6 +2541,11 @@ return Oklab
 							</Item>
 							<Item class="Folder" referent="RBXC7A1358FAFB34E7C987C3A25A6A67E03">
 								<Properties>
+									<Color3 name="IconTint">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
 									<BinaryString name="AttributesSerialize"></BinaryString>
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
@@ -2769,6 +2823,11 @@ return useDependency]]></ProtectedString>
 							</Item>
 							<Item class="Folder" referent="RBX84F684D6A8874518B2D5A7377DBD93FA">
 								<Properties>
+									<Color3 name="IconTint">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
 									<BinaryString name="AttributesSerialize"></BinaryString>
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
@@ -3521,6 +3580,11 @@ return {
 							</Item>
 							<Item class="Folder" referent="RBX4DAEFA3763954302B0458FFEFCC07B4B">
 								<Properties>
+									<Color3 name="IconTint">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
 									<BinaryString name="AttributesSerialize"></BinaryString>
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
@@ -3919,6 +3983,11 @@ return nil]]></ProtectedString>
 							</Item>
 							<Item class="Folder" referent="RBXD137D4A1A84E4C99B787F5C61E73A99D">
 								<Properties>
+									<Color3 name="IconTint">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
 									<BinaryString name="AttributesSerialize"></BinaryString>
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
@@ -5265,6 +5334,11 @@ return nil]]></ProtectedString>
 							</Item>
 							<Item class="Folder" referent="RBXA4BF43A633674268B1AB1E8E2C03619D">
 								<Properties>
+									<Color3 name="IconTint">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
 									<BinaryString name="AttributesSerialize"></BinaryString>
 									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 									<bool name="DefinesCapabilities">false</bool>
@@ -5531,6 +5605,11 @@ return xtypeof]]></ProtectedString>
 			</Item>
 			<Item class="Folder" referent="RBX12938700074E4361892A3CE6F5D6DABD">
 				<Properties>
+					<Color3 name="IconTint">
+						<R>0</R>
+						<G>0</G>
+						<B>0</B>
+					</Color3>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
@@ -5542,6 +5621,11 @@ return xtypeof]]></ProtectedString>
 				</Properties>
 				<Item class="Folder" referent="RBXDC6CCA449B66407FA08C0D60370C571E">
 					<Properties>
+						<Color3 name="IconTint">
+							<R>0</R>
+							<G>0</G>
+							<B>0</B>
+						</Color3>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
@@ -6453,6 +6537,11 @@ end
 					</Item>
 					<Item class="Folder" referent="RBX5DBA782A91E54EACB81F5A52B1DCEDB6">
 						<Properties>
+							<Color3 name="IconTint">
+								<R>0</R>
+								<G>0</G>
+								<B>0</B>
+							</Color3>
 							<BinaryString name="AttributesSerialize"></BinaryString>
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
@@ -7240,6 +7329,11 @@ end
 					</Item>
 					<Item class="Folder" referent="RBXAB1C20E7A974449A8EF7A734C8BA47EA">
 						<Properties>
+							<Color3 name="IconTint">
+								<R>0</R>
+								<G>0</G>
+								<B>0</B>
+							</Color3>
 							<BinaryString name="AttributesSerialize"></BinaryString>
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
@@ -8697,6 +8791,11 @@ end
 				</Item>
 				<Item class="Folder" referent="RBXC93620B6690341F595F899121B4D63FA">
 					<Properties>
+						<Color3 name="IconTint">
+							<R>0</R>
+							<G>0</G>
+							<B>0</B>
+						</Color3>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
@@ -8883,6 +8982,11 @@ end]]></ProtectedString>
 			</Item>
 			<Item class="Folder" referent="RBX43E8A179CFDC406D9DED7203C59CA00C">
 				<Properties>
+					<Color3 name="IconTint">
+						<R>0</R>
+						<G>0</G>
+						<B>0</B>
+					</Color3>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
@@ -8894,6 +8998,11 @@ end]]></ProtectedString>
 				</Properties>
 				<Item class="Folder" referent="RBXC53BED7D703B496B8BCD51D3073FD1E5">
 					<Properties>
+						<Color3 name="IconTint">
+							<R>0</R>
+							<G>0</G>
+							<B>0</B>
+						</Color3>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
@@ -9727,6 +9836,11 @@ return {
 				</Item>
 				<Item class="Folder" referent="RBX6BAAA44FE3BA4BED921F1BEC0C20657B">
 					<Properties>
+						<Color3 name="IconTint">
+							<R>0</R>
+							<G>0</G>
+							<B>0</B>
+						</Color3>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
@@ -9744,7 +9858,7 @@ return {
 	Icon = "rbxassetid://135928770766655",
 	SettingsIcon = "rbxassetid://77235068921027",
 
-	Version = "1.0.10",
+	Version = "1.0.14",
 	VersionTip = "",
 
 	WidgetSize = Vector2.new(230, 200),
@@ -9892,6 +10006,7 @@ return {
 		"Active",
 		"Adornee",
 		"AlwaysOnTop",
+		"Enabled",
 		"Brightness",
 		"ClipsDescendants",
 		"CurrentDistance",
@@ -10013,8 +10128,14 @@ return {
 		"ScrollingDirection",
 		"ScrollingEnabled",
 		"TopImage",
+		"BottomImage",
 		"VerticalScrollBarInset",
 		"VerticalScrollBarPosition",
+		"AutomaticCanvasSize",
+		"HorizontalScrollBarInset",
+		"CanvasSize",
+		"CanvasPosition",
+		"ElasticBehavior",
 	}),
 
 	--// UI Modifiers & Layouts
@@ -10033,6 +10154,9 @@ return {
 		"LineJoinMode",
 		"Thickness",
 		"Transparency",
+		"BorderOffset",
+		"StrokeSizingMode",
+		"ZIndex",
 	},
 	UIGradient = {
 		"Color",
@@ -10517,6 +10641,7 @@ return {
 	},
 
 	SurfaceGui = {
+		ZOffset = 0,
 		Face = Enum.NormalId.Front,
 		ClipsDescendants = true,
 		ResetOnSpawn = true,
@@ -10528,6 +10653,7 @@ return {
 		AlwaysOnTop = false,
 		Adornee = ".__readasnil",
 		SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud,
+		ToolPunchThroughDistance = 0,
 		CanvasSize = Vector2.new(200, 50),
 		Brightness = 1,
 		Active = true,
@@ -10758,6 +10884,7 @@ return {
 		Animated = true,
 		EasingStyle = Enum.EasingStyle.Back,
 		TweenTime = 1,
+		CurrentPage = ".__readasnil",
 		SortOrder = Enum.SortOrder.LayoutOrder,
 		Circular = false,
 		GamepadInputEnabled = true,
@@ -10936,6 +11063,7 @@ return {
 	UIDragDetector = {
 		ActivatedCursorIcon = "",
 		BoundingBehavior = Enum.UIDragDetectorBoundingBehavior.Automatic,
+		BoundingUI = ".__readasnil",
 		CursorIcon = "",
 		DragRelativity = Enum.UIDragDetectorDragRelativity.Absolute,
 		DragSpace = Enum.UIDragDetectorDragSpace.Parent,
@@ -11162,10 +11290,10 @@ function Fetcher.installVide(vide: ModuleScript)
 	local ModulesFolder = ReplicatedStorage:FindFirstChild("Modules")
 		or new("Folder", { Name = "Modules", Parent = ReplicatedStorage })
 
-	if ModulesFolder:FindFirstChild("Vide") then
-		vide:Destroy()
-		return ModulesFolder.Vide, ModulesFolder
+	if ModulesFolder:FindFirstChild("Vide") and ModulesFolder.Vide:IsA("ModuleScript") then
+		ModulesFolder.Vide:Destroy()
 	end
+
 	vide.Name = "Vide"
 	vide.Parent = ModulesFolder
 	return vide, ModulesFolder
@@ -11187,6 +11315,11 @@ return Fetcher
 				</Item>
 				<Item class="Folder" referent="RBX3A996B14E17747BAB10DCFD98FDCEA04">
 					<Properties>
+						<Color3 name="IconTint">
+							<R>0</R>
+							<G>0</G>
+							<B>0</B>
+						</Color3>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
@@ -11224,8 +11357,6 @@ local WORD_KEYWORDS = {
 	"then",
 }
 
--- Replaces string/comment bodies with spaces (keeping newlines) so bracket
--- and keyword scanning below ignores anything inside them.
 local function maskStringsAndComments(source: string): string
 	local out = table.create(#source)
 	local n = #source
@@ -11308,12 +11439,15 @@ local function maskStringsAndComments(source: string): string
 	return table.concat(out)
 end
 
-local function scanTokens(maskedLine: string): { string }
-	local tokens, i, n = {}, 1, #maskedLine
+type Token = { value: string, pos: number, hug: boolean? }
+
+local function scanTokens(maskedLine: string): { Token }
+	local tokens: { Token } = {}
+	local i, n = 1, #maskedLine
 	while i <= n do
 		local c = maskedLine:sub(i, i)
 		if c == "{" or c == "}" or c == "(" or c == ")" or c == "[" or c == "]" then
-			table.insert(tokens, c)
+			table.insert(tokens, { value = c, pos = i })
 			i += 1
 		elseif c:match("[%a_]") then
 			local j = i
@@ -11323,7 +11457,7 @@ local function scanTokens(maskedLine: string): { string }
 			local word = maskedLine:sub(i, j - 1)
 			for _, kw in WORD_KEYWORDS do
 				if word == kw then
-					table.insert(tokens, word)
+					table.insert(tokens, { value = word, pos = i })
 					break
 				end
 			end
@@ -11333,6 +11467,30 @@ local function scanTokens(maskedLine: string): { string }
 		end
 	end
 	return tokens
+end
+
+local function isOpenBracket(v: string): boolean
+	return v == "{" or v == "(" or v == "["
+end
+
+local function isCloseBracket(v: string): boolean
+	return v == "}" or v == ")" or v == "]"
+end
+
+local function isCloser(v: string): boolean
+	return isCloseBracket(v) or v == "end" or v == "until"
+end
+
+local function markHugs(tokens: { Token }, maskedLine: string)
+	for idx = 1, #tokens - 1 do
+		local a, b = tokens[idx], tokens[idx + 1]
+		if a.value == "(" and b.value == "{" then
+			local between = maskedLine:sub(a.pos + 1, b.pos - 1)
+			if between:match("^%s*$") then
+				a.hug = true
+			end
+		end
+	end
 end
 
 local function splitLines(s: string): { string }
@@ -11351,6 +11509,17 @@ local function indent(code: string): string
 	local depth = 0
 	local blockStack: { string } = {}
 
+	local bracketStack: { boolean } = {}
+
+	local function popBracket(stack: { boolean }): boolean
+		if #stack == 0 then
+			return true
+		end
+		local contributing = stack[#stack]
+		table.remove(stack)
+		return contributing
+	end
+
 	for idx = 1, #rawLines do
 		local trimmed = rawLines[idx]:match("^%s*(.-)%s*$")
 		local maskedTrimmed = maskedLines[idx]:match("^%s*(.-)%s*$") or ""
@@ -11361,42 +11530,59 @@ local function indent(code: string): string
 		end
 
 		local tokens = scanTokens(maskedTrimmed)
+		markHugs(tokens, maskedTrimmed)
 
-		local leadingCloses = 0
+		local depthAtLineStart = depth
+
+		local shadowStack = table.clone(bracketStack)
+		local shadowDepth = depth
 		for _, tok in tokens do
-			if tok == "}" or tok == ")" or tok == "]" or tok == "end" or tok == "until" then
-				leadingCloses += 1
-			else
+			if not isCloser(tok.value) then
 				break
+			end
+			if isCloseBracket(tok.value) then
+				if popBracket(shadowStack) then
+					shadowDepth = math.max(shadowDepth - 1, 0)
+				end
+			else -- "end" or "until"
+				shadowDepth = math.max(shadowDepth - 1, 0)
 			end
 		end
 
-		local displayDepth = math.max(depth - leadingCloses, 0)
+		local displayDepth = shadowDepth
 		if maskedTrimmed:match("^else%f[%A]") or maskedTrimmed:match("^elseif%f[%A]") then
-			displayDepth = math.max(depth - 1, 0)
+			displayDepth = math.max(depthAtLineStart - 1, 0)
 		end
 
 		table.insert(out, string.rep(INDENT, displayDepth) .. trimmed)
 
+		-- Real pass: mutate depth/bracketStack/blockStack for every token.
 		for _, tok in tokens do
-			if tok == "{" or tok == "(" or tok == "[" then
-				depth += 1
-			elseif tok == "}" or tok == ")" or tok == "]" then
-				depth = math.max(depth - 1, 0)
-			elseif tok == "do" then
+			local v = tok.value
+			if isOpenBracket(v) then
+				local contributing = not tok.hug
+				table.insert(bracketStack, contributing)
+				if contributing then
+					depth += 1
+				end
+			elseif isCloseBracket(v) then
+				if popBracket(bracketStack) then
+					depth = math.max(depth - 1, 0)
+				end
+			elseif v == "do" then
 				if blockStack[#blockStack] == "for-while-pending" then
 					blockStack[#blockStack] = "do"
 				else
 					depth += 1
 					table.insert(blockStack, "do")
 				end
-			elseif tok == "for" or tok == "while" then
+			elseif v == "for" or v == "while" then
 				table.insert(blockStack, "for-while-pending")
 				depth += 1
-			elseif tok == "function" or tok == "if" or tok == "repeat" then
-				table.insert(blockStack, tok)
+			elseif v == "function" or v == "if" or v == "repeat" then
+				table.insert(blockStack, v)
 				depth += 1
-			elseif tok == "end" or tok == "until" then
+			elseif v == "end" or v == "until" then
 				depth = math.max(depth - 1, 0)
 				table.remove(blockStack)
 			end
@@ -11460,7 +11646,7 @@ local Complex_Types: { string } = {
 	"Animation",
 }
 
-local VIDE_TEMPLATE: string = [[--!strict
+local VIDE_TEMPLATE: string = [[--!nolint
 
 --> Vide API: https://centau.github.io/vide/api/reactivity-core.html
 local Vide = require(%s)
@@ -11470,7 +11656,7 @@ return function(props)
 %s
 end]]
 
-local DYNAMIC_VIDE_TEMPLATE: string = [[--!strict
+local DYNAMIC_VIDE_TEMPLATE: string = [[--!nolint
 
 local RunService = game:GetService("RunService")
 
@@ -11496,7 +11682,7 @@ return function(props)
 	}
 end]]
 
-local STORY_TEMPLATE: string = [[--!strict
+local STORY_TEMPLATE: string = [[--!nolint
 
 local App = require(%s)
 local Vide = require(%s)
@@ -12386,6 +12572,11 @@ return Reader
 				</Item>
 				<Item class="Folder" referent="RBX25F07F02581D495AA155139DCFA5FFC1">
 					<Properties>
+						<Color3 name="IconTint">
+							<R>0</R>
+							<G>0</G>
+							<B>0</B>
+						</Color3>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
@@ -14892,6 +15083,11 @@ return values
 		</Item>
 		<Item class="Folder" referent="RBX5714C91AA92343D1B5BDD5B720F7427B">
 			<Properties>
+				<Color3 name="IconTint">
+					<R>0</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
@@ -17384,6 +17580,11 @@ return values
 			</Item>
 			<Item class="Folder" referent="RBXF8CA27993789429399B52B59BD54A331">
 				<Properties>
+					<Color3 name="IconTint">
+						<R>0</R>
+						<G>0</G>
+						<B>0</B>
+					</Color3>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
@@ -17395,6 +17596,11 @@ return values
 				</Properties>
 				<Item class="Folder" referent="RBX52069DEFA47A45318FF01B01AAB8CD72">
 					<Properties>
+						<Color3 name="IconTint">
+							<R>0</R>
+							<G>0</G>
+							<B>0</B>
+						</Color3>
 						<BinaryString name="AttributesSerialize"><![CDATA[DAAAAAsAAABkZXNjcmlwdGlvbgIpAAAAQSByZWFjdGl2ZSBMdWF1IGxpYnJhcnkgZm9yIGNy
 ZWF0aW5nIFVJLiAIAAAAaXNTaGFyZWQDAQcAAABsaWNlbnNlAgMAAABNSVQSAAAAbG9vbURl
 cGVuZGVuY3lMaXN0AgAAAAAWAAAAbG9vbUluc3RhbGxhdGlvblNvdXJjZQIGAAAAc2hhcmVk
@@ -20084,6 +20290,60 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">132e18f07c5ed51c0a7957c3000004e6</UniqueId>
 		</Properties>
+		<Item class="ModuleScript" referent="RBX8F4BBC629A7B40CEA526CDCD2039FF32">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--- Configuration for the Luau Language Server
+--- https://devforum.roblox.com/t/luau-language-server-for-external-editors/2185389
+--- Make sure that `luau-lsp.studioPlugin.enabled` is set to `true` in VSCode for the plugin to connect
+
+return {
+	--- The host to connect to the language server.
+	host = "http://localhost",
+
+	--- The port to connect to the language server.
+	--- In VSCode, this is configured using `luau-lsp.studioPlugin.port`
+	--- Note, this port is *different* to your Rojo port
+	port = 3667,
+
+	--- Whether the plugin should automatically connect to the language server when Studio starts up
+	startAutomatically = false,
+
+	--- A list of Instances to track for changes.
+	--- When any descendants of these instances change, an update event is sent to the language server
+	include = {
+		game:GetService("Workspace"),
+		game:GetService("Players"),
+		game:GetService("Lighting"),
+		game:GetService("ReplicatedFirst"),
+		game:GetService("ReplicatedStorage"),
+		game:GetService("ServerScriptService"),
+		game:GetService("ServerStorage"),
+		game:GetService("StarterGui"),
+		game:GetService("StarterPack"),
+		game:GetService("StarterPlayer"),
+		game:GetService("SoundService"),
+		game:GetService("Chat"),
+		game:GetService("LocalizationService"),
+		game:GetService("TestService"),
+	},
+
+	--- The log level to use for the language server.
+	--- Valid values are "DEBUG", "INFO", "WARN", "ERROR"
+	logLevel = "INFO",
+}
+]]></ProtectedString>
+				<string name="ScriptGuid">{4D3AFB88-6726-4A6F-BEEA-387093C29867}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">LuauLSP_Settings</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">432cb735059a26040aca570e0000261c</UniqueId>
+			</Properties>
+		</Item>
 	</Item>
 	<Item class="SerializationService" referent="RBXBCC05138D68A421981378FC8DFBBAC5C">
 		<Properties>
